@@ -1,0 +1,5 @@
+# Google Calendar private keys
+calendars.json
+# Python virtual enviroment
+venv
+.venv
