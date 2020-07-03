@@ -48,7 +48,7 @@ def create_data_frame(data):
     df["Duration"] = df["DTEND"] - df["DTSTART"]
 
     # Filter only breakfast
-    # df = df[df["SUMMARY"] == "Breakfast"]
+    #df = df[df["SUMMARY"] == "Breakfast"]
 
     # Add value column with minutes
     hour = df["DTSTART"].dt.hour
@@ -58,7 +58,6 @@ def create_data_frame(data):
 
     df.set_index("DTSTART")
     return df
-
 
 with open("calendars.json") as data_file:
     data = json.load(data_file)
