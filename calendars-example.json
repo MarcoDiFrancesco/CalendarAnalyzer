@@ -1,46 +1,4 @@
 [
-    {
-        "CAL_NAME": "Chores",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Commute",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Eat",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Entertainment",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Lectures",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Personal care",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Personal development",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Spare time",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Sport",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Study",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    },
-    {
-        "CAL_NAME": "Work",
-        "CAL_LINK": "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX.calendar.google.com/private-XXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
-    }
+    "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX/private-XXXXXXXXXXXXXXXXXXXXXXXXX/basic.ics",
+    "https://calendar.google.com/calendar/ical/XXXXXXXXXXXXXXXXXXXXXXXXX/private-XXXXXXXXXXXXXXXXXXXXXXXXX/basic.ics"
 ]
