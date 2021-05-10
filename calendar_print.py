@@ -1,108 +1,92 @@
+from altair.vegalite.v4.schema.core import Axis
 import pandas as pd
 import streamlit as st
 
-import json
-import requests
-import jicson
-import os
-import uuid
+from utils import get_google_calendars
+import warnings
 
 
-def _get_cal(cal_link):
-    """
-    Download ics from Google Calendar, write it to a temp file and return data in json form
-    """
-    ics = requests.get(cal_link).text
-    file_path = f"/tmp/{uuid.uuid4()}-calendar.ics"
-    with open(file_path, "w") as f:
-        f.write(str(ics))
-    json = jicson.fromFile(file_path)
-    os.remove(file_path)
-    return json
-
-
-# @st.cache(allow_output_mutation=True)
-def get_calendars():
-    """Get dictionary of calendars"""
-
-    calendars = {}
-    with open("calendars.json") as f:
-        cal_links = json.load(f)
-        for cal_link in cal_links:
-            cal = _get_cal(cal_link)
-            cal = cal["VCALENDAR"][0]
-            cal_name = cal["X-WR-CALNAME"]
-            cal_content = cal["VEVENT"]
-            cal_content = pd.DataFrame(
-                data=cal_content, columns=["SUMMARY", "DTSTART", "DTEND"]
-            )
-            calendars[cal_name] = cal_content
-    return calendars
-
-
-def cal_to_datetime(calendars):
-    """Make dates in python date library format"""
+def edit_datetime(calendars):
     for name, events in calendars.items():
+        # Transforms dates in date format
         events["DTSTART"] = pd.to_datetime(events["DTSTART"])
         events["DTEND"] = pd.to_datetime(events["DTEND"])
-    return calendars
 
-
-def get_duration(calendars):
-    """
-    Calculates duration from start to end like:
-    Groceries	0 days 01:00:00
-    Transform to minutes:
-    Groceries	1
-    """
-    for name, events in calendars.items():
+        # Calculates duration from start to end like:
+        #     Groceries	0 days 01:00:00
+        # Transform to minutes:
+        #     Groceries	1
         events["Duration"] = events["DTEND"] - events["DTSTART"]
         events["Duration"] = events["Duration"].dt.total_seconds() / 60 / 60
-    return calendars
 
+        # Add index
+        # From:
+        #     1	Groceries	0 days 01:00:00
+        #     2	Shopping	0 days 01:00:00
+        #     3	Groceries	0 days 01:00:00
+        # With index:
+        #     Groceries	0 days 01:00:00
+        #     Shopping	0 days 01:00:00
+        #     Groceries	0 days 01:00:00
+        # events = events.set_index("SUMMARY")
 
-def set_index(calendars):
-    """
-    From :
-    1	Groceries	0 days 01:00:00
-    2	Shopping	0 days 01:00:00
-    3	Groceries	0 days 01:00:00
-    With index:
-    Groceries	0 days 01:00:00
-    Shopping	0 days 01:00:00
-    Groceries	0 days 01:00:00
-    Sum:
-    Groceries	0 days 02:00:00
-    Shopping	0 days 01:00:00
-    """
-    for name, events in calendars.items():
-        events = events.set_index("SUMMARY")
-        events = events.sum(level=0)
+        # Sort by duration descending
+        events = events.sort_values(by=["Duration", "SUMMARY"], ascending=False)
+
+        # Remove daily or mulitple days activities
+        events = events[events.Duration != 0]
         calendars[name] = events
     return calendars
 
 
+def show_by_activity(calendars):
+    """
+    Show list of activities with duration:
+    Algoritmi	45
+    Reti	    44.5000
+    Ingegneria 	39
+    """
+    activities = ["Select value", *calendars]
+    activity = st.selectbox("List of all the activities", activities)
+    if activity != "Select value":
+        st.table(calendars[activity])
+
+
+def get_by_activity(calendars):
+    # Sum:
+    #     Groceries	0 days 02:00:00
+    #     Shopping	0 days 01:00:00
+    for name, events in calendars.items():
+        events = events.sum()
+    return calendars
+
+
+def get_by_month(calendars):
+    # 2021-03 FBK         3.00
+    #         Update      1.00
+    # 2021-04 FBK         2.0
+    #         Update      4.00
+    for name, df in calendars.items():
+        # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            df["Month"] = df["DTSTART"].dt.to_period("M").astype("str")
+        df.set_index(["Month", "SUMMARY"], inplace=True)
+        df = df.groupby(["Month", "SUMMARY"])
+        df = df.sum()
+        calendars[name] = df
+    return calendars
+
+
 if __name__ == "__main__":
-    calendars = get_calendars()
-    calendars = cal_to_datetime(calendars)
-    calendars = get_duration(calendars)
-    calendars = set_index(calendars)
-    st.title("Calendar data")
-    for name, calendar in calendars.items():
-        st.line_chart(calendar)
+    calendars = get_google_calendars()
+    calendars = calendars.copy()
+    calendars = edit_datetime(calendars)
 
-    # # Add value column with minutes
-    # hour = df["DTSTART"].dt.hour
-    # minute = df["DTSTART"].dt.minute
-    # minute = hour * 60 + minute
-    # df["value"] = minute
+    st.title("Calendar Analyzer")
+    data_by_activity = get_by_activity(calendars)
+    data_by_month = get_by_month(calendars)
+    show_by_activity(data_by_month)
 
-    # df.set_index("DTSTART")
-    # return df
-
-    # df = create_data_frame(cal)
-    # # print(df)
-    # #
-
-    # options = list(dict.fromkeys(df["SUMMARY"]))
-    # option = st.selectbox("Which activity you'd like to visualize?", options)
+    # for name, calendar in data_by_month.items():
+    #     st.bar_chart(calendar)
