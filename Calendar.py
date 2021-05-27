@@ -48,17 +48,23 @@ class Calendar:
         return json
 
     def edit_datetime(self):
-        for name, events in self.calendars.items():
+        for name, df in self.calendars.items():
             # Transforms dates in date format
-            events["DTSTART"] = pd.to_datetime(events["DTSTART"])
-            events["DTEND"] = pd.to_datetime(events["DTEND"])
+            df["DTSTART"] = pd.to_datetime(df["DTSTART"])
+            df["DTEND"] = pd.to_datetime(df["DTEND"])
 
             # Calculates duration from start to end like:
             #     Groceries	0 days 01:00:00
             # Transform to minutes:
             #     Groceries	1
-            events["Duration"] = events["DTEND"] - events["DTSTART"]
-            events["Duration"] = events["Duration"].dt.total_seconds() / 60 / 60
+            df["Duration"] = df["DTEND"] - df["DTSTART"]
+            df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
+
+            # From: 'Dinner with Pietro'
+            # Summary: 'Dinner'
+            # Descrip: 'with Pietro'
+            df["SUMMARY"] = df["SUMMARY"].str.split(" ").str[0]
+            df["Description"] = df["SUMMARY"].str.split(" ")[1:].str.join(" ")
 
             # Add index
             # From:
@@ -69,22 +75,25 @@ class Calendar:
             #     Groceries	0 days 01:00:00
             #     Shopping	0 days 01:00:00
             #     Groceries	0 days 01:00:00
-            # events = events.set_index("SUMMARY")
+            # df = df.set_index("SUMMARY")
 
             # Sort
-            events = events.sort_values(by=["Duration", "SUMMARY"], ascending=False)
+            df = df.sort_values(by=["Duration", "SUMMARY"], ascending=False)
 
             # Remove daily/mulitple days activities and NaN
-            self.calendars[name] = events[events.Duration > 0]
+            self.calendars[name] = df[df.Duration > 0]
 
     @property
     def by_activity(self):
         # Sum:
         #     Groceries	0 days 02:00:00
         #     Shopping	0 days 01:00:00
-        for _, events in self.calendars.items():
-            events = events.sum()
-        return self.calendars
+        calendars = {}
+        for name, df in self.calendars.items():
+            df = df.set_index(["SUMMARY"])
+            df = df.sum(level=0)
+            calendars[name] = df
+        return calendars
 
     @property
     def by_month(self):
@@ -98,7 +107,7 @@ class Calendar:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 df["Month"] = df["DTSTART"].dt.to_period("M").astype("str")
-            df.set_index(["Month", "SUMMARY"])
+            # df.set_index(["Month", "SUMMARY"])
             df = df.groupby(["Month", "SUMMARY"])
             df = df.sum()
             calendars[name] = df
@@ -111,7 +120,7 @@ class Calendar:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 df["Week"] = df["DTSTART"].dt.to_period("W").astype("str")
-            df = df.set_index(["Week", "SUMMARY"])
+            # df = df.set_index(["Week", "SUMMARY"])
             df = df.groupby(["Week", "SUMMARY"])
             df = df.sum()
             calendars[name] = df

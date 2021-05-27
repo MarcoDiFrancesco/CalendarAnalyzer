@@ -2,7 +2,7 @@ from Calendar import Calendar
 import streamlit as st
 
 
-def list_all(calendars):
+def get_cal_type(calendars):
     """
     Show list of activities with duration:
     Algoritmi	45
@@ -19,14 +19,28 @@ def list_all(calendars):
 
     activities = ["Select value", *calendar]
     activity = st.selectbox("List of all the activities", activities)
-    if activity != "Select value":
-        st.table(calendar[activity])
+    if activity == "Select value":
+        return None
+    return calendar[activity]
+
+
+def list_all(df):
+    st.table(df)
+
+
+def chart_by_month(df):
+    st.bar_chart(df)
+
+
+def main():
+    calendar = Calendar()
+    st.title("Calendar Analyzer")
+    df = get_cal_type(calendar)
+    if df is None:
+        return
+    list_all(df)
+    chart_by_month(df)
 
 
 if __name__ == "__main__":
-    calendar = Calendar()
-    st.title("Calendar Analyzer")
-    list_all(calendar)
-
-    # for name, calendar in data_by_month.items():
-    #     st.bar_chart(calendar)
+    main()
