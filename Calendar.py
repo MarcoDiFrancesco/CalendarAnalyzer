@@ -113,38 +113,42 @@ class Calendar:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 df["Month"] = df["DTSTART"].dt.to_period("M").astype("str")
-            # df.set_index(["Month", "SUMMARY"])
-            # Get list of activities
-            activity_list = df["SUMMARY"].unique()
-            df = df.groupby(["Month", "SUMMARY"])
-
-            # 2020-11 Breakfast     31.00
-            #         Dinner        33.00
-            #         Lunch         26.50
-            df = df.sum()
-
-            # 2020-11 Breakfast     31.00
-            # 2020-11 Dinner        33.00
-            # 2020-11 Lunch         26.50
-
-            df = df.reset_index()
-
-            # SUMMARY  Breakfast  Dinner  Lunch  Snack
-            # Month
-            # 2019-11      11.50   15.00   15.5    NaN
-            # 2019-12      20.50   30.50   30.0    NaN
-            # 2020-01      32.50   37.00   30.5    NaN
-            df = df.pivot(index="Month", columns="SUMMARY")["Duration"]
-
-            # SUMMARY  Breakfast  Dinner  Lunch  Snack
-            # Month
-            # 2019-11      11.50   15.00   15.5    0.0
-            # 2019-12      20.50   30.50   30.0    0.0
-            # 2020-01      32.50   37.00   30.5    0.0
-            df = df.fillna(0)
+            df = self.get_by_date(df, "Month")
 
             calendars[name] = df
         return calendars
+
+    def get_by_date(self, df, datetype):
+        # 2020-11 Breakfast     31.00
+        #         Dinner        33.00
+        #         Lunch         26.50
+        df = df.groupby([datetype, "SUMMARY"])
+        df = df.sum()
+
+        # 2020-11 Breakfast     31.00
+        # 2020-11 Dinner        33.00
+        # 2020-11 Lunch         26.50
+
+        df = df.reset_index()
+
+        # SUMMARY  Breakfast  Dinner  Lunch  Snack
+        # Month
+        # 2019-11      11.50   15.00   15.5    NaN
+        # 2019-12      20.50   30.50   30.0    NaN
+        # 2020-01      32.50   37.00   30.5    NaN
+        df = df.pivot(index=datetype, columns="SUMMARY")["Duration"]
+
+        # SUMMARY  Breakfast  Dinner  Lunch  Snack
+        # Month
+        # 2019-11      11.50   15.00   15.5    0.0
+        # 2019-12      20.50   30.50   30.0    0.0
+        # 2020-01      32.50   37.00   30.5    0.0
+        df = df.fillna(0)
+
+        # List of columns
+        columns = list(df.columns.values)
+        df = pd.DataFrame(df, columns=columns)
+        return df
 
     @property
     def by_week(self):
@@ -153,8 +157,6 @@ class Calendar:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 df["Week"] = df["DTSTART"].dt.to_period("W").astype("str")
-            # df = df.set_index(["Week", "SUMMARY"])
-            df = df.groupby(["Week", "SUMMARY"])
-            df = df.sum()
+            df = self.get_by_date(df, "Week")
             calendars[name] = df
         return calendars
