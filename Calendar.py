@@ -8,6 +8,8 @@ import pandas as pd
 import tempfile
 import copy
 import warnings
+import datetime
+import numpy as np
 
 
 class Calendar:
@@ -39,9 +41,6 @@ class Calendar:
     def download_cal(self, link):
         """Download ics from Google Calendar, return json"""
         ics = requests.get(link).text
-        # file_path = f"/tmp/{uuid.uuid4()}-calendar.ics"
-        # with open(file_path, "w") as f:
-        #     f.write(str(ics))
         with tempfile.NamedTemporaryFile(mode="w") as f:
             f.write(str(ics))
             json = jicson.fromFile(f.name)
@@ -53,6 +52,12 @@ class Calendar:
             df["DTSTART"] = pd.to_datetime(df["DTSTART"])
             df["DTEND"] = pd.to_datetime(df["DTEND"])
 
+            # Discard before date
+            df = df[df["DTSTART"] > "2019-11-16"]
+            # Discard future events
+            today = datetime.datetime.today().strftime("%Y-%m-%d")
+            df = df[df["DTSTART"] < today]
+
             # Calculates duration from start to end like:
             #     Groceries	0 days 01:00:00
             # Transform to minutes:
@@ -63,8 +68,8 @@ class Calendar:
             # From: 'Dinner with Pietro'
             # Summary: 'Dinner'
             # Descrip: 'with Pietro'
-            df["SUMMARY"] = df["SUMMARY"].str.split(" ").str[0]
-            df["Description"] = df["SUMMARY"].str.split(" ")[1:].str.join(" ")
+            # df["SUMMARY"] = df["SUMMARY"].str.split(" ").str[0]
+            # df["Description"] = df["SUMMARY"].str.split(" ")[1:].str.join(" ")
 
             # Add index
             # From:
@@ -78,7 +83,7 @@ class Calendar:
             # df = df.set_index("SUMMARY")
 
             # Sort
-            df = df.sort_values(by=["Duration", "SUMMARY"], ascending=False)
+            # df = df.sort_values(by=["Duration"])
 
             # Remove daily/mulitple days activities and NaN
             self.calendars[name] = df[df.Duration > 0]
@@ -92,6 +97,7 @@ class Calendar:
         for name, df in self.calendars.items():
             df = df.set_index(["SUMMARY"])
             df = df.sum(level=0)
+            df = df.sort_values(by=["Duration"], ascending=False)
             calendars[name] = df
         return calendars
 
@@ -108,8 +114,35 @@ class Calendar:
                 warnings.simplefilter("ignore")
                 df["Month"] = df["DTSTART"].dt.to_period("M").astype("str")
             # df.set_index(["Month", "SUMMARY"])
+            # Get list of activities
+            activity_list = df["SUMMARY"].unique()
             df = df.groupby(["Month", "SUMMARY"])
+
+            # 2020-11 Breakfast     31.00
+            #         Dinner        33.00
+            #         Lunch         26.50
             df = df.sum()
+
+            # 2020-11 Breakfast     31.00
+            # 2020-11 Dinner        33.00
+            # 2020-11 Lunch         26.50
+
+            df = df.reset_index()
+
+            # SUMMARY  Breakfast  Dinner  Lunch  Snack
+            # Month
+            # 2019-11      11.50   15.00   15.5    NaN
+            # 2019-12      20.50   30.50   30.0    NaN
+            # 2020-01      32.50   37.00   30.5    NaN
+            df = df.pivot(index="Month", columns="SUMMARY")["Duration"]
+
+            # SUMMARY  Breakfast  Dinner  Lunch  Snack
+            # Month
+            # 2019-11      11.50   15.00   15.5    0.0
+            # 2019-12      20.50   30.50   30.0    0.0
+            # 2020-01      32.50   37.00   30.5    0.0
+            df = df.fillna(0)
+
             calendars[name] = df
         return calendars
 
