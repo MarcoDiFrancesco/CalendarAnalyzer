@@ -25,7 +25,7 @@ class Calendar:
     @st.cache
     def download_cals(self):
         """Download calendars"""
-        calendars = {}
+        cals = []
         with open("calendars.json") as f:
             links = json.load(f)
             for link in links:
@@ -35,8 +35,9 @@ class Calendar:
                 cal_content = pd.DataFrame(
                     data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND"]
                 )
-                calendars[cal_name] = cal_content
-        return calendars
+                cal_content["Calendar"] = cal_name
+                cals.append(cal_content)
+        return pd.concat(cals)
 
     def download_cal(self, link):
         """Download ics from Google Calendar, return json"""
@@ -47,116 +48,94 @@ class Calendar:
         return json
 
     def edit_datetime(self):
-        for name, df in self.calendars.items():
-            # Transforms dates in date format
-            df["DTSTART"] = pd.to_datetime(df["DTSTART"])
-            df["DTEND"] = pd.to_datetime(df["DTEND"])
+        # Transforms dates in date format
+        df = self.calendars
+        df["DTSTART"] = pd.to_datetime(df["DTSTART"])
+        df["DTEND"] = pd.to_datetime(df["DTEND"])
 
-            # Discard before date
-            df = df[df["DTSTART"] > "2019-11-16"]
-            # Discard future events
-            today = datetime.datetime.today().strftime("%Y-%m-%d")
-            df = df[df["DTSTART"] < today]
+        # Discard before date
+        df = df[df["DTSTART"] > "2019-11-16"]
+        # Discard future events
+        today = datetime.datetime.today().strftime("%Y-%m-%d")
+        df = df[df["DTSTART"] < today]
 
-            # Calculates duration from start to end like:
-            #     Groceries	0 days 01:00:00
-            # Transform to minutes:
-            #     Groceries	1
-            df["Duration"] = df["DTEND"] - df["DTSTART"]
-            df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
+        # Calculates duration from start to end like:
+        #     Groceries	0 days 01:00:00
+        # Transform to minutes:
+        #     Groceries	1
+        df["Duration"] = df["DTEND"] - df["DTSTART"]
+        df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
 
-            # From: 'Dinner with Pietro'
-            # Summary: 'Dinner'
-            # Descrip: 'with Pietro'
-            # df["SUMMARY"] = df["SUMMARY"].str.split(" ").str[0]
-            # df["Description"] = df["SUMMARY"].str.split(" ")[1:].str.join(" ")
-
-            # Add index
-            # From:
-            #     1	Groceries	0 days 01:00:00
-            #     2	Shopping	0 days 01:00:00
-            #     3	Groceries	0 days 01:00:00
-            # With index:
-            #     Groceries	0 days 01:00:00
-            #     Shopping	0 days 01:00:00
-            #     Groceries	0 days 01:00:00
-            # df = df.set_index("SUMMARY")
-
-            # Sort
-            # df = df.sort_values(by=["Duration"])
-
-            # Remove daily/mulitple days activities and NaN
-            self.calendars[name] = df[df.Duration > 0]
-
-    @property
-    def by_activity(self):
-        # Sum:
-        #     Groceries	0 days 02:00:00
+        # Add index
+        # From:
+        #     1	Groceries	0 days 01:00:00
+        #     2	Shopping	0 days 01:00:00
+        #     3	Groceries	0 days 01:00:00
+        # With index:
+        #     Groceries	0 days 01:00:00
         #     Shopping	0 days 01:00:00
-        calendars = {}
-        for name, df in self.calendars.items():
-            df = df.set_index(["SUMMARY"])
-            df = df.sum(level=0)
-            df = df.sort_values(by=["Duration"], ascending=False)
-            calendars[name] = df
-        return calendars
+        #     Groceries	0 days 01:00:00
+        # df = df.set_index("SUMMARY")
 
-    @property
-    def by_month(self):
+        # Remove daily/mulitple days activities and NaN
+        self.calendars = df[df.Duration > 0]
+
+    def by_activity(self, calendar_sel):
+        df = self.calendars
+        if calendar_sel != "Select value":
+            df = df.loc[df["Calendar"] == calendar_sel]
+        df = df.sort_values(by=["Duration"], ascending=False)
+        df = df.set_index(["Calendar", "SUMMARY"])
+        df = df.sum(level=1)
+        return df.sort_values(by=["Duration"], ascending=False)
+
+    def by_month(self, calendar_sel, normalize=False):
         # 2021-03 FBK         3.00
         #         Update      1.00
         # 2021-04 FBK         2.0
         #         Update      4.00
-        calendars = {}
-        for name, df in self.calendars.items():
-            # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                df["Month"] = df["DTSTART"].dt.to_period("M").astype("str")
-            df = self.get_by_date(df, "Month")
+        df = self.calendars
+        return self.by_period(df, "M", calendar_sel, normalize)
 
-            calendars[name] = df
-        return calendars
+    def by_week(self, calendar_sel, normalize=False):
+        df = self.calendars
+        return self.by_period(df, "W", calendar_sel, normalize)
 
-    def get_by_date(self, df, datetype):
+    def get_active_days(self):
+        df = self.calendars
+        df["Days"] = df["DTSTART"].dt.to_period("D").astype("str")
+        df["Months"] = df["DTSTART"].dt.to_period("M").astype("str")
+        # df = df.groupby(["Days"])
+        # df["DaysActive"] = df["DTSTART"].dt.to_period("D")
+
+    def by_period(self, df, period, calendar_sel, normalize):
+        if calendar_sel != "Select value":
+            df = df.loc[df["Calendar"] == calendar_sel]
+
+        # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            df["Period"] = df["DTSTART"].dt.to_period(period).astype("str")
+
         # 2020-11 Breakfast     31.00
         #         Dinner        33.00
         #         Lunch         26.50
-        df = df.groupby([datetype, "SUMMARY"])
+        df = df.groupby(["Period", "SUMMARY"])
         df = df.sum()
 
         # 2020-11 Breakfast     31.00
         # 2020-11 Dinner        33.00
         # 2020-11 Lunch         26.50
-
         df = df.reset_index()
-
-        # SUMMARY  Breakfast  Dinner  Lunch  Snack
-        # Month
-        # 2019-11      11.50   15.00   15.5    NaN
-        # 2019-12      20.50   30.50   30.0    NaN
-        # 2020-01      32.50   37.00   30.5    NaN
-        df = df.pivot(index=datetype, columns="SUMMARY")["Duration"]
 
         # SUMMARY  Breakfast  Dinner  Lunch  Snack
         # Month
         # 2019-11      11.50   15.00   15.5    0.0
         # 2019-12      20.50   30.50   30.0    0.0
         # 2020-01      32.50   37.00   30.5    0.0
-        df = df.fillna(0)
+        df = df.pivot_table(index="Period", columns="SUMMARY", fill_value=0)["Duration"]
 
         # List of columns
         columns = list(df.columns.values)
         df = pd.DataFrame(df, columns=columns)
         return df
-
-    @property
-    def by_week(self):
-        calendars = {}
-        for name, df in self.calendars.items():
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                df["Week"] = df["DTSTART"].dt.to_period("W").astype("str")
-            df = self.get_by_date(df, "Week")
-            calendars[name] = df
-        return calendars
