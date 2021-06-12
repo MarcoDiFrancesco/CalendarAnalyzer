@@ -9,7 +9,6 @@ import tempfile
 import copy
 import warnings
 import datetime
-import numpy as np
 
 
 class Calendar:
@@ -90,11 +89,9 @@ class Calendar:
         return df.sort_values(by=["Duration"], ascending=False)
 
     def by_month(self, calendar_sel, normalize=False):
-        # 2021-03 FBK         3.00
-        #         Update      1.00
-        # 2021-04 FBK         2.0
-        #         Update      4.00
         df = self.calendars
+        # if calendar_sel == "Select value":
+        #     print(df)
         return self.by_period(df, "M", calendar_sel, normalize)
 
     def by_week(self, calendar_sel, normalize=False):
@@ -111,6 +108,9 @@ class Calendar:
     def by_period(self, df, period, calendar_sel, normalize):
         if calendar_sel != "Select value":
             df = df.loc[df["Calendar"] == calendar_sel]
+            group_by_column = "SUMMARY"
+        else:
+            group_by_column = "Calendar"
 
         # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
         with warnings.catch_warnings():
@@ -120,7 +120,7 @@ class Calendar:
         # 2020-11 Breakfast     31.00
         #         Dinner        33.00
         #         Lunch         26.50
-        df = df.groupby(["Period", "SUMMARY"])
+        df = df.groupby(["Period", group_by_column])
         df = df.sum()
 
         # 2020-11 Breakfast     31.00
@@ -133,7 +133,9 @@ class Calendar:
         # 2019-11      11.50   15.00   15.5    0.0
         # 2019-12      20.50   30.50   30.0    0.0
         # 2020-01      32.50   37.00   30.5    0.0
-        df = df.pivot_table(index="Period", columns="SUMMARY", fill_value=0)["Duration"]
+        df = df.pivot_table(index="Period", columns=group_by_column, fill_value=0)[
+            "Duration"
+        ]
 
         # List of columns
         columns = list(df.columns.values)

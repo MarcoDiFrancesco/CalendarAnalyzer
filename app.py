@@ -38,7 +38,8 @@ def main():
         )
         st.write(alt_chart)
     else:
-        st.bar_chart(df, height=400)
+        st.bar_chart(df, height=350)
+        st.area_chart(df, height=350)
 
 
 if __name__ == "__main__":
