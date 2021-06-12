@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run calendar_print.py
+web: sh setup.sh && streamlit run app.py
