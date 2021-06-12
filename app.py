@@ -24,6 +24,15 @@ def main():
         df = calendar.by_activity(calendar_sel)
     show_table = st.checkbox("Show table")
 
+    normalize = st.checkbox("Normalize")
+    if normalize and not cal_type == "Activity":
+        df = df.div(df.sum(axis=1), axis=0)
+        # Sort columns by order of apperance
+        df = df[df.sum().sort_values().index[:]]
+        # Add number because chart orders by name
+        for i, row in enumerate(df):
+            df.rename(columns={row: f"{i}-{row}"}, inplace=True)
+
     if show_table:
         st.table(df)
     if cal_type == "Activity":
