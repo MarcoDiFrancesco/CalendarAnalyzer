@@ -27,6 +27,8 @@ def main():
         df = calendar.by_week(calendar_sel, normalize=True)
     elif cal_type == "Activity":
         df = calendar.by_activity(calendar_sel)
+    else:
+        raise KeyError
 
     show_table = st.checkbox("Show data")
     if show_table:

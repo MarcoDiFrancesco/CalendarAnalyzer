@@ -33,3 +33,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest
+          platforms: |
+            linux/amd64
+            linux/arm64
+            linux/arm/v7
