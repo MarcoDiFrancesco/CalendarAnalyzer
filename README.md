@@ -1,3 +1,3 @@
 # CalendarAnalyzer
 
-Analyze data gathered from Google Calendar ics files
+Analyze data gathered from Google Calendar
