@@ -30,6 +30,9 @@ jobs:
       - name: Install buildx support for multiple architectures (e.g. arm/v7)
         run: docker run --privileged --rm tonistiigi/binfmt --install all
 
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
       - name: Build image
         uses: docker/build-push-action@v2
         with:

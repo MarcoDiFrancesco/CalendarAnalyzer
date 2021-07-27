@@ -1,46 +1,33 @@
+import os
 from Calendar import Calendar
 import streamlit as st
-import pandas as pd
 import altair as alt
+import sentry_sdk
+from utils.sort_df import sort_df
+import logging
+from utils.table_sd_sum import table_sd_sum
+from utils.show_checkboxes import show_checkboxes
 
 
-def main():
-    calendar = Calendar()
-    st.title("Calendar Analyzer")
-    password = st.text_input("Enter a password", type="password")
-    PSW = "gigi"
-    if password != PSW:
-        return
-    # Make radio horizontal
-    st.write(
-        "<style>div.row-widget.stRadio > div{flex-direction:row;}</style>",
-        unsafe_allow_html=True,
-    )
-    cal_type = st.radio("Group by", options=["Month", "Week", "Activity"])
-
-    calendar_list = calendar.calendars["Calendar"].unique()
-    calendar_list = ["Select value", *calendar_list]
-    calendar_sel = st.selectbox("List of all calendars", calendar_list)
-    if cal_type == "Month":
-        df = calendar.by_month(calendar_sel, normalize=True)
-    elif cal_type == "Week":
-        df = calendar.by_week(calendar_sel, normalize=True)
-    elif cal_type == "Activity":
-        df = calendar.by_activity(calendar_sel)
+def show_table(group_by, df):
+    if group_by == "Month" or group_by == "Week":
+        st.write(table_sd_sum(df))
     else:
-        raise KeyError
+        st.write(df)
 
-    show_table = st.checkbox("Show data")
-    if show_table:
-        st.table(df)
 
-    # Sort data
-    if not cal_type == "Activity":
-        normalize_by_default = calendar_sel == "Select value"
-        df = sort_df(df, normalize_by_default)
-
-    if cal_type == "Activity":
-        alt_chart = (
+def show_bar_chart(group_by, df, sel_cal):
+    st.subheader("Bar chart")
+    if group_by == "Month" or group_by == "Week":
+        normalize = sel_cal == "Select value"
+        normalize, area_chart, _ = show_checkboxes(normalize)
+        df = sort_df(df, normalize)
+        if area_chart:
+            st.area_chart(df, height=350)
+        else:
+            st.bar_chart(df, height=350)
+    else:
+        st.write(
             alt.Chart(df.reset_index())
             .mark_bar(point=True)
             .encode(
@@ -49,61 +36,64 @@ def main():
             )
             .properties(width=700, height=400)
         )
-        st.write(alt_chart)
+
+
+def show_filter(calendar):
+    # Show radio options horizontally
+    st.write(
+        "<style>div.row-widget.stRadio > div{flex-direction:row;}</style>",
+        unsafe_allow_html=True,
+    )
+
+    # Group by type
+    group_by = st.radio("Group by", options=["Month", "Week", "Activity"])
+    cal_list = calendar.calendars["Calendar"].unique()
+    cal_list = ["Select value", *cal_list]
+    sel_cal = st.selectbox("List of all calendars", cal_list)
+
+    # Filter section
+    filter = st.beta_expander("Filters")
+    with filter:
+        st.write("TO IMPLEMENT")
+        start, stop = st.select_slider(
+            "Restrict period",
+            ["01/20", "02/20", "03/20"],
+            value=("01/20", "02/20"),
+        )
+    if group_by == "Month":
+        df = calendar.by_month(sel_cal, normalize=True)
+    elif group_by == "Week":
+        df = calendar.by_week(sel_cal, normalize=True)
+    elif group_by == "Activity":
+        df = calendar.by_activity(sel_cal)
     else:
-        st.bar_chart(df, height=350)
-        st.area_chart(df, height=350)
+        logging.error(f"Key error: {group_by}")
+        raise KeyError
+
+    return group_by, df, sel_cal
 
 
-def sort_df(df, normalize_by_default):
-    if normalize_by_default:
-        options = ["Standard deviation", "Sum", "Nope"]
-    else:
-        options = ["Nope", "Standard deviation", "Sum"]
-    normalize_by = st.radio("Normalize by", options=options)
-    if normalize_by == "Nope":
-        return df
-    if normalize_by == "Sum":
-        sorted_df = df.sum().sort_values()
-    elif normalize_by == "Standard deviation":
-        sorted_df = df.std().sort_values()
+def main():
+    calendar = Calendar()
+    st.title("Calendar Analyzer")
 
-    # Show table with std or sum
-    st.dataframe(sorted_df.sort_values(ascending=False).astype(int))
+    # Require password
+    password = st.text_input("Enter a password", type="password")
+    PSW = "gigi"
+    if password != PSW:
+        return
 
-    # Normalize by sum
-    df = df.div(df.sum(axis=1), axis=0)
-
-    # Sort one up, one down
-    new_sort = []
-    for element in sorted_df.index:
-        new_sort.insert(len(new_sort) // 2, element)
-
-    # Reverse order, in this case looks better
-    new_sort = new_sort[::-1]
-
-    # Reorder columns
-    df = df[new_sort]
-
-    # Add number because chart orders by name
-    for i, row in enumerate(df):
-        df.rename(columns={row: f"{i}-{row}"}, inplace=True)
-    return df
+    group_by, df, sel_cal = show_filter(calendar)
+    show_table(group_by, df)
+    show_bar_chart(group_by, df, sel_cal)
 
 
-# def sort_by_sum(df):
-#     sorted_df = df.sum().sort_values()
-#     st.dataframe(sorted_df)
-#     # Normalize by sum
-#     df = df.div(df.sum(axis=1), axis=0)
-#     df = df[sorted_df.index]
-#     return df
-
-
-# def sort_by_std(df):
-#     sorted_df = df.std().sort_values()
-#     st.dataframe(sorted_df)
+def sentry():
+    key = os.environ.get("SENTRY_KEY")
+    if key:
+        sentry_sdk.init(key, traces_sample_rate=1.0)
 
 
 if __name__ == "__main__":
+    sentry()
     main()

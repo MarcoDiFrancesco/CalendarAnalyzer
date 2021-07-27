@@ -3,3 +3,4 @@ calendars.json
 # Python virtual enviroment
 venv
 .venv
+.envvars

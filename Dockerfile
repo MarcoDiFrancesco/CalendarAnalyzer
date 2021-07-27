@@ -1,8 +1,6 @@
 FROM python:3.9-slim-buster
-EXPOSE 8501
+RUN apt-get update && apt-get install -y gcc
 WORKDIR /app
-RUN apt-get update
-RUN apt-get install -y gcc
 COPY requirements.txt requirements.txt
 RUN pip install --timeout 120 -r requirements.txt
 COPY . .

@@ -1,6 +1,4 @@
 import json
-from numpy import NaN
-from pandas._libs.tslibs import NaT
 import requests
 import jicson
 import streamlit as st
