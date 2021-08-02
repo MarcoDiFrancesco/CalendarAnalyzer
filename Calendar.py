@@ -127,7 +127,7 @@ class Calendar:
 
     def _get_normalized_duration(self, df):
         """
-        Normalize duration by number of days in the month
+        Normalize activity duration by number of days in the month
         e.g. February -> 10h * 30 / 28 = 10.71h
         """
         df_date = pd.DataFrame(df["Period"])

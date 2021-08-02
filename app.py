@@ -74,8 +74,10 @@ def show_filter(calendar):
 
 
 def main():
-    calendar = Calendar()
+    st.set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
     st.title("Calendar Analyzer")
+
+    calendar = Calendar()
 
     # Require password
     password = st.text_input("Enter a password", type="password")
