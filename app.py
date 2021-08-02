@@ -80,7 +80,9 @@ def main():
     # Require password
     password = st.text_input("Enter a password", type="password")
     PSW = "gigi"
-    if password != PSW:
+    if os.environ.get("DEBUG"):
+        pass
+    elif password != PSW:
         return
 
     group_by, df, sel_cal = show_filter(calendar)
@@ -88,12 +90,11 @@ def main():
     show_bar_chart(group_by, df, sel_cal)
 
 
-def sentry():
+if __name__ == "__main__":
     key = os.environ.get("SENTRY_KEY")
     if key:
         sentry_sdk.init(key, traces_sample_rate=1.0)
-
-
-if __name__ == "__main__":
-    sentry()
-    main()
+    try:
+        main()
+    except Exception as err:
+        sentry_sdk.capture_exception(err)

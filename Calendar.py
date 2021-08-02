@@ -1,4 +1,5 @@
 import json
+from altair.vegalite.v4.schema.channels import Column
 import requests
 import jicson
 import streamlit as st
@@ -7,6 +8,7 @@ import tempfile
 import copy
 import warnings
 import datetime
+from calendar import monthrange
 
 
 class Calendar:
@@ -14,19 +16,18 @@ class Calendar:
 
     def __init__(self):
         # Dictionary containing calendars
-        cached_calendars = self.download_cals()
-        # copy.copy throws warning
+        cached_calendars = self._download_cals()
         self.calendars = copy.deepcopy(cached_calendars)
-        self.edit_datetime()
+        self._edit_datetime()
 
     @st.cache
-    def download_cals(self):
+    def _download_cals(self):
         """Download calendars"""
         cals = []
         with open("calendars.json") as f:
             links = json.load(f)
             for link in links:
-                cal = self.download_cal(link)
+                cal = self._download_cal(link)
                 cal = cal["VCALENDAR"][0]
                 cal_name = cal["X-WR-CALNAME"]
                 cal_content = pd.DataFrame(
@@ -36,7 +37,7 @@ class Calendar:
                 cals.append(cal_content)
         return pd.concat(cals)
 
-    def download_cal(self, link):
+    def _download_cal(self, link):
         """Download ics from Google Calendar, return json"""
         ics = requests.get(link).text
         with tempfile.NamedTemporaryFile(mode="w") as f:
@@ -44,17 +45,17 @@ class Calendar:
             json = jicson.fromFile(f.name)
         return json
 
-    def edit_datetime(self):
+    def _edit_datetime(self):
         # Transforms dates in date format
         df = self.calendars
         df["DTSTART"] = pd.to_datetime(df["DTSTART"])
         df["DTEND"] = pd.to_datetime(df["DTEND"])
 
         # Discard before date
-        df = df[df["DTSTART"] > "2019-11-16"]
-        # Discard future events
-        today = datetime.datetime.today().strftime("%Y-%m-%d")
-        df = df[df["DTSTART"] < today]
+        df = df[df["DTSTART"] > "2019-12"]  # Real is 2019-11-16
+        # Discard this month
+        month = datetime.datetime.today().strftime("%Y-%m")
+        df = df[df["DTSTART"] < month]
 
         # Calculates duration from start to end like:
         #     Groceries	0 days 01:00:00
@@ -62,17 +63,6 @@ class Calendar:
         #     Groceries	1
         df["Duration"] = df["DTEND"] - df["DTSTART"]
         df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
-
-        # Add index
-        # From:
-        #     1	Groceries	0 days 01:00:00
-        #     2	Shopping	0 days 01:00:00
-        #     3	Groceries	0 days 01:00:00
-        # With index:
-        #     Groceries	0 days 01:00:00
-        #     Shopping	0 days 01:00:00
-        #     Groceries	0 days 01:00:00
-        # df = df.set_index("SUMMARY")
 
         # Remove daily/mulitple days activities and NaN
         self.calendars = df[df.Duration > 0]
@@ -90,20 +80,13 @@ class Calendar:
         df = self.calendars
         # if calendar_sel == "Select value":
         #     print(df)
-        return self.by_period(df, "M", calendar_sel, normalize)
+        return self._by_period(df, "M", calendar_sel, normalize)
 
     def by_week(self, calendar_sel, normalize=False):
         df = self.calendars
-        return self.by_period(df, "W", calendar_sel, normalize)
+        return self._by_period(df, "W", calendar_sel, normalize)
 
-    def get_active_days(self):
-        df = self.calendars
-        df["Days"] = df["DTSTART"].dt.to_period("D").astype("str")
-        df["Months"] = df["DTSTART"].dt.to_period("M").astype("str")
-        # df = df.groupby(["Days"])
-        # df["DaysActive"] = df["DTSTART"].dt.to_period("D")
-
-    def by_period(self, df, period, calendar_sel, normalize):
+    def _by_period(self, df, period, calendar_sel, normalize):
         if calendar_sel != "Select value":
             df = df.loc[df["Calendar"] == calendar_sel]
             group_by_column = "SUMMARY"
@@ -126,6 +109,8 @@ class Calendar:
         # 2020-11 Lunch         26.50
         df = df.reset_index()
 
+        df = self._get_normalized_duration(df)
+
         # SUMMARY  Breakfast  Dinner  Lunch  Snack
         # Month
         # 2019-11      11.50   15.00   15.5    0.0
@@ -138,4 +123,15 @@ class Calendar:
         # List of columns
         columns = list(df.columns.values)
         df = pd.DataFrame(df, columns=columns)
+        return df
+
+    def _get_normalized_duration(self, df):
+        """
+        Normalize duration by number of days in the month
+        e.g. February -> 10h * 30 / 28 = 10.71h
+        """
+        df_date = pd.DataFrame(df["Period"])
+        df_date["Period"] = pd.to_datetime(df_date["Period"])
+        df_date["DaysInMonth"] = df_date["Period"].dt.daysinmonth
+        df["Duration"] = df["Duration"] * 30 / df_date["DaysInMonth"]
         return df
