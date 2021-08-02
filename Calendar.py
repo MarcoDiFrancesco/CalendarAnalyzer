@@ -67,28 +67,26 @@ class Calendar:
         # Remove daily/mulitple days activities and NaN
         self.calendars = df[df.Duration > 0]
 
-    def by_activity(self, calendar_sel):
+    def by_activity(self, cal_sel=None):
         df = self.calendars
-        if calendar_sel != "Select value":
-            df = df.loc[df["Calendar"] == calendar_sel]
+        if cal_sel is not None:
+            df = df.loc[df["Calendar"] == cal_sel]
         df = df.sort_values(by=["Duration"], ascending=False)
         df = df.set_index(["Calendar", "SUMMARY"])
         df = df.sum(level=1)
         return df.sort_values(by=["Duration"], ascending=False)
 
-    def by_month(self, calendar_sel, normalize=False):
+    def by_month(self, cal_sel=None):
         df = self.calendars
-        # if calendar_sel == "Select value":
-        #     print(df)
-        return self._by_period(df, "M", calendar_sel, normalize)
+        return self._by_period(df, "M", cal_sel)
 
-    def by_week(self, calendar_sel, normalize=False):
+    def by_week(self, cal_sel=None):
         df = self.calendars
-        return self._by_period(df, "W", calendar_sel, normalize)
+        return self._by_period(df, "W", cal_sel)
 
-    def _by_period(self, df, period, calendar_sel, normalize):
-        if calendar_sel != "Select value":
-            df = df.loc[df["Calendar"] == calendar_sel]
+    def _by_period(self, df, period, cal_sel):
+        if cal_sel is not None:
+            df = df.loc[df["Calendar"] == cal_sel]
             group_by_column = "SUMMARY"
         else:
             group_by_column = "Calendar"

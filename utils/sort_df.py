@@ -2,7 +2,6 @@ import streamlit as st
 
 
 def sort_df(df, normalize):
-
     if not normalize:
         return df
 
