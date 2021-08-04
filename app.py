@@ -2,7 +2,6 @@ import os
 from utils.Calendar import Calendar
 import streamlit as st
 import altair as alt
-import sentry_sdk
 from utils.sort_df import sort_df
 import logging
 from utils.table_sd_sum import table_sd_sum
@@ -115,10 +114,4 @@ def main():
 
 
 if __name__ == "__main__":
-    key = os.environ.get("SENTRY_KEY")
-    if key:
-        sentry_sdk.init(key, traces_sample_rate=1.0)
-    try:
-        main()
-    except Exception as err:
-        sentry_sdk.capture_exception(err)
+    main()
