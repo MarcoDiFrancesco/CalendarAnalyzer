@@ -1,5 +1,4 @@
 import json
-from altair.vegalite.v4.schema.channels import Column
 import requests
 import jicson
 import streamlit as st
@@ -8,7 +7,8 @@ import tempfile
 import copy
 import warnings
 import datetime
-from calendar import monthrange
+import os
+import logging
 
 
 class Calendar:
@@ -24,17 +24,20 @@ class Calendar:
     def _download_cals(self):
         """Download calendars"""
         cals = []
-        with open("calendars.json") as f:
-            links = json.load(f)
-            for link in links:
-                cal = self._download_cal(link)
-                cal = cal["VCALENDAR"][0]
-                cal_name = cal["X-WR-CALNAME"]
-                cal_content = pd.DataFrame(
-                    data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND"]
-                )
-                cal_content["Calendar"] = cal_name
-                cals.append(cal_content)
+        links = os.getenv("CALENDAR_LINKS")
+        if links is None:
+            logging.error("Source CALENDAR_LINKS environment variable")
+            raise KeyError()
+        links = json.loads(links)
+        for link in links:
+            cal = self._download_cal(link)
+            cal = cal["VCALENDAR"][0]
+            cal_name = cal["X-WR-CALNAME"]
+            cal_content = pd.DataFrame(
+                data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND"]
+            )
+            cal_content["Calendar"] = cal_name
+            cals.append(cal_content)
         return pd.concat(cals)
 
     def _download_cal(self, link):

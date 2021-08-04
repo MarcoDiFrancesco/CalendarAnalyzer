@@ -1,5 +1,5 @@
 import os
-from Calendar import Calendar
+from utils.Calendar import Calendar
 import streamlit as st
 import altair as alt
 import sentry_sdk
@@ -35,7 +35,6 @@ def select_activity(calendar):
 
 
 def show_filter(calendar, group_by):
-
     # Filter section
     filter = st.beta_expander("Filters")
     with filter:
