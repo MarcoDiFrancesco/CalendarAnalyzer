@@ -22,7 +22,6 @@ def table_sd_sum(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_dates(base=True):
-    print("BASE", base)
     if not base:
         return [], []
     base_date = [
