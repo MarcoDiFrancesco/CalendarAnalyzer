@@ -66,7 +66,7 @@ def show_table(group_by, df):
 
 
 def show_bar_chart(group_by, df, sel_cal=None):
-    st.subheader("Bar chart")
+    st.subheader("Chart")
     if group_by == "Month" or group_by == "Week":
         normalize = sel_cal is None
         normalize, area_chart, _ = show_checkboxes(normalize)

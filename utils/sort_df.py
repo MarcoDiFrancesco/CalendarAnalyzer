@@ -28,3 +28,11 @@ def sort_df(df, normalize):
     for i, row in enumerate(df):
         df.rename(columns={row: f"{i}-{row}"}, inplace=True)
     return df
+
+
+def sort_by_name(df, type_mw):
+    goal, var = (80, 0.7) if type_mw == "M" else (18, 0.6)
+    df.loc[df["Activity"].isin(["Work", "FBK"]), "Duration"] = goal * var + df[
+        "Duration"
+    ] * (1 - var)
+    return df

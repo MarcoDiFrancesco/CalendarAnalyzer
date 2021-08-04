@@ -9,6 +9,7 @@ import warnings
 import datetime
 import os
 import logging
+from utils import sort_df
 
 
 class Calendar:
@@ -88,11 +89,12 @@ class Calendar:
         return self._by_period(df, "W", cal_sel)
 
     def _by_period(self, df, period, cal_sel):
-        if cal_sel is not None:
+        # Filter by selected calendar
+        if cal_sel:
             df = df.loc[df["Calendar"] == cal_sel]
-            group_by_column = "SUMMARY"
+            df = df.rename(columns={"SUMMARY": "Activity"})
         else:
-            group_by_column = "Calendar"
+            df = df.rename(columns={"Calendar": "Activity"})
 
         # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
         with warnings.catch_warnings():
@@ -102,7 +104,7 @@ class Calendar:
         # 2020-11 Breakfast     31.00
         #         Dinner        33.00
         #         Lunch         26.50
-        df = df.groupby(["Period", group_by_column])
+        df = df.groupby(["Period", "Activity"])
         df = df.sum()
 
         # 2020-11 Breakfast     31.00
@@ -110,14 +112,16 @@ class Calendar:
         # 2020-11 Lunch         26.50
         df = df.reset_index()
 
-        df = self._get_normalized_duration(df)
+        if period == "M":
+            df = self._get_normalized_duration(df)
+        df = sort_df.sort_by_name(df, period)
 
         # SUMMARY  Breakfast  Dinner  Lunch  Snack
         # Month
         # 2019-11      11.50   15.00   15.5    0.0
         # 2019-12      20.50   30.50   30.0    0.0
         # 2020-01      32.50   37.00   30.5    0.0
-        df = df.pivot_table(index="Period", columns=group_by_column, fill_value=0)[
+        df = df.pivot_table(index="Period", columns="Activity", fill_value=0)[
             "Duration"
         ]
 
