@@ -11,10 +11,9 @@ from utils.show_checkboxes import show_checkboxes
 def get_password():
     """Return true if password is correct"""
     password = st.text_input("Enter a password", type="password")
-    PSW = "gigi"
     if os.environ.get("DEBUG"):
         return True
-    if password == PSW:
+    if password == os.environ.get("PSW"):
         return True
     return False
 
@@ -38,6 +37,8 @@ def show_filter(calendar, group_by):
     filter = st.beta_expander("Filters")
     with filter:
         st.write("TO IMPLEMENT")
+        if not get_password():
+            return True
         start, stop = st.select_slider(
             "Restrict period",
             ["01/20", "02/20", "03/20"],
@@ -45,11 +46,11 @@ def show_filter(calendar, group_by):
         )
 
 
-def get_df(calendar, group_by, sel_cal=None):
+def get_df(calendar, group_by, fm, sel_cal=None):
     if group_by == "Month":
-        df = calendar.by_month(sel_cal)
+        df = calendar.by_month(fm, sel_cal)
     elif group_by == "Week":
-        df = calendar.by_week(sel_cal)
+        df = calendar.by_week(fm, sel_cal)
     elif group_by == "Activity":
         df = calendar.by_activity(sel_cal)
     else:
@@ -92,15 +93,13 @@ def main():
     st.title("Calendar Analyzer")
 
     calendar = Calendar()
-    if not get_password():
-        return
     group_by = show_group_by()
-    show_filter(calendar, group_by)
+    fm = show_filter(calendar, group_by)
 
     # All activities
     st.markdown("---")
     st.header("All activities")
-    df = get_df(calendar, group_by)
+    df = get_df(calendar, group_by, fm)
     show_bar_chart(group_by, df)
     show_table(group_by, df)
 
@@ -108,7 +107,7 @@ def main():
     st.markdown("---")
     st.header("Single activity")
     sel_cal = select_activity(calendar)
-    df = get_df(calendar, group_by, sel_cal)
+    df = get_df(calendar, group_by, fm, sel_cal)
     show_bar_chart(group_by, df, sel_cal)
     show_table(group_by, df)
 

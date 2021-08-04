@@ -80,15 +80,15 @@ class Calendar:
         df = df.sum(level=1)
         return df.sort_values(by=["Duration"], ascending=False)
 
-    def by_month(self, cal_sel=None):
+    def by_month(self, filter, cal_sel=None):
         df = self.calendars
-        return self._by_period(df, "M", cal_sel)
+        return self._by_period(df, "M", cal_sel, filter)
 
-    def by_week(self, cal_sel=None):
+    def by_week(self, filter, cal_sel=None):
         df = self.calendars
-        return self._by_period(df, "W", cal_sel)
+        return self._by_period(df, "W", cal_sel, filter)
 
-    def _by_period(self, df, period, cal_sel):
+    def _by_period(self, df, period, cal_sel, flt):
         # Filter by selected calendar
         if cal_sel:
             df = df.loc[df["Calendar"] == cal_sel]
@@ -114,7 +114,7 @@ class Calendar:
 
         if period == "M":
             df = self._get_normalized_duration(df)
-        df = sort_df.sort_by_name(df, period)
+        df = sort_df.sort_by_name(df, period, flt)
 
         # SUMMARY  Breakfast  Dinner  Lunch  Snack
         # Month

@@ -19,3 +19,22 @@ def table_sd_sum(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = ["Sum", "SD"]
     df.sort_values(by="Sum", ascending=False, inplace=True)
     return df
+
+
+def get_dates(base=True):
+    print("BASE", base)
+    if not base:
+        return [], []
+    base_date = [
+        "2019-12",
+        "2019-12-02/2019-12-08",
+        "2019-12-09/2019-12-15",
+        "2020-09",
+        "2020-08-31/2020-09-06",
+        "2020-09-07/2020-09-13",
+        "2020-09-14/2020-09-20",
+        "2020-09-28/2020-10-04",
+        "2021-09",
+    ]
+    base_activity = ["Work", "FBK"]
+    return base_date, base_activity
