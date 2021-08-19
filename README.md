@@ -1,4 +1,4 @@
-# CalendarAnalyzer
+# Calendar Analyzer
 
 Visualize my life's activities
 
