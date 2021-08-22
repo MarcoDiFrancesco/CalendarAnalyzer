@@ -34,7 +34,7 @@ def select_activity(calendar):
 
 def show_filter(calendar, group_by):
     # Filter section
-    filter = st.beta_expander("Filters")
+    filter = st.expander("Filters")
     with filter:
         st.write("TO IMPLEMENT")
         if not get_password():
@@ -78,7 +78,7 @@ def show_bar_chart(group_by, df, sel_cal=None):
             st.bar_chart(df, height=350)
     else:
         st.write(
-            alt.Chart(df.reset_index())
+            st.columns.Chart(df.reset_index())
             .mark_bar(point=True)
             .encode(
                 alt.X("SUMMARY", title="Activity", sort="-y"),

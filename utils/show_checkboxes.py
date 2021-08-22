@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def show_checkboxes(normalize):
-    cb1, cb2, cb3 = st.beta_columns(3)
+    cb1, cb2, cb3 = st.columns(3)
     with cb1:
         res1 = st.checkbox(
             "Normalize",
