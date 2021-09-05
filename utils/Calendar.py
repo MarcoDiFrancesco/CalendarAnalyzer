@@ -26,9 +26,7 @@ class Calendar:
         """Download calendars"""
         cals = []
         links = os.getenv("CALENDAR_LINKS")
-        if links is None:
-            logging.error("Source CALENDAR_LINKS environment variable")
-            raise KeyError()
+        assert links, "Environment variable CALENDAR_LINKS not found"
         links = json.loads(links)
         for link in links:
             cal = self._download_cal(link)
@@ -76,8 +74,7 @@ class Calendar:
         if cal_sel is not None:
             df = df.loc[df["Calendar"] == cal_sel]
         df = df.sort_values(by=["Duration"], ascending=False)
-        df = df.set_index(["Calendar", "SUMMARY"])
-        df = df.sum(level=1)
+        df = df.groupby(["Calendar", "SUMMARY"]).sum()
         return df.sort_values(by=["Duration"], ascending=False)
 
     def by_month(self, filter, cal_sel=None):
@@ -88,7 +85,18 @@ class Calendar:
         df = self.calendars
         return self._by_period(df, "W", cal_sel, filter)
 
-    def _by_period(self, df, period, cal_sel, flt):
+    def _by_period(self, df: pd.DataFrame, period: str, cal_sel: str, flt: bool):
+        """Smandruppa the dataframe
+
+        Args:
+            df (pd.DataFrame): Input dataframe
+            period (str): Period like week (w) or month (m)
+            cal_sel (str): Selected calendar from dropdown (Eat, Sport)
+            flt (bool): Filter
+
+        Returns:
+            pd.DataFrame: Dataframe smandruppato
+        """
         # Filter by selected calendar
         if cal_sel:
             df = df.loc[df["Calendar"] == cal_sel]
@@ -104,12 +112,7 @@ class Calendar:
         # 2020-11 Breakfast     31.00
         #         Dinner        33.00
         #         Lunch         26.50
-        df = df.groupby(["Period", "Activity"])
-        df = df.sum()
-
-        # 2020-11 Breakfast     31.00
-        # 2020-11 Dinner        33.00
-        # 2020-11 Lunch         26.50
+        df = df.groupby(["Period", "Activity"]).sum()
         df = df.reset_index()
 
         if period == "M":
@@ -133,7 +136,7 @@ class Calendar:
     def _get_normalized_duration(self, df):
         """
         Normalize activity duration by number of days in the month
-        e.g. February -> 10h * 30 / 28 = 10.71h
+        e.g. 10h activity in February -> 10h * 30 / 28 = 10.71h
         """
         df_date = pd.DataFrame(df["Period"])
         df_date["Period"] = pd.to_datetime(df_date["Period"])

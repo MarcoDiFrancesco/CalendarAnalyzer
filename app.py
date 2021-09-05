@@ -6,6 +6,7 @@ from utils.sort_df import sort_df
 import logging
 from utils.table_sd_sum import table_sd_sum
 from utils.show_checkboxes import show_checkboxes
+import pandas as pd
 
 
 def get_password():
@@ -24,7 +25,7 @@ def show_group_by():
         "<style>div.row-widget.stRadio > div{flex-direction:row;}</style>",
         unsafe_allow_html=True,
     )
-    return st.radio("Group by", options=["Month", "Week", "Activity"])
+    return st.radio("Group by", options=["Month", "Week"])
 
 
 def select_activity(calendar):
@@ -46,7 +47,7 @@ def show_filter(calendar, group_by):
         )
 
 
-def get_df(calendar, group_by, fm, sel_cal=None):
+def get_df(calendar: Calendar, group_by: str, fm, sel_cal=None):
     if group_by == "Month":
         df = calendar.by_month(fm, sel_cal)
     elif group_by == "Week":
@@ -66,26 +67,25 @@ def show_table(group_by, df):
         st.write(df)
 
 
-def show_bar_chart(group_by, df, sel_cal=None):
-    st.subheader("Chart")
-    if group_by == "Month" or group_by == "Week":
-        normalize = sel_cal is None
-        normalize, area_chart, _ = show_checkboxes(normalize)
-        df = sort_df(df, normalize)
-        if area_chart:
-            st.area_chart(df, height=350)
-        else:
-            st.bar_chart(df, height=350)
+def bar_chart(group_by, df, normalize, area_chart, sel_cal=None):
+    # TODO: replace with altair chart with order
+    df = sort_df(df, normalize)
+    if area_chart:
+        st.area_chart(df, height=350)
     else:
-        st.write(
-            st.columns.Chart(df.reset_index())
-            .mark_bar(point=True)
-            .encode(
-                alt.X("SUMMARY", title="Activity", sort="-y"),
-                alt.Y("Duration", title="Hours"),
-            )
-            .properties(width=700, height=400)
+        st.bar_chart(df, height=350)
+
+
+def decreasing_activity_chart(df: pd.DataFrame):
+    st.write(
+        alt.Chart(df.reset_index())
+        .mark_bar(point=True)
+        .encode(
+            alt.X("SUMMARY", title="Activity", sort="-y"),
+            alt.Y("Duration", title="Hours"),
         )
+        .properties(width=700, height=400)
+    )
 
 
 def main():
@@ -100,16 +100,22 @@ def main():
     st.markdown("---")
     st.header("All activities")
     df = get_df(calendar, group_by, fm)
-    show_bar_chart(group_by, df)
+    st.subheader("Chart 1")
+    normalize, area_chart, _ = show_checkboxes(True, "1")
+    bar_chart(group_by, df, normalize, area_chart)
     show_table(group_by, df)
 
     # Selected activity
     st.markdown("---")
     st.header("Single activity")
     sel_cal = select_activity(calendar)
-    df = get_df(calendar, group_by, fm, sel_cal)
-    show_bar_chart(group_by, df, sel_cal)
-    show_table(group_by, df)
+    df_by_date = get_df(calendar, group_by, fm, sel_cal)
+    st.subheader("Chart 2")
+    normalize, area_chart, _ = show_checkboxes(False, "2")
+    bar_chart(group_by, df_by_date, normalize, area_chart)
+    df_by_activity = get_df(calendar, "Activity", fm, sel_cal)
+    decreasing_activity_chart(df_by_activity)
+    show_table(group_by, df_by_date)
 
 
 if __name__ == "__main__":
