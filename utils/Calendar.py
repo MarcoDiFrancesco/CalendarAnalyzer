@@ -8,8 +8,7 @@ import copy
 import warnings
 import datetime
 import os
-import logging
-from utils import sort_df
+from utils.sort_df import sort_by_name
 
 
 class Calendar:
@@ -79,32 +78,43 @@ class Calendar:
 
     def by_month(self, filter, cal_sel=None):
         df = self.calendars
-        return self._by_period(df, "M", cal_sel, filter)
+        df = self._filter_by_cal(df, cal_sel)
+        return self._by_period(df, "M", filter)
 
     def by_week(self, filter, cal_sel=None):
         df = self.calendars
-        return self._by_period(df, "W", cal_sel, filter)
+        df = self._filter_by_cal(df, cal_sel)
+        return self._by_period(df, "W", filter)
 
-    def _by_period(self, df: pd.DataFrame, period: str, cal_sel: str, flt: bool):
-        """Smandruppa the dataframe
+    def _filter_by_cal(self, df: pd.DataFrame, cal_sel: str) -> pd.DataFrame:
+        """Filter by selected calendar in the dropdown (Eat, Sport)
 
         Args:
-            df (pd.DataFrame): Input dataframe
-            period (str): Period like week (w) or month (m)
-            cal_sel (str): Selected calendar from dropdown (Eat, Sport)
-            flt (bool): Filter
+            cal_sel (str): Selected calendar
 
         Returns:
             pd.DataFrame: Dataframe smandruppato
         """
-        # Filter by selected calendar
         if cal_sel:
             df = df.loc[df["Calendar"] == cal_sel]
             df = df.rename(columns={"SUMMARY": "Activity"})
         else:
             df = df.rename(columns={"Calendar": "Activity"})
+        return df
 
-        # Hide warning: Converting to PeriodArray/Index representation will drop timezone information.
+    def _by_period(self, df: pd.DataFrame, period: str, flt: bool):
+        """Smandruppa the dataframe
+
+        Args:
+            df (pd.DataFrame): Input dataframe
+            period (str): Period like week (w) or month (m)
+            flt (bool): Filter
+
+        Returns:
+            pd.DataFrame: Dataframe smandruppato
+        """
+        # Hide warning: Converting to PeriodArray/Index representation
+        # will drop timezone information.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             df["Period"] = df["DTSTART"].dt.to_period(period).astype("str")
@@ -115,22 +125,10 @@ class Calendar:
         df = df.groupby(["Period", "Activity"]).sum()
         df = df.reset_index()
 
+        # Normalization by number of days is done only in month
         if period == "M":
             df = self._get_normalized_duration(df)
-        df = sort_df.sort_by_name(df, period, flt)
-
-        # SUMMARY  Breakfast  Dinner  Lunch  Snack
-        # Month
-        # 2019-11      11.50   15.00   15.5    0.0
-        # 2019-12      20.50   30.50   30.0    0.0
-        # 2020-01      32.50   37.00   30.5    0.0
-        df = df.pivot_table(index="Period", columns="Activity", fill_value=0)[
-            "Duration"
-        ]
-
-        # List of columns
-        columns = list(df.columns.values)
-        df = pd.DataFrame(df, columns=columns)
+        df = sort_by_name(df, period, flt)
         return df
 
     def _get_normalized_duration(self, df):
