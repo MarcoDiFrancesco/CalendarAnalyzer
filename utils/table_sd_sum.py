@@ -16,7 +16,6 @@ def table_sd_sum(df: pd.DataFrame) -> pd.DataFrame:
     st.markdown(
         "**Standard Deviation** is calculated on all activities over the sum of them"
     )
-
     df_sum = df.groupby(["Activity"]).sum()
     df_std = df.groupby(["Activity"]).std() / df_sum * 1000
     # Set NaN to 0
@@ -27,7 +26,7 @@ def table_sd_sum(df: pd.DataFrame) -> pd.DataFrame:
     df = pd.concat([df_sum, df_std], axis=1)
     df.columns = ["Sum", "SD"]
     df.sort_values(by="Sum", ascending=False, inplace=True)
-    return df
+    st.write(df)
 
 
 def get_dates(base=True):

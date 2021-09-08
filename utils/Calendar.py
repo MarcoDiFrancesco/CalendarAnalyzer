@@ -68,38 +68,64 @@ class Calendar:
         # Remove daily/mulitple days activities and NaN
         self.calendars = df[df.Duration > 0]
 
-    def by_activity(self, cal_sel=None):
+    def by_activity(self, cal_sel: pd.DataFrame) -> pd.DataFrame:
+        """Filter by calendar and by get sum of single activities
+
+        Args:
+            cal_sel (str): Chores, Eat, Work
+
+        Returns:
+            pd.DataFrame: Output dataframe
+        """
         df = self.calendars
-        if cal_sel is not None:
-            df = df.loc[df["Calendar"] == cal_sel]
-        df = df.sort_values(by=["Duration"], ascending=False)
-        df = df.groupby(["Calendar", "SUMMARY"]).sum()
+        df = self._filter_by_cal(df, cal_sel)
+        # if cal_sel is not None:
+        #     df = df.loc[df["Calendar"] == cal_sel]
+        # df = df.sort_values(by=["Duration"], ascending=False)
+        df = df.groupby(["Activity"]).sum()
         return df.sort_values(by=["Duration"], ascending=False)
 
     def by_month(self, filter, cal_sel=None):
         df = self.calendars
+        # Eat, Study become activity
         df = self._filter_by_cal(df, cal_sel)
         return self._by_period(df, "M", filter)
 
     def by_week(self, filter, cal_sel=None):
         df = self.calendars
-        df = self._filter_by_cal(df, cal_sel)
+        # ADD MONTH CHECKS
         return self._by_period(df, "W", filter)
 
-    def _filter_by_cal(self, df: pd.DataFrame, cal_sel: str) -> pd.DataFrame:
-        """Filter by selected calendar in the dropdown (Eat, Sport)
+    # def _rename_columns(self, df: pd.DataFrame, cal_sel: str):
+    #     """
+
+    #     Args:
+    #         df (pd.DataFrame): Input dataframe
+    #         cal_sel (str): Selected calendar
+
+    #     Returns:
+    #         pd.DataFrame: Output datafram
+    #     """
+    #     if cal_sel:
+    #     else:
+    #     return df
+
+    def _filter_by_cal(self, df: pd.DataFrame, cal_sel: str = None) -> pd.DataFrame:
+        """Filter by selected calendar in the dropdown (Eat, Sport) and group
+        by Calendar if calendar is selected, by summary if it's a category
 
         Args:
             cal_sel (str): Selected calendar
 
         Returns:
-            pd.DataFrame: Dataframe smandruppato
+            pd.DataFrame: Ouput dataframe
         """
         if cal_sel:
-            df = df.loc[df["Calendar"] == cal_sel]
-            df = df.rename(columns={"SUMMARY": "Activity"})
+            df = df.loc[df["Activity"] == cal_sel]
+            df.drop("Activity", inplace=True, axis=1)
+            df.rename(columns={"SUMMARY": "Activity"}, inplace=True)
         else:
-            df = df.rename(columns={"Calendar": "Activity"})
+            df.rename(columns={"Calendar": "Activity"}, inplace=True)
         return df
 
     def _by_period(self, df: pd.DataFrame, period: str, flt: bool):

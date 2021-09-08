@@ -28,7 +28,7 @@ def show_group_by():
 
 
 def select_activity(calendar):
-    cal_list = calendar.calendars["Calendar"].unique()
+    cal_list = calendar.calendars["Activity"].unique()
     return st.selectbox("List of all calendars", cal_list)
 
 
@@ -59,14 +59,7 @@ def get_df(calendar: Calendar, group_by: str, fm, sel_cal=None):
     return df
 
 
-def show_table(group_by, df):
-    if group_by == "Month" or group_by == "Week":
-        st.write(table_sd_sum(df))
-    else:
-        st.write(df)
-
-
-def chart_all(df: pd.DataFrame, normalize: bool, area_chart: bool):
+def chart_all(df: pd.DataFrame, area_chart: bool):
     # TODO: add area chrt support
     st.write(
         alt.Chart(df)
@@ -74,7 +67,7 @@ def chart_all(df: pd.DataFrame, normalize: bool, area_chart: bool):
         .properties(width=700, height=400)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("sum(Duration)"),
+            y=alt.Y("sum(Duration)", title="Sum of hours"),
             color=alt.Color(
                 "Activity",
                 scale=alt.Scale(
@@ -116,7 +109,7 @@ def chart_single(df: pd.DataFrame, area_chart: bool):
         .properties(width=700, height=400)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("sum(Duration)"),
+            y=alt.Y("sum(Duration)", title="Hours"),
             color=alt.Color(
                 "Activity",
                 legend=alt.Legend(title="Color Legend"),
@@ -130,8 +123,12 @@ def decreasing_activity_chart(df: pd.DataFrame):
         alt.Chart(df.reset_index())
         .mark_bar(point=True)
         .encode(
-            alt.X("SUMMARY", title="Activity", sort="-y"),
+            alt.X("Activity", sort="-y"),
             alt.Y("Duration", title="Hours"),
+            color=alt.Color(
+                "Activity",
+                legend=alt.Legend(title="Color Legend"),
+            ),
         )
         .properties(width=700, height=400)
     )
@@ -161,9 +158,10 @@ def main():
     df = get_df(calendar, group_by, fm)
     st.subheader("Chart 1")
     normalize, area_chart, _ = show_checkboxes(True, "1")
-    df = normalize_to_one(df, normalize)
-    chart_all(df, normalize, area_chart)
-    show_table(group_by, df)
+    df_norm = df.copy()
+    df_norm = normalize_to_one(df_norm, normalize)
+    chart_all(df_norm, area_chart)
+    table_sd_sum(df)
 
     # Selected activity
     st.markdown("---")
@@ -172,11 +170,12 @@ def main():
     df = get_df(calendar, group_by, fm, sel_cal)
     st.subheader("Chart 2")
     normalize, area_chart, _ = show_checkboxes(False, "2")
-    df = normalize_to_one(df, normalize)
-    chart_single(df, area_chart)
+    df_norm = df.copy()
+    df_norm = normalize_to_one(df_norm, normalize)
+    chart_single(df_norm, area_chart)
     df_by_activity = get_df(calendar, "Activity", fm, sel_cal)
     decreasing_activity_chart(df_by_activity)
-    show_table(group_by, df)
+    table_sd_sum(df)
 
 
 if __name__ == "__main__":
