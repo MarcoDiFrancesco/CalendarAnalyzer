@@ -47,6 +47,7 @@ class Calendar:
         return json
 
     def _edit_datetime(self):
+        """Remove first month from all data"""
         # Transforms dates in date format
         df = self.calendars
         df["DTSTART"] = pd.to_datetime(df["DTSTART"])
@@ -54,9 +55,7 @@ class Calendar:
 
         # Discard before date
         df = df[df["DTSTART"] > "2019-12"]  # Real is 2019-11-16
-        # Discard this month
-        month = datetime.datetime.today().strftime("%Y-%m")
-        df = df[df["DTSTART"] < month]
+        # Discard last month moved to only month chart
 
         # Calculates duration from start to end like:
         #     Groceries	0 days 01:00:00

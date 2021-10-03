@@ -6,6 +6,7 @@ import logging
 from utils.table_sd_sum import table_sd_sum
 from utils.show_checkboxes import show_checkboxes
 import pandas as pd
+import datetime
 
 
 def get_password():
@@ -135,6 +136,15 @@ def decreasing_activity_chart(df: pd.DataFrame):
 
 
 def normalize_to_one(df: pd.DataFrame, normalize: bool) -> pd.DataFrame:
+    """Normalize data to 1 if required
+
+    Args:
+        df (pd.DataFrame): Input dataframe
+        normalize (bool): If normalize
+
+    Returns:
+        pd.DataFrame: Output dataframe
+    """
     if normalize:
         df_sum = df.groupby(["Period"]).sum().reset_index()
         df_sum.rename(columns={"Duration": "Duration_Month"}, inplace=True)
@@ -142,6 +152,19 @@ def normalize_to_one(df: pd.DataFrame, normalize: bool) -> pd.DataFrame:
         df_new["Duration_Normalized"] = df_new["Duration"] / df_new["Duration_Month"]
         df["Duration"] = df_new["Duration_Normalized"]
     return df
+
+
+def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove last month of data from dataframe
+
+    Args:
+        df (pd.DataFrame): input dataframe
+
+    Returns:
+        pd.DataFrame: output dataframe
+    """
+    month = datetime.datetime.today().strftime("%Y-%m")
+    return df[df["Period"] < month]
 
 
 def main():
@@ -160,6 +183,7 @@ def main():
     normalize, area_chart, _ = show_checkboxes(True, "1")
     df_norm = df.copy()
     df_norm = normalize_to_one(df_norm, normalize)
+    df_norm = remove_last_month(df_norm)
     chart_all(df_norm, area_chart)
     table_sd_sum(df)
 
@@ -172,6 +196,7 @@ def main():
     normalize, area_chart, _ = show_checkboxes(False, "2")
     df_norm = df.copy()
     df_norm = normalize_to_one(df_norm, normalize)
+    df_norm = remove_last_month(df_norm)
     chart_single(df_norm, area_chart)
     df_by_activity = get_df(calendar, "Activity", fm, sel_cal)
     decreasing_activity_chart(df_by_activity)
