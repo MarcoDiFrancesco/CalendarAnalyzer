@@ -61,12 +61,9 @@ def get_df(calendar: Calendar, group_by: str, fm, sel_cal=None):
 
 
 def chart_all(df: pd.DataFrame, area_chart: bool):
-    # TODO: add area chrt support
+    chart = alt.Chart(df).mark_area() if area_chart else alt.Chart(df).mark_bar()
     st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
+        chart.properties(width=700, height=400).encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Sum of hours"),
             color=alt.Color(
@@ -104,11 +101,9 @@ def chart_all(df: pd.DataFrame, area_chart: bool):
 
 
 def chart_single(df: pd.DataFrame, area_chart: bool):
+    chart = alt.Chart(df).mark_area() if area_chart else alt.Chart(df).mark_bar()
     st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
+        chart.properties(width=700, height=400).encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),
             color=alt.Color(
@@ -156,6 +151,8 @@ def normalize_to_one(df: pd.DataFrame, normalize: bool) -> pd.DataFrame:
 
 def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
     """Remove last month of data from dataframe
+    Set here and not in Calendar class so it's possible to filter data
+    only in charts and not in table.
 
     Args:
         df (pd.DataFrame): input dataframe
@@ -170,6 +167,9 @@ def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
 def main():
     st.set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
     st.title("Calendar Analyzer")
+    st.caption(
+        "[https://github.com/MarcoDiFrancesco/CalendarAnalyzer](https://github.com/MarcoDiFrancesco/CalendarAnalyzer)"
+    )
 
     calendar = Calendar()
     group_by = show_group_by()

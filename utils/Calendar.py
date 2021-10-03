@@ -61,8 +61,13 @@ class Calendar:
         #     Groceries	0 days 01:00:00
         # Transform to minutes:
         #     Groceries	1
-        df["Duration"] = df["DTEND"] - df["DTSTART"]
-        df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
+        with warnings.catch_warnings():
+            # Solution to this warning not known
+            warnings.simplefilter(
+                action="ignore", category=pd.core.common.SettingWithCopyWarning
+            )
+            df["Duration"] = df["DTEND"] - df["DTSTART"]
+            df["Duration"] = df["Duration"].dt.total_seconds() / 60 / 60
 
         # Remove daily/mulitple days activities and NaN
         self.calendars = df[df.Duration > 0]
@@ -121,8 +126,8 @@ class Calendar:
         """
         if cal_sel:
             df = df.loc[df["Activity"] == cal_sel]
-            df.drop("Activity", inplace=True, axis=1)
-            df.rename(columns={"SUMMARY": "Activity"}, inplace=True)
+            df = df.drop("Activity", axis=1)
+            df = df.rename(columns={"SUMMARY": "Activity"})
         else:
             df.rename(columns={"Calendar": "Activity"}, inplace=True)
         return df
