@@ -61,12 +61,9 @@ def get_df(calendar: Calendar, group_by: str, fm, sel_cal=None):
 
 
 def chart_all(df: pd.DataFrame, area_chart: bool):
-    # TODO: add area chrt support
+    chart = alt.Chart(df).mark_area() if area_chart else alt.Chart(df).mark_bar()
     st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
+        chart.properties(width=700, height=400).encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Sum of hours"),
             color=alt.Color(
@@ -104,11 +101,9 @@ def chart_all(df: pd.DataFrame, area_chart: bool):
 
 
 def chart_single(df: pd.DataFrame, area_chart: bool):
+    chart = alt.Chart(df).mark_area() if area_chart else alt.Chart(df).mark_bar()
     st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
+        chart.properties(width=700, height=400).encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),
             color=alt.Color(
