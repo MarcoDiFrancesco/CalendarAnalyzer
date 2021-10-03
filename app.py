@@ -156,6 +156,8 @@ def normalize_to_one(df: pd.DataFrame, normalize: bool) -> pd.DataFrame:
 
 def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
     """Remove last month of data from dataframe
+    Set here and not in Calendar class so it's possible to filter data
+    only in charts and not in table.
 
     Args:
         df (pd.DataFrame): input dataframe
@@ -170,6 +172,9 @@ def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
 def main():
     st.set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
     st.title("Calendar Analyzer")
+    st.caption(
+        "[https://github.com/MarcoDiFrancesco/CalendarAnalyzer](https://github.com/MarcoDiFrancesco/CalendarAnalyzer)"
+    )
 
     calendar = Calendar()
     group_by = show_group_by()
