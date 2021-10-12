@@ -20,7 +20,8 @@ class Calendar:
         self.calendars = copy.deepcopy(cached_calendars)
         self._edit_datetime()
 
-    @st.cache
+    # Cache for 1 week
+    @st.cache(ttl=7 * 24 * 60 * 60)
     def _download_cals(self):
         """Download calendars"""
         cals = []
