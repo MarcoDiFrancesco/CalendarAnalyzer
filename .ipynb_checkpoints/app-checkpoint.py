@@ -5,7 +5,6 @@ import altair as alt
 import logging
 from utils.table_sd_sum import table_sd_sum
 from utils.show_checkboxes import show_checkboxes
-from utils.telegram import telegram_data, telegram_plot
 import pandas as pd
 import datetime
 
@@ -200,12 +199,6 @@ def main():
     df_by_activity = get_df(calendar, "Activity", fm, sel_cal)
     decreasing_activity_chart(df_by_activity)
     table_sd_sum(df)
-
-    # Telegram data
-    st.markdown("---")
-    st.header("Telegram activity")
-    df = telegram_data()
-    telegram_plot(df)
 
 
 if __name__ == "__main__":

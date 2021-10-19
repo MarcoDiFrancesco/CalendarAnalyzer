@@ -4,3 +4,5 @@ calendars.json
 venv
 .venv
 .envvars
+# Dataset directory
+data
