@@ -5,9 +5,9 @@ import altair as alt
 import logging
 from utils.table_sd_sum import table_sd_sum
 from utils.show_checkboxes import show_checkboxes
-from utils.telegram import telegram_data, telegram_plot
 import pandas as pd
 import datetime
+from utils import telegram as tg
 
 
 def get_password():
@@ -165,6 +165,10 @@ def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
     return df[df["Period"] < month]
 
 
+def remove_short_actvs(df: pd.DataFrame) -> pd.DataFrame:
+    return df[df["Duration"] > 2]
+
+
 def main():
     st.set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
     st.title("Calendar Analyzer")
@@ -196,16 +200,19 @@ def main():
     df_norm = df.copy()
     df_norm = normalize_to_one(df_norm, normalize)
     df_norm = remove_last_month(df_norm)
+    df_norm = remove_short_actvs(df_norm)
     chart_single(df_norm, area_chart)
     df_by_activity = get_df(calendar, "Activity", fm, sel_cal)
+    df_by_activity = remove_short_actvs(df_by_activity)
     decreasing_activity_chart(df_by_activity)
     table_sd_sum(df)
 
     # Telegram data
     st.markdown("---")
     st.header("Telegram activity")
-    df = telegram_data()
-    telegram_plot(df)
+    tg.user_plot()
+    tg.month_plot_user()
+    tg.month_plot_sentreceived()
 
 
 if __name__ == "__main__":
