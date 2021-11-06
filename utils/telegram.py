@@ -5,6 +5,59 @@ import altair as alt
 import streamlit as st
 
 
+def user_plot():
+    df = _data_by_user()
+    df = df[df["messages_len"] > 100]
+    chart = alt.Chart(df).mark_bar()
+    st.write(
+        chart.properties(width=700, height=400).encode(
+            x=alt.X("name", title="User", sort="-y"),
+            y=alt.Y("messages_len", title="Messages count"),
+            # order=alt.Order("messages_len", sort="ascending"),
+            # sort=alt.EncodingSortField(field="messages_len", order="ascending"),
+        )
+    )
+
+
+def month_plot_user():
+    df = _data_by_time()
+    st.subheader("Messages distribution")
+    st.write("Showing chats with at least 100 messages")
+    df = df.groupby([df.period, df.name]).size().reset_index(name="size")
+    df = df[df["size"] >= 100]
+    st.write(
+        alt.Chart(df)
+        .mark_bar()
+        .properties(width=700, height=400)
+        .encode(
+            x=alt.X("period"),
+            y=alt.Y("size", title="Users"),
+            color=alt.Color(
+                "name",
+                legend=alt.Legend(title="Color Legend"),
+            ),
+        )
+    )
+
+
+def month_plot_sentreceived():
+    df = _data_by_time()
+    df = df.groupby([df.period, df.sent]).size().reset_index(name="size")
+    st.write(
+        alt.Chart(df)
+        .mark_bar()
+        .properties(width=700, height=400)
+        .encode(
+            x=alt.X("period"),
+            y=alt.Y("size", title="Users"),
+            color=alt.Color(
+                "sent",
+                legend=alt.Legend(title="Color Legend"),
+            ),
+        )
+    )
+
+
 def _from_json() -> list:
     p = Path() / "data" / "telegram" / "result.json"
     assert p.exists()
@@ -51,58 +104,3 @@ def _data_by_time() -> pd.DataFrame:
     df.loc[df["from"] != "Marco Di Francesco", "sent"] = "Received"
     df["period"] = df.date.dt.strftime("%Y-%m")
     return df
-
-
-def user_plot():
-    df = _data_by_user()
-    df = df[df["messages_len"] > 100]
-    chart = alt.Chart(df).mark_bar()
-    st.write(
-        chart.properties(width=700, height=400).encode(
-            x=alt.X("name", title="User", sort="-y"),
-            y=alt.Y("messages_len", title="Messages count"),
-            # order=alt.Order("messages_len", sort="ascending"),
-            # sort=alt.EncodingSortField(field="messages_len", order="ascending"),
-        )
-    )
-
-
-def month_plot_user():
-    df = _data_by_time()
-    st.subheader("Messages distribution")
-    st.write("Showing chats with at least 100 messages")
-    df = df.groupby([df.period, df.name]).size().reset_index(name="size")
-    df = df[df["size"] >= 100]
-    print("dffa", df)
-    st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
-            x=alt.X("period"),
-            y=alt.Y("size", title="Users"),
-            color=alt.Color(
-                "name",
-                legend=alt.Legend(title="Color Legend"),
-            ),
-        )
-    )
-
-
-def month_plot_sentreceived():
-    df = _data_by_time()
-    df = df.groupby([df.period, df.sent]).size().reset_index(name="size")
-    print("dffa", df)
-    st.write(
-        alt.Chart(df)
-        .mark_bar()
-        .properties(width=700, height=400)
-        .encode(
-            x=alt.X("period"),
-            y=alt.Y("size", title="Users"),
-            color=alt.Color(
-                "sent",
-                legend=alt.Legend(title="Color Legend"),
-            ),
-        )
-    )

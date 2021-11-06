@@ -1,6 +1,6 @@
 # Calendar Analyzer
 
-Visualize my life's activities
+My life, visualized
 
 Hosted in a 1GB Raspberry Pi inside a Docker container, be kind with it ❤️
 
