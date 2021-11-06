@@ -4,3 +4,4 @@ calendars.json
 venv
 .venv
 .envvars
+data/
