@@ -4,38 +4,17 @@ import streamlit as st
 import altair as alt
 import logging
 from utils.table_sd_sum import table_sd_sum
-from utils.show_checkboxes import show_checkboxes
+
+# from utils.show_checkboxes import show_checkboxes
 import pandas as pd
 import datetime
 from utils import telegram as tg
 from utils import password
 
 
-# def show_group_by():
-#     # Show radio options horizontally
-#     st.write(
-#         "<style>div.row-widget.stRadio > div{flex-direction:row;}</style>",
-#         unsafe_allow_html=True,
-#     )
-#     return st.radio("Group by", options=["Month", "Week"])
-
-
 def select_activity(calendar):
     cal_list = calendar.calendars["Activity"].unique()
-    return st.selectbox("List of all calendars", cal_list)
-
-
-# def get_df(calendar: Calendar, group_by: str, fm, sel_cal=None):
-#     if group_by == "Month":
-#         df = calendar.by_month(fm, sel_cal)
-#     elif group_by == "Week":
-#         df = calendar.by_week(fm, sel_cal)
-#     elif group_by == "Activity":
-#         df = calendar.by_activity(sel_cal)
-#     else:
-#         logging.error(f"Key error: {group_by}")
-#         raise KeyError
-#     return df
+    return st.radio("List of all calendars", cal_list)
 
 
 def chart_all(df: pd.DataFrame, area_chart: bool):
@@ -108,22 +87,20 @@ def decreasing_activity_chart(df: pd.DataFrame):
     )
 
 
-def normalize_to_one(df: pd.DataFrame, normalize: bool) -> pd.DataFrame:
-    """Normalize data to 1 if required
+def normalize_to_one(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize data to 1
 
     Args:
         df (pd.DataFrame): Input dataframe
-        normalize (bool): If normalize
 
     Returns:
         pd.DataFrame: Output dataframe
     """
-    if normalize:
-        df_sum = df.groupby(["Period"]).sum().reset_index()
-        df_sum.rename(columns={"Duration": "Duration_Month"}, inplace=True)
-        df_new = pd.merge(df, df_sum, on="Period")
-        df_new["Duration_Normalized"] = df_new["Duration"] / df_new["Duration_Month"]
-        df["Duration"] = df_new["Duration_Normalized"]
+    df_sum = df.groupby(["Period"]).sum().reset_index()
+    df_sum.rename(columns={"Duration": "Duration_Month"}, inplace=True)
+    df_new = pd.merge(df, df_sum, on="Period")
+    df_new["Duration_Normalized"] = df_new["Duration"] / df_new["Duration_Month"]
+    df["Duration"] = df_new["Duration_Normalized"]
     return df
 
 
@@ -150,44 +127,43 @@ def main():
     )
 
     calendar = Calendar()
-    # TODO: remove it
-    group_by = "Month"
     psw_corr = password.get_password()
 
     # All activities
     st.markdown("---")
     st.header("All activities")
-    # df = get_df(calendar, group_by, psw_corr)
     df = calendar.by_month(psw_corr, None)
-    normalize, area_chart, _ = show_checkboxes(True, "1")
+    # normalize, area_chart, _ = show_checkboxes(True, "1")
     df_norm = df.copy()
-    df_norm = normalize_to_one(df_norm, normalize)
+    # TODO: remove bool value
+    df_norm = normalize_to_one(df_norm)
     df_norm = remove_last_month(df_norm)
-    chart_all(df_norm, area_chart)
+    # TODO: remove bool value
+    chart_all(df_norm, False)
     table_sd_sum(df)
 
     # Selected activity
     st.markdown("---")
     st.header("Single activity")
     sel_cal = select_activity(calendar)
-    # df = get_df(calendar, group_by, psw_corr, sel_cal)
     df = calendar.by_month(psw_corr, sel_cal)
-    normalize, area_chart, _ = show_checkboxes(False, "2")
+    # normalize, area_chart, _ = show_checkboxes(False, "2")
     df_norm = df.copy()
-    df_norm = normalize_to_one(df_norm, normalize)
+    # TODO: remove bool value
+    # df_norm = normalize_to_one(df_norm, False)
     df_norm = remove_last_month(df_norm)
-    chart_single(df_norm, area_chart)
-    # df_by_activity = get_df(calendar, "Activity", psw_corr, sel_cal)
+    # TODO: remove bool value
+    chart_single(df_norm, False)
     df_by_activity = calendar.by_activity(sel_cal)
     decreasing_activity_chart(df_by_activity)
     table_sd_sum(df)
 
-    # Telegram data
-    st.markdown("---")
-    st.header("Telegram activity")
-    tg.user_plot()
-    tg.month_plot_user()
-    tg.month_plot_sentreceived()
+    # # Telegram data
+    # st.markdown("---")
+    # st.header("Telegram activity")
+    # tg.user_plot()
+    # tg.month_plot_user()
+    # tg.month_plot_sentreceived()
 
 
 if __name__ == "__main__":

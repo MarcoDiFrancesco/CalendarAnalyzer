@@ -26,7 +26,9 @@ class Calendar:
         """Download calendars"""
         cals = []
         links = os.getenv("CALENDAR_LINKS")
-        assert links, "Environment variable CALENDAR_LINKS not found"
+        assert (
+            links
+        ), "Environment variable CALENDAR_LINKS not found, did you source .envvar?"
         links = json.loads(links)
         for link in links:
             cal = self._download_cal(link)
