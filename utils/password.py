@@ -1,12 +1,14 @@
 import streamlit as st
 import os
+import pandas as pd
 
 
-def get_password() -> bool:
+def get_password(df: pd.DataFrame) -> pd.DataFrame:
     """Return true if password is correct"""
     password = st.text_input("Enter a password", type="password")
     if os.environ.get("DEBUG"):
-        return True
+        return df
     if password == os.environ.get("PSW"):
-        return True
-    return False
+        return df
+    df = df[df.Calendar != "Work"]
+    return df
