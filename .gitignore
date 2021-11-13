@@ -5,4 +5,4 @@ venv
 .venv
 .envvars
 # Dataset directory
-data
+data/

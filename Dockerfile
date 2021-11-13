@@ -4,4 +4,4 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install --timeout 120 -r requirements.txt
 COPY . .
-CMD streamlit run app.py
+CMD streamlit run app.py --client.showErrorDetails=false
