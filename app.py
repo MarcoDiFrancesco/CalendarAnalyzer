@@ -11,12 +11,40 @@ from utils.download_cals import download_cals
 from utils.table_sum import table_sum
 
 
+legend_cals = alt.Scale(
+    domain=[
+        "Chores",
+        "Commute",
+        "Eat",
+        "Entertainment",
+        "Personal care",
+        "Personal development",
+        "Spare time",
+        "Sport",
+        "Study",
+        "Work",
+    ],
+    range=[
+        "#7986CB",
+        "#9E69AF",
+        "#039BE5",
+        "#F4511E",
+        "#E67C73",
+        "#F6BF26",
+        "#B39DDB",
+        "#8E24AA",
+        "#33B679",
+        "#F09300",
+    ],
+)
+
+
 def select_activity(df: pd.DataFrame) -> str:
     cal_list = df.Calendar.unique()
     return st.radio("List of all calendars", cal_list)
 
 
-def chart_all(df: pd.DataFrame):
+def chart_calendars(df: pd.DataFrame):
     df = df.copy()
     df = group_by_period(df, "M")
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
@@ -26,45 +54,20 @@ def chart_all(df: pd.DataFrame):
     st.write(
         alt.Chart(df)
         .mark_bar()
-        .properties(width=700, height=400)
+        .properties(width=700, height=500)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("sum(Duration)", title="Sum of hours"),
+            y=alt.Y("sum(Duration)", title="Normalized duration"),
             color=alt.Color(
                 "Calendar",
-                scale=alt.Scale(
-                    domain=[
-                        "Chores",
-                        "Commute",
-                        "Eat",
-                        "Entertainment",
-                        "Personal care",
-                        "Personal development",
-                        "Spare time",
-                        "Sport",
-                        "Study",
-                        "Work",
-                    ],
-                    range=[
-                        "#7986CB",
-                        "#9E69AF",
-                        "#039BE5",
-                        "#F4511E",
-                        "#E67C73",
-                        "#F6BF26",
-                        "#B39DDB",
-                        "#8E24AA",
-                        "#33B679",
-                        "#F09300",
-                    ],
-                ),
-                legend=alt.Legend(title="Color Legend"),
+                scale=legend_cals,
+                legend=alt.Legend(title="Calendar"),
             ),
         )
     )
 
 
-def chart_single(df: pd.DataFrame, calendar: str):
+def chart_calendar(df: pd.DataFrame, calendar: str):
     df = df.copy()
     df = group_by_period(df, "M")
     df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
@@ -80,7 +83,7 @@ def chart_single(df: pd.DataFrame, calendar: str):
             y=alt.Y("sum(Duration)", title="Hours"),
             color=alt.Color(
                 "SUMMARY",
-                legend=alt.Legend(title="Color Legend"),
+                legend=alt.Legend(title="Activity"),
             ),
         )
         .configure_legend(labelLimit=120)
@@ -94,11 +97,31 @@ def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
     st.write(
         alt.Chart(df)
         .mark_bar(point=True)
+        .properties(width=550, height=500)
+        .encode(
+            alt.X("Duration", title="Hours"),
+            alt.Y("SUMMARY", title="Activity", sort="-x"),
+            color=alt.Color("SUMMARY", legend=None),
+        )
+    )
+
+
+def chart_calendars_longest(df: pd.DataFrame):
+    st.subheader("Longest non-stop activities")
+    df = df.copy()
+    # df = df.groupby(["Calendar", "SUMMARY"]).sum().reset_index()
+    df = df.sort_values("Duration", ascending=False)
+    df = df.drop_duplicates("SUMMARY")
+    df = df.head(20)
+    print("LONG", df)
+    st.write(
+        alt.Chart(df)
+        .mark_bar(point=True)
         .properties(width=700, height=500)
         .encode(
-            alt.X("SUMMARY", sort="-y"),
-            alt.Y("Duration", title="Hours"),
-            color=alt.Color("SUMMARY", legend=None),
+            alt.X("Duration", title="Hours"),
+            alt.Y("SUMMARY", title="Activity", sort="-x"),
+            color=alt.Color("Calendar", scale=legend_cals),
         )
     )
 
@@ -157,15 +180,14 @@ df = password.get_password(df)
 # All activities
 st.markdown("---")
 st.header("All activities")
-# # TODO: remove work from dataframe
-chart_all(df)
+chart_calendars(df)
+chart_calendars_longest(df)
 table_sum(df)
 
 # Selected activity
 st.markdown("---")
 st.header("Single activity")
 calendar = select_activity(df)
-chart_single(df, calendar)
-# df_by_activity = calendar.by_activity(sel_cal)
+chart_calendar(df, calendar)
 chart_decreasing_activity(df, calendar)
 table_sum(df, calendar)
