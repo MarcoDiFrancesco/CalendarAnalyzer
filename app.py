@@ -10,7 +10,6 @@ from utils import clean_df, password
 from utils.download_cals import download_cals
 from utils.table_sum import table_sum
 
-
 legend_cals = alt.Scale(
     domain=[
         "Chores",
