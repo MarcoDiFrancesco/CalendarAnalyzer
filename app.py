@@ -130,6 +130,7 @@ table_sum(df)
 # Selected activity
 st.markdown("---")
 st.header("Single activity")
+st.text("Unique activities divided by calendar")
 calendar = select_activity(df)
 chart_calendar(df, calendar)
 chart_decreasing_activity(df, calendar)
