@@ -1,4 +1,3 @@
-import datetime
 import warnings
 
 import altair as alt
@@ -9,33 +8,9 @@ from streamlit.commands.page_config import set_page_config
 from utils import clean_df, password
 from utils.download_cals import download_cals
 from utils.table_sum import table_sum
-
-legend_cals = alt.Scale(
-    domain=[
-        "Chores",
-        "Commute",
-        "Eat",
-        "Entertainment",
-        "Personal care",
-        "Personal development",
-        "Spare time",
-        "Sport",
-        "Study",
-        "Work",
-    ],
-    range=[
-        "#7986CB",
-        "#9E69AF",
-        "#039BE5",
-        "#F4511E",
-        "#E67C73",
-        "#F6BF26",
-        "#B39DDB",
-        "#8E24AA",
-        "#33B679",
-        "#F09300",
-    ],
-)
+from utils.remove_last_month import remove_last_month
+from utils.normalize import normalize_to_one, normalized_duration
+from utils.legend import legend
 
 
 def select_activity(df: pd.DataFrame) -> str:
@@ -47,7 +22,7 @@ def chart_calendars(df: pd.DataFrame):
     df = df.copy()
     df = group_by_period(df, "M")
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
-    df = _get_normalized_duration(df)
+    df = normalized_duration(df)
     df = normalize_to_one(df)
     df = remove_last_month(df)
     st.write(
@@ -59,7 +34,7 @@ def chart_calendars(df: pd.DataFrame):
             y=alt.Y("sum(Duration)", title="Normalized duration"),
             color=alt.Color(
                 "Calendar",
-                scale=legend_cals,
+                scale=legend(df),
                 legend=alt.Legend(title="Calendar"),
             ),
         )
@@ -70,7 +45,7 @@ def chart_calendar(df: pd.DataFrame, calendar: str):
     df = df.copy()
     df = group_by_period(df, "M")
     df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
-    df = _get_normalized_duration(df)
+    df = normalized_duration(df)
     df = remove_last_month(df)
     df = df.loc[df["Calendar"] == calendar]
     st.write(
@@ -119,21 +94,9 @@ def chart_calendars_longest(df: pd.DataFrame):
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
-            color=alt.Color("Calendar", scale=legend_cals),
+            color=alt.Color("Calendar", scale=legend(df)),
         )
     )
-
-
-def _get_normalized_duration(df):
-    """
-    Normalize activity duration by number of days in the month
-    e.g. 10h activity in February -> 10h * 30 / 28 = 10.71h
-    """
-    df_date = pd.DataFrame(df["Period"])
-    df_date["Period"] = pd.to_datetime(df_date["Period"])
-    df_date["DaysInMonth"] = df_date["Period"].dt.daysinmonth
-    df["Duration"] = df["Duration"] * 30 / df_date["DaysInMonth"]
-    return df
 
 
 def group_by_period(df: pd.DataFrame, period: str) -> pd.DataFrame:
@@ -144,24 +107,6 @@ def group_by_period(df: pd.DataFrame, period: str) -> pd.DataFrame:
         warnings.simplefilter("ignore")
         df["Period"] = df["DTSTART"].dt.to_period(period).astype("str")
     return df
-
-
-def normalize_to_one(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalize data to 1"""
-    df_sum = df.groupby(["Period"]).sum().reset_index()
-    df_sum = df_sum.rename(columns={"Duration": "Duration_Month"})
-    df_new = pd.merge(df, df_sum, on="Period")
-    df_new["Duration_Normalized"] = df_new["Duration"] / df_new["Duration_Month"]
-    df["Duration"] = df_new["Duration_Normalized"]
-    return df
-
-
-def remove_last_month(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove last month of data from dataframe
-    Set here and not in Calendar class so it's possible to filter data
-    only in charts and not in table."""
-    month = datetime.datetime.today().strftime("%Y-%m")
-    return df[df["Period"] < month]
 
 
 set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
