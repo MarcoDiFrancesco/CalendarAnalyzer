@@ -9,6 +9,7 @@ def get_password(df: pd.DataFrame) -> pd.DataFrame:
     """Return true if password is correct"""
     with st.expander("Filter"):
         password = st.text_input("Enter a password", type="password")
+        # TODO: check if this flag works
         if os.environ.get("DEBUG"):
             caching_button()
             return df

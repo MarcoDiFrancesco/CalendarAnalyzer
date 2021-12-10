@@ -112,7 +112,6 @@ def chart_calendars_longest(df: pd.DataFrame):
     df = df.sort_values("Duration", ascending=False)
     df = df.drop_duplicates("SUMMARY")
     df = df.head(20)
-    print("LONG", df)
     st.write(
         alt.Chart(df)
         .mark_bar(point=True)
