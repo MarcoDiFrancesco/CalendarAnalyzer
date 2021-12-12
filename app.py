@@ -143,7 +143,7 @@ chart_calendar(df, calendar)
 chart_decreasing_activity(df, calendar)
 table_sum(df, calendar)
 
-# Workout map
+# Workout
 st.markdown("---")
-st.header("Workout map")
+st.header("Workout")
 chart_workout(df)
