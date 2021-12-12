@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 from streamlit.commands.page_config import set_page_config
 
-from utils import clean_df, password
+from utils import clean_df, admin
 from utils.download_cals import download_cals
 from utils.table_sum import table_sum
 from utils.remove_last_month import remove_last_month
@@ -86,11 +86,11 @@ def chart_calendars_longest(df: pd.DataFrame):
     # df = df.groupby(["Calendar", "SUMMARY"]).sum().reset_index()
     df = df.sort_values("Duration", ascending=False)
     df = df.drop_duplicates("SUMMARY")
-    df = df.head(20)
+    df = df.head(10)
     st.write(
         alt.Chart(df)
         .mark_bar(point=True)
-        .properties(width=700, height=500)
+        .properties(width=700, height=300)
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
@@ -118,7 +118,7 @@ st.caption(
 df = download_cals().copy()
 df = clean_df.clean_df(df)
 
-df = password.get_password(df)
+df = admin.get_password(df)
 
 # All activities
 st.markdown("---")

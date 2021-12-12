@@ -26,9 +26,10 @@ def download_cals() -> pd.DataFrame:
         cal = cal["VCALENDAR"][0]
         cal_name = cal["X-WR-CALNAME"]
         cal_content = pd.DataFrame(
-            data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND"]
+            data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND", "UID"]
         )
         cal_content["Calendar"] = cal_name
+        cal_content["CAL_LINK"] = link
         cals.append(cal_content)
     return pd.concat(cals)
 
