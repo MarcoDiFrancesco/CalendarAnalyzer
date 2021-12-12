@@ -19,7 +19,7 @@ def chart_workout_year(df: pd.DataFrame, title: str):
         .mark_rect()
         .encode(
             x=alt.X("date(DTSTART):O", title="Day"),
-            y=alt.Y("month(DTSTART):O", title="Month", sort="-x"),
+            y=alt.Y("month(DTSTART):O", title="Month"),
             color=alt.Color("sum(Duration):Q", scale=alt.Scale(scheme="goldorange")),
         )
         .properties(width=700)
