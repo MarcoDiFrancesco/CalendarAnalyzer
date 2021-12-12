@@ -13,10 +13,12 @@ from utils.normalize import normalize_to_one, normalized_duration
 from utils.legend import legend
 from utils.fix_activitires import fix_activities
 from utils.compute_day import compute_day
+from utils.workout import chart_workout
 
 
 def select_activity(df: pd.DataFrame) -> str:
     cal_list = df.Calendar.unique()
+    cal_list = sorted(cal_list, reverse=True)
     return st.radio("List of all calendars", cal_list)
 
 
@@ -140,3 +142,8 @@ calendar = select_activity(df)
 chart_calendar(df, calendar)
 chart_decreasing_activity(df, calendar)
 table_sum(df, calendar)
+
+# Workout map
+st.markdown("---")
+st.header("Workout map")
+chart_workout(df)

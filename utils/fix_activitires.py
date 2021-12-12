@@ -22,14 +22,7 @@ def fix_activities(df: pd.DataFrame):
 
 
 def _check_minute(df: pd.DataFrame):
-    """Get errors from dataframe
-
-    Args:
-        df (pd.DataFrame): [description]
-
-    Returns:
-        pd.DataFrame: [description]
-    """
+    """Get errors from dataframe"""
     df["DTSTARTMIN"] = df["DTSTART"].dt.minute
     df["DTENDMIN"] = df["DTEND"].dt.minute
     df.loc[df["DTSTARTMIN"] == 15, "Error"] = "Starts at 15"
@@ -41,7 +34,7 @@ def _check_minute(df: pd.DataFrame):
 
 def _check_meal(df: pd.DataFrame):
     df = df.head(50)
-    # TODO: implement it
+    # TODO: impelement other daily checks using this function
     # df.groupby("DAY").apply(_check_meal_day)
 
 
