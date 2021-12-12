@@ -12,7 +12,8 @@ def fix_activities(df: pd.DataFrame):
     """
     df = df.copy()
     df = _cal_link(df)
-    _check_errors(df)
+    _check_minute(df)
+    _check_meal(df)
     df = df[~df.Error.isnull()]
     # Take at most n elements
     st.write(f"Total errors: {len(df)}")
@@ -20,7 +21,7 @@ def fix_activities(df: pd.DataFrame):
     _table_errors(df)
 
 
-def _check_errors(df: pd.DataFrame) -> pd.DataFrame:
+def _check_minute(df: pd.DataFrame):
     """Get errors from dataframe
 
     Args:
@@ -35,7 +36,12 @@ def _check_errors(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df["DTSTARTMIN"] == 45, "Error"] = "Starts at 45"
     df.loc[df["DTENDMIN"] == 15, "Error"] = "Ends at 15"
     df.loc[df["DTENDMIN"] == 45, "Error"] = "Ends at 45"
-    df = df.drop(["DTSTARTMIN", "DTENDMIN"], axis=1)
+    df.drop(["DTSTARTMIN", "DTENDMIN"], axis=1, inplace=True)
+
+
+def _check_meal(df: pd.DataFrame):
+    df = df.head(10)
+    pass
 
 
 def _cal_link(df: pd.DataFrame):

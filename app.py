@@ -12,6 +12,7 @@ from utils.remove_last_month import remove_last_month
 from utils.normalize import normalize_to_one, normalized_duration
 from utils.legend import legend
 from utils.fix_activitires import fix_activities
+from utils.compute_day import compute_day
 
 
 def select_activity(df: pd.DataFrame) -> str:
@@ -120,6 +121,8 @@ df = download_cals().copy()
 df = clean_df.clean_df(df)
 
 df = admin.get_password(df)
+df = df.sort_values("DTSTART")
+compute_day(df)
 fix_activities(df)
 
 # All activities
