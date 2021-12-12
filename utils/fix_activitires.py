@@ -40,8 +40,22 @@ def _check_minute(df: pd.DataFrame):
 
 
 def _check_meal(df: pd.DataFrame):
-    df = df.head(10)
-    pass
+    df = df.head(50)
+    # TODO: implement it
+    # df.groupby("DAY").apply(_check_meal_day)
+
+
+def _check_meal_day(df: pd.DataFrame):
+    """Check for meal in this order
+    - Breakfast
+    - Lunch
+    - Dinner
+
+    Args:
+        df (pd.DataFrame): Datafram with all the activities in a day
+    """
+    df = df[df["SUMMARY"].isin(["Breakfast", "Lunch", "Dinner"])]
+    raise NotImplementedError
 
 
 def _cal_link(df: pd.DataFrame):
@@ -65,7 +79,6 @@ def _cal_link(df: pd.DataFrame):
     df["CAL_LINK"] = df["CAL_LINK"].str.split("@", expand=True)[0] + "@g"
     df["EVENT_LINK"] = df["UID"] + " " + df["CAL_LINK"]
     # String to bytes
-    # TODO: try to remove strict
     df["EVENT_LINK"] = df["EVENT_LINK"].str.encode("utf-8", "strict")
     # Bytes to base64
     df["EVENT_LINK"] = df["EVENT_LINK"].apply(base64.b64encode)
@@ -90,12 +103,21 @@ def _table_errors(df: pd.DataFrame):
     # Kind of table
     col1, col2, col3, col4 = st.columns(4)
     col1.write("**Error type**")
-    col2.write("**Calendar**")
-    col3.write("**Summary**")
+    col2.write("**Day**")
+    col3.write("**Name**")
     col4.write("**Event link**")
     for row in df.to_dict(orient="records"):
         col1.write(row["Error"])
-        col2.write(row["Calendar"])
-        col3.write(row["SUMMARY"])
-        link = row["EVENT_LINK"]
-        col4.write(f"[Event link]({link})")
+        year = row["DTSTART"].year
+        month = row["DTSTART"].month
+        day = row["DTSTART"].day
+        col2.write(f"{day}/{month}/{year}")
+        name_event = row["SUMMARY"]
+        name_cal = row["Calendar"]
+        # Take first n characters to not overflow
+        col3.write(f"{name_event} ({name_cal})"[:20])
+        link_event = row["EVENT_LINK"]
+        link_week = (
+            f"https://calendar.google.com/calendar/u/0/r/week/{year}/{month}/{day}"
+        )
+        col4.write(f"[Event]({link_event}) [Week]({link_week})")
