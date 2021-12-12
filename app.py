@@ -11,6 +11,7 @@ from utils.table_sum import table_sum
 from utils.remove_last_month import remove_last_month
 from utils.normalize import normalize_to_one, normalized_duration
 from utils.legend import legend
+from utils.fix_activitires import fix_activities
 
 
 def select_activity(df: pd.DataFrame) -> str:
@@ -119,6 +120,7 @@ df = download_cals().copy()
 df = clean_df.clean_df(df)
 
 df = admin.get_password(df)
+fix_activities(df)
 
 # All activities
 st.markdown("---")
