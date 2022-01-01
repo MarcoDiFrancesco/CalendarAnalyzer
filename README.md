@@ -1,8 +1,16 @@
 # Calendar Analyzer
 
-My life, visualized
+My life, visualized.
 
 Hosted in a 1GB Raspberry Pi inside a Docker container, be kind with it ❤️
+
+## Data collection
+
+Done using Google Calendar
+
+<p align="center">
+    <img src="img/google-calendar-week-view.png" width="800">
+</p>
 
 ---
 
