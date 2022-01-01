@@ -10,16 +10,14 @@ def chart_workout(df: pd.DataFrame):
     df = df[df["Calendar"] == "Sport"]
 
     for year in range(2020, 2023):
-        st.subheader(f"Stats {year}")
         df_year = df[df["DTSTART"].dt.year == year]
-        _stats(df_year)
+        tot_days = len(df["DAY"].unique())
+        st.write(f"**Wokrout days of {year}**: {tot_days}")
+
+    for year in range(2020, 2023):
+        df_year = df[df["DTSTART"].dt.year == year]
         title = f"Workout map {year}"
         _chart_workout_year(df_year, title)
-
-
-def _stats(df: pd.DataFrame):
-    tot_days = len(df["DAY"].unique())
-    st.write(f"**Total days**: {tot_days}")
 
 
 def _chart_workout_year(df: pd.DataFrame, title: str):
