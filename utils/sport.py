@@ -2,6 +2,7 @@ import pandas as pd
 import altair as alt
 import streamlit as st
 from utils.remove_last_month import remove_last_month
+from utils.single_activity import chart_calendar
 
 
 def chart_sport(df: pd.DataFrame):
@@ -12,7 +13,9 @@ def chart_sport(df: pd.DataFrame):
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
         tot_days = len(df_year["DAY"].unique())
-        st.text(f"Workout days of {year}: {tot_days}/365")
+        st.text(f"Workout days of {year}: {tot_days}/365 ({tot_days/365:.0%})")
+
+    chart_calendar(df, "Sport")
 
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
