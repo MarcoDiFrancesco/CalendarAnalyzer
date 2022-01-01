@@ -4,7 +4,7 @@ import streamlit as st
 from utils.remove_last_month import remove_last_month
 
 
-def chart_workout(df: pd.DataFrame):
+def chart_sport(df: pd.DataFrame):
     df = df.copy()
     df = remove_last_month(df, "DTSTART")
     df = df[df["Calendar"] == "Sport"]

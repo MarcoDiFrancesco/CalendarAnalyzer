@@ -13,7 +13,7 @@ from utils.normalize import normalize_to_one, normalized_duration
 from utils.legend import legend
 from utils.fix_activitires import fix_activities
 from utils.compute_day import compute_day
-from utils.workout import chart_workout
+from utils.sport import chart_sport
 from utils.entertainment import entertainment
 from utils.group_by_period import group_by_period
 
@@ -23,6 +23,7 @@ def select_activity(df: pd.DataFrame) -> str:
     cal_list = sorted(cal_list, reverse=True)
     # Added a separate section for it
     cal_list.remove("Entertainment")
+    # cal_list.remove("Sport")
     return st.radio("List of all calendars", cal_list)
 
 
@@ -139,6 +140,6 @@ table_sum(df, calendar)
 
 # Workout
 st.markdown("---")
-st.header("Workout")
-chart_workout(df)
+st.header("Sport")
+chart_sport(df)
 entertainment(df)

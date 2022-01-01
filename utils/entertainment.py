@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from utils.workout import heat_map
 import altair as alt
 from utils.group_by_period import group_by_period
 from utils.legend import legend
@@ -14,6 +13,7 @@ def entertainment(df: pd.DataFrame):
     df = df.copy()
     st.header("Entertainment")
     df = df[df["Calendar"] == "Entertainment"]
+    _average_usage(df, 2020)
     _average_usage(df, 2021)
     _bar_chart(df)
 
