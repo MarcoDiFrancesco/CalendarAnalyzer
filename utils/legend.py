@@ -1,6 +1,7 @@
 import altair as alt
 import pandas as pd
 
+# TODO: move it and remove from default argument
 calendars = {
     "Chores": "#7986CB",
     "Commute": "#9E69AF",
@@ -15,16 +16,26 @@ calendars = {
 }
 
 
-def legend(df: pd.DataFrame) -> alt.Scale:
-    """Return altair legend with only the calendar that appear on
-    the dataframe in column Calendar
+def legend(
+    df: pd.DataFrame, color_map: dict = calendars, column="Calendar"
+) -> alt.Scale:
+    """Return legend with only the calendar that appear on
+    the dataframe in specified column
+
+    Args:
+        df (pd.DataFrame): Input df
+        color_map (dict, optional): {"Chores": "#7986CB", "Work": "#F09300"}
+        column (str, optional): Calendar or SUMMARY. TODO: remove default
+
+    Returns:
+        alt.Scale: altair legend
     """
     # Names
     domain = []
     # Colors
     range = []
-    cal_names = df["Calendar"].unique()
+    cal_names = df[column].unique()
     for name in cal_names:
         domain.append(name)
-        range.append(calendars[name])
+        range.append(color_map.get(name, ""))
     return alt.Scale(domain=domain, range=range)

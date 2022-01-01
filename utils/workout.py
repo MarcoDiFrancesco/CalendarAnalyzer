@@ -11,23 +11,23 @@ def chart_workout(df: pd.DataFrame):
 
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
-        tot_days = len(df["DAY"].unique())
-        st.write(f"**Wokrout days of {year}**: {tot_days}")
+        tot_days = len(df_year["DAY"].unique())
+        st.text(f"Workout days of {year}: {tot_days}/365")
 
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
         title = f"Workout map {year}"
-        _chart_workout_year(df_year, title)
+        heat_map(df_year, title, color_scheme="goldgreen")
 
 
-def _chart_workout_year(df: pd.DataFrame, title: str):
+def heat_map(df: pd.DataFrame, title: str, color_scheme):
     st.write(
         alt.Chart(df, title=title)
         .mark_rect()
         .encode(
             x=alt.X("date(DTSTART):O", title="Day"),
             y=alt.Y("month(DTSTART):O", title="Month"),
-            color=alt.Color("sum(Duration):Q", scale=alt.Scale(scheme="goldorange")),
+            color=alt.Color("sum(Duration):Q", scale=alt.Scale(scheme=color_scheme)),
         )
         .properties(width=700)
     )

@@ -14,11 +14,15 @@ from utils.legend import legend
 from utils.fix_activitires import fix_activities
 from utils.compute_day import compute_day
 from utils.workout import chart_workout
+from utils.entertainment import entertainment
+from utils.group_by_period import group_by_period
 
 
 def select_activity(df: pd.DataFrame) -> str:
     cal_list = df.Calendar.unique()
     cal_list = sorted(cal_list, reverse=True)
+    # Added a separate section for it
+    cal_list.remove("Entertainment")
     return st.radio("List of all calendars", cal_list)
 
 
@@ -34,7 +38,7 @@ def chart_calendars(df: pd.DataFrame):
         .mark_bar()
         .properties(width=700, height=500)
         .encode(
-            x=alt.X("Period"),
+            x=alt.X("Period", title="Month"),
             y=alt.Y("sum(Duration)", title="Normalized duration"),
             color=alt.Color(
                 "Calendar",
@@ -103,16 +107,6 @@ def chart_calendars_longest(df: pd.DataFrame):
     )
 
 
-def group_by_period(df: pd.DataFrame, period: str) -> pd.DataFrame:
-    """Group by period and make sum of the hours and normalize duration to it's size"""
-    # Hide warning: Converting to PeriodArray/Index representation
-    # will drop timezone information.
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        df["Period"] = df["DTSTART"].dt.to_period(period).astype("str")
-    return df
-
-
 set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
 st.title("Calendar Analyzer")
 st.caption(
@@ -147,3 +141,4 @@ table_sum(df, calendar)
 st.markdown("---")
 st.header("Workout")
 chart_workout(df)
+entertainment(df)
