@@ -1,10 +1,12 @@
 import pandas as pd
 import altair as alt
 import streamlit as st
+from utils.remove_last_month import remove_last_month
 
 
 def chart_workout(df: pd.DataFrame):
     df = df.copy()
+    df = remove_last_month(df, "DTSTART")
     df = df[df["Calendar"] == "Sport"]
 
     for year in range(2020, 2023):
@@ -18,9 +20,6 @@ def chart_workout(df: pd.DataFrame):
 def _stats(df: pd.DataFrame):
     tot_days = len(df["DAY"].unique())
     st.write(f"**Total days**: {tot_days}")
-
-    mean_duration = df["Duration"].mean()
-    st.write(f"**Mean duration**: {mean_duration*60} minutes")
 
 
 def _chart_workout_year(df: pd.DataFrame, title: str):
