@@ -29,7 +29,7 @@ def chart_calendars(df: pd.DataFrame):
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
     df = normalized_duration(df)
     df = normalize_to_one(df)
-    df = remove_last_month(df)
+    df = remove_last_month(df, "Period")
     st.write(
         alt.Chart(df)
         .mark_bar()

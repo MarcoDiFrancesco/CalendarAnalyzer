@@ -11,7 +11,7 @@ def chart_calendar(df: pd.DataFrame, calendar: str):
     df = group_by_period(df, "M")
     df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
     df = normalized_duration(df)
-    df = remove_last_month(df)
+    df = remove_last_month(df, "Period")
     df = df.loc[df["Calendar"] == calendar]
     st.write(
         alt.Chart(df)
@@ -27,6 +27,7 @@ def chart_calendar(df: pd.DataFrame, calendar: str):
         )
         .configure_legend(labelLimit=120)
     )
+
 
 def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
     df = df.copy()
