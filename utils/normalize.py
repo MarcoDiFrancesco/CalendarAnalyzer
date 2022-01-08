@@ -1,8 +1,13 @@
 import pandas as pd
 
 
-def normalize_max_to_one(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalize biggest columns to one"""
+def normalize_to_average(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize with aveage being to 1
+    Calculated as: sum_of_hours / months_number
+    """
+    print(df["Duration"].max())
+    df["Duration"] /= df["Duration"].sum() / len(df["Period"].unique())
+    print(df)
     return df
 
 

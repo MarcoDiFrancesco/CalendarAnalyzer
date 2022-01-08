@@ -17,7 +17,7 @@ from utils.single_activity import (
     select_activity,
 )
 from utils.sport import chart_sport
-from utils.study import chart_study_horiz, chart_study_vert
+from utils.study import study
 from utils.table_sum import table_sum
 
 set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
@@ -51,11 +51,7 @@ chart_decreasing_activity(df, calendar)
 table_sum(df, calendar)
 
 # Study
-st.markdown("---")
-st.header("Study")
-chart_study_vert(df)
-chart_study_horiz(df)
-
+study(df)
 # Entertainment
 entertainment(df)
 
