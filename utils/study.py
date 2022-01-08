@@ -117,4 +117,5 @@ def rige_plot(df: pd.DataFrame):
     #     .configure_view(stroke=None)
     #     .configure_title(anchor="end")
     # )
-    st.write(chart)
+    # st.write(chart)
+    pass
