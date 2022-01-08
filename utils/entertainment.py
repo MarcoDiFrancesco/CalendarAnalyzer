@@ -19,10 +19,12 @@ def entertainment(df: pd.DataFrame):
         """
         Observations:
         - Days I used to entertain myself incresed
+        - I played Stardew Valley during winter session of 2021 replacing the time spent YouTube, it's a sign that one balanced the other
         - I decreased my average entertainment and YouTube time gaming a little bit less
         - Starting from December and through the whole winter session I entertain myself a lot,
           maybe this is due to me going back to my parents' home where the organizational strees increases
         - September to November is where I'm entertaining myself the least
+        - YouTube activities are becoming shorter. This may be due to YouTube Shorts.
         """
     )
     _average_usage(df, 2020)

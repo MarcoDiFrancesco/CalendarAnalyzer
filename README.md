@@ -8,7 +8,7 @@ Done using Google Calendar
     <img src="img/google-calendar-week-view.png" width="800">
 </p>
 
-## Result
+## Dashboard
 Hosted in a 1GB Raspberry Pi inside a Docker container, be kind with it ❤️
 
 [
