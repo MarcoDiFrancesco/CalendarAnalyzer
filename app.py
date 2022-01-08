@@ -41,7 +41,7 @@ chart_calendars(df)
 chart_calendars_longest(df)
 table_sum(df)
 
-# Selected activity
+# Single activity
 st.markdown("---")
 st.header("Single activity")
 st.text("Unique activities divided by calendar")
@@ -50,15 +50,16 @@ chart_calendar_vert(df, calendar)
 chart_decreasing_activity(df, calendar)
 table_sum(df, calendar)
 
-# Sport
-st.markdown("---")
-st.header("Sport")
-chart_sport(df)
-entertainment(df)
-
 # Study
 st.markdown("---")
 st.header("Study")
 chart_study_vert(df)
 chart_study_horiz(df)
+
+# Entertainment
 entertainment(df)
+
+# Sport
+st.markdown("---")
+st.header("Sport")
+chart_sport(df)
