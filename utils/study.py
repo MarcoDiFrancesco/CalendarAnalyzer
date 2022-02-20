@@ -167,7 +167,3 @@ def rige_plot(df: pd.DataFrame):
     #     .configure_title(anchor="middle")
     # )
     # st.write(chart)
-<<<<<<< Updated upstream
-    pass
-=======
->>>>>>> Stashed changes
