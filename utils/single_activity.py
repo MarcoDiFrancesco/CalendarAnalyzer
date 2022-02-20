@@ -21,7 +21,7 @@ def chart_calendar_vert(df: pd.DataFrame, calendar: str):
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
-    st.write(
+    st.altair_chart(
         alt.Chart(df)
         .mark_bar()
         .properties(width=700, height=500)
@@ -33,7 +33,8 @@ def chart_calendar_vert(df: pd.DataFrame, calendar: str):
                 legend=alt.Legend(title="Activity"),
             ),
         )
-        .configure_legend(labelLimit=120)
+        .configure_legend(labelLimit=120),
+        # use_container_width=True,
     )
 
 

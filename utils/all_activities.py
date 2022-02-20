@@ -18,7 +18,7 @@ def chart_calendars(df: pd.DataFrame):
     st.write(
         alt.Chart(df)
         .mark_bar()
-        .properties(width=700, height=500)
+        .properties(height=500)
         .encode(
             x=alt.X("Period", title="Month"),
             y=alt.Y("sum(Duration)", title="Normalized duration"),
@@ -27,6 +27,10 @@ def chart_calendars(df: pd.DataFrame):
                 scale=legend(df),
                 legend=alt.Legend(title="Calendar"),
             ),
+            tooltip=[
+                "Calendar",
+                alt.Tooltip("sum(Duration)", title="Monthly occupation", format=".1%"),
+            ],
         )
     )
 
@@ -38,7 +42,7 @@ def chart_calendars_longest(df: pd.DataFrame):
     df = df.sort_values("Duration", ascending=False)
     df = df.drop_duplicates("SUMMARY")
     df = df.head(10)
-    st.write(
+    st.altair_chart(
         alt.Chart(df)
         .mark_bar(point=True)
         .properties(width=700, height=300)

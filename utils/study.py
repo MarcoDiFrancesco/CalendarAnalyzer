@@ -1,3 +1,4 @@
+from os import name
 import pandas as pd
 import altair as alt
 import streamlit as st
@@ -74,13 +75,61 @@ def chart_horiz(df: pd.DataFrame):
     st.write(chart)
 
 
+def _add_zeros(df):
+    """Add zeros if not studied a subject month"""
+    df = df.groupby(["Period", "SUMMARY"]).sum()
+    df = pd.pivot_table(
+        df, index="Period", columns="SUMMARY", values="Duration", fill_value=0
+    )
+    df = df.reset_index()
+    df = df.melt("Period", var_name="SUMMARY", value_name="Duration")
+    return df
+
+
 def rige_plot(df: pd.DataFrame):
-    # from vega_datasets import data
+    from vega_datasets import data
 
-    # source = data.seattle_weather.url
+    source = data.seattle_weather.url
+    step = 20  # Distance between month bars
+    overlap = 0.7  # Height of the bars
 
-    # step = 20
-    # overlap = 1
+    df = filter_df_chart(df, "Study")
+    df = normalized_duration(df)
+    df = remove_last_month(df, "Period")
+    df = _add_zeros(df)
+    # Replace this color color by subject
+    df["color"] = df["Duration"].apply(lambda d: "blue" if d < 10 else "red")
+    chart = (
+        alt.Chart(df, height=step)
+        .transform_joinaggregate(mean_temp="mean(Duration)", groupby=["SUMMARY"])
+        .mark_area(
+            interpolate="monotone", fillOpacity=0.8, stroke="lightgray", strokeWidth=0.5
+        )
+        .encode(
+            alt.X("Period:O", bin="binned", title="Year-Month"),
+            alt.Y(
+                "Duration:Q", scale=alt.Scale(range=[step, -step * overlap]), axis=None
+            ),
+            # TODO: add color palette like here https://stackoverflow.com/a/65861410/7924557
+            # alt.Fill(
+            #     "color:O",
+            #     # legend=None,
+            #     scale=None,
+            # ),
+        )
+        .facet(
+            row=alt.Row(
+                "SUMMARY:O",
+                title="Subject",
+                header=alt.Header(labelAngle=0, labelAlign="left"),
+            )
+        )
+        .properties(title="Monthly study distribution", bounds="flush")
+        .configure_facet(spacing=0)
+        .configure_view(stroke=None)
+        .configure_title(anchor="middle")
+    )
+    st.altair_chart(chart)
 
     # chart = (
     #     alt.Chart(source, height=step)
@@ -99,23 +148,26 @@ def rige_plot(df: pd.DataFrame):
     #     .encode(
     #         alt.X("bin_min:Q", bin="binned", title="Maximum Daily Temperature (C)"),
     #         alt.Y("value:Q", scale=alt.Scale(range=[step, -step * overlap]), axis=None),
-    #         alt.Fill(
-    #             "mean_temp:Q",
-    #             legend=None,
-    #             scale=alt.Scale(domain=[30, 5], scheme="redyellowblue"),
-    #         ),
+    #         # alt.Fill(  # Color for area
+    #         #     "mean_temp:Q",
+    #         #     legend=None,
+    #         #     scale=alt.Scale(domain=[30, 5], scheme="redyellowblue"),
+    #         # ),
     #     )
     #     .facet(
     #         row=alt.Row(
     #             "Month:T",
     #             title=None,
-    #             header=alt.Header(labelAngle=0, labelAlign="right", format="%B"),
+    #             header=alt.Header(labelAngle=0, labelAlign="left"),
     #         )
     #     )
     #     .properties(title="Seattle Weather", bounds="flush")
     #     .configure_facet(spacing=0)
     #     .configure_view(stroke=None)
-    #     .configure_title(anchor="end")
+    #     .configure_title(anchor="middle")
     # )
     # st.write(chart)
+<<<<<<< Updated upstream
     pass
+=======
+>>>>>>> Stashed changes

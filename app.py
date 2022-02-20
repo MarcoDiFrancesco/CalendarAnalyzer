@@ -34,6 +34,7 @@ df = df.sort_values("DTSTART")
 compute_day(df)
 fix_activities(df)
 
+
 # All activities
 st.markdown("---")
 st.header("All activities")
