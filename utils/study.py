@@ -87,7 +87,7 @@ def _add_zeros(df):
 
 
 def rige_plot(df: pd.DataFrame):
-    from vega_datasets import data
+    # from vega_datasets import data
 
     source = data.seattle_weather.url
     step = 20  # Distance between month bars
