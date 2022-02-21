@@ -18,6 +18,7 @@ from utils.single_activity import (
 )
 from utils.sport import chart_sport
 from utils.study import study
+from utils.personal_development import personal_development
 from utils.table_sum import table_sum
 
 set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
@@ -53,6 +54,8 @@ table_sum(df, calendar)
 
 # Study
 study(df)
+# Personal development
+personal_development(df)
 # Entertainment
 entertainment(df)
 
