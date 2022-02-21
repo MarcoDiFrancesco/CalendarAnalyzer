@@ -50,5 +50,10 @@ def chart_calendars_longest(df: pd.DataFrame):
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
             color=alt.Color("Calendar", scale=legend(df)),
+            tooltip=[
+                alt.Tooltip("Duration", title="Duration (hours)"),
+                alt.Tooltip("yearmonthdatehoursminutes(DTSTART)", title="Start date"),
+                alt.Tooltip("yearmonthdatehoursminutes(DTEND)", title="End date"),
+            ],
         )
     )

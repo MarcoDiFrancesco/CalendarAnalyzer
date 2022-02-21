@@ -20,6 +20,9 @@ def layered_bar_chart(df: pd.DataFrame):
         (df["Calendar"] == "Personal development") | (df["Calendar"] == "Study")
     ]
     df = df.groupby(["Period", "Calendar"]).sum().reset_index()
+    df["Duration"] /= df["Duration"].max()
+    df["Duration"] *= 100
+    print(df)
     chart = (
         alt.Chart(df)
         .mark_bar(opacity=0.5)
@@ -37,7 +40,7 @@ def layered_bar_chart(df: pd.DataFrame):
                     "Sunday",
                 ],
             ),
-            y=alt.Y("Duration:Q", stack=None),
+            y=alt.Y("Duration:Q", title="Ratio", stack=None),
             color=alt.Color(
                 "Calendar",
                 scale=legend(df),
