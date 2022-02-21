@@ -15,10 +15,11 @@ def fix_activities(df: pd.DataFrame):
     _check_minute(df)
     _check_meal(df)
     df = df[~df.Error.isnull()]
-    # Take at most n elements
-    st.write(f"Total errors: {len(df)}")
-    df = df[: min(len(df), 30)]
-    _table_errors(df)
+    with st.expander("Errors list", expanded=True):
+        st.write(f"Total errors: {len(df)}")
+        # Take at most n elements
+        df = df[: min(len(df), 10)]
+        _table_errors(df)
 
 
 def _check_minute(df: pd.DataFrame):

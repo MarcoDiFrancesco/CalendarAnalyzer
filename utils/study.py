@@ -86,17 +86,26 @@ def _add_zeros(df):
     return df
 
 
-def rige_plot(df: pd.DataFrame):
-    # from vega_datasets import data
+def _order_subjects(df: pd.DataFrame) -> list:
+    """Order subjects by peak date
+    Return list ordered list of subjects
+    """
+    # Get rows with max value of Duration
+    df_peak = df.loc[df.groupby(["SUMMARY"])["Duration"].idxmax()]
+    df_peak = df_peak.sort_values("Period")
+    list_peak = df_peak["SUMMARY"].tolist()
+    return list_peak
 
-    # source = data.seattle_weather.url
-    step = 20  # Distance between month bars
-    overlap = 0.7  # Height of the bars
+
+def rige_plot(df: pd.DataFrame):
+    step = 20  # Height of the each area plot
+    overlap = 1  # Height of the area
 
     df = filter_df_chart(df, "Study")
     df = normalized_duration(df)
-    df = remove_last_month(df, "Period")
+    # df = remove_last_month(df, "Period")
     df = _add_zeros(df)
+    subjects_order = _order_subjects(df)
     # Replace this color color by subject
     df["color"] = df["Duration"].apply(lambda d: "blue" if d < 10 else "red")
     chart = (
@@ -106,11 +115,21 @@ def rige_plot(df: pd.DataFrame):
             interpolate="monotone", fillOpacity=0.8, stroke="lightgray", strokeWidth=0.5
         )
         .encode(
-            alt.X("Period:O", bin="binned", title="Year-Month"),
+            alt.X("Period:O", bin="binned", title=None),
             alt.Y(
                 "Duration:Q", scale=alt.Scale(range=[step, -step * overlap]), axis=None
             ),
+            tooltip=[
+                alt.Tooltip(
+                    "Duration",
+                    title="Studied hours (month)",
+                    format=".2",
+                ),
+            ]
             # TODO: add color palette like here https://stackoverflow.com/a/65861410/7924557
+            # TODO: find a color scheme that makes sense, maybe join study with personal dev
+            #       and color in yellow the projects? Then there is the problem of linux project
+            #       and anyway most projects are very little, so not noticible
             # alt.Fill(
             #     "color:O",
             #     # legend=None,
@@ -122,9 +141,10 @@ def rige_plot(df: pd.DataFrame):
                 "SUMMARY:O",
                 title="Subject",
                 header=alt.Header(labelAngle=0, labelAlign="left"),
+                sort=subjects_order,
             )
         )
-        .properties(title="Monthly study distribution", bounds="flush")
+        .properties(title="Subject study distribution by month", bounds="flush")
         .configure_facet(spacing=0)
         .configure_view(stroke=None)
         .configure_title(anchor="middle")
