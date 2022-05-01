@@ -1,9 +1,9 @@
 name: pre-commit
 
-# on:
-#   push:
-#     branches:
-#       - "master"
+on:
+  push:
+    branches:
+      - "master"
 
 jobs:
   pre-commit:
