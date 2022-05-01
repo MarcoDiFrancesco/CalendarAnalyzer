@@ -1,7 +1,8 @@
 import base64
 from urllib import parse
-import streamlit as st
+
 import pandas as pd
+import streamlit as st
 
 
 def fix_activities(df: pd.DataFrame):

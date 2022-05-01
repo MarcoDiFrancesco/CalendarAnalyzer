@@ -1,9 +1,10 @@
+import altair as alt
+import pandas as pd
+import streamlit as st
+
 from utils.group_by_period import group_by_period
 from utils.normalize import normalized_duration
 from utils.remove_last_month import remove_last_month
-import streamlit as st
-import altair as alt
-import pandas as pd
 
 
 def filter_df_chart(df: pd.DataFrame, calendar: str):

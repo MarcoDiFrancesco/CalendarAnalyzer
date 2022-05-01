@@ -1,7 +1,9 @@
 from os import name
-import pandas as pd
+
 import altair as alt
+import pandas as pd
 import streamlit as st
+
 from utils.normalize import normalize_to_average, normalized_duration
 from utils.remove_last_month import remove_last_month
 from utils.single_activity import filter_df_chart
@@ -34,6 +36,11 @@ def chart_vert(df: pd.DataFrame):
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Ratio"),
+            tooltip=[
+                alt.Tooltip("sum(Duration)", title="Duration (hours)"),
+                # alt.Tooltip("yearmonthdatehoursminutes(DTSTART)", title="Start date"),
+                # alt.Tooltip("yearmonthdatehoursminutes(DTEND)", title="End date"),
+            ],
         )
     )
     line = (

@@ -1,6 +1,7 @@
-import pandas as pd
-import warnings
 import datetime
+import warnings
+
+import pandas as pd
 
 
 def clean_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -28,8 +29,8 @@ def _remove_first_month(df: pd.DataFrame) -> pd.DataFrame:
 def _remove_future(df: pd.DataFrame) -> pd.DataFrame:
     """Remove events starting in the future"""
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-    tomorrow = tomorrow.strftime("%Y-%m-%d")
-    return df[df["DTSTART"] < tomorrow]
+    tomorrow_str = tomorrow.strftime("%Y-%m-%d")
+    return df[df["DTSTART"] < tomorrow_str]
 
 
 def _compute_duration(df: pd.DataFrame) -> pd.DataFrame:

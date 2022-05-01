@@ -1,13 +1,14 @@
-import json
-import requests
-import jicson
-import streamlit as st
-import pandas as pd
-import tempfile
 import copy
-import warnings
 import datetime
+import json
 import os
+import tempfile
+import warnings
+
+import jicson
+import pandas as pd
+import requests
+import streamlit as st
 
 # from utils.sort_df import sort_by_name
 
@@ -21,6 +22,8 @@ def download_cals() -> pd.DataFrame:
         links
     ), "Environment variable CALENDAR_LINKS not found, did you source .envvar?"
     links = json.loads(links)
+    # Check added for linter
+    assert links is not None
     for link in links:
         cal = _download_cal(link)
         cal = cal["VCALENDAR"][0]

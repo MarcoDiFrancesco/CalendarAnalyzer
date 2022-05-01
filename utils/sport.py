@@ -1,6 +1,7 @@
-import pandas as pd
 import altair as alt
+import pandas as pd
 import streamlit as st
+
 from utils.normalize import normalized_duration
 from utils.remove_last_month import remove_last_month
 from utils.single_activity import chart_calendar_vert

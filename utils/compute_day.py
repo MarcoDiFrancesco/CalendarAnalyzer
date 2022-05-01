@@ -1,5 +1,6 @@
-import pandas as pd
 from datetime import timedelta
+
+import pandas as pd
 
 
 def compute_day(df: pd.DataFrame):
