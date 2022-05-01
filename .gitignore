@@ -2,5 +2,5 @@
 calendars.json
 # Python virtual enviroment
 venv
-.venv
+.venv*/
 .envvars

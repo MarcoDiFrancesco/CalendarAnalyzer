@@ -14,7 +14,9 @@ Done using Google Calendar
 
 ## Dashboard
 
-Hosted in a 1GB Raspberry Pi inside a Docker container, be kind with it ❤️
+Preview: [http://raspberry.gleeze.com:8501](http://raspberry.gleeze.com:8501)
+
+(hosted in a 1GB Raspberry Pi, be kind with it ❤️)
 
 [
 ![All activities](https://i.imgur.com/KNwPSST.png)
