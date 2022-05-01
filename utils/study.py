@@ -37,9 +37,7 @@ def chart_vert(df: pd.DataFrame):
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Ratio"),
             tooltip=[
-                alt.Tooltip("sum(Duration)", title="Duration (hours)"),
-                # alt.Tooltip("yearmonthdatehoursminutes(DTSTART)", title="Start date"),
-                # alt.Tooltip("yearmonthdatehoursminutes(DTEND)", title="End date"),
+                alt.Tooltip("sum(Duration)", title="Ratio", format=".0%"),
             ],
         )
     )

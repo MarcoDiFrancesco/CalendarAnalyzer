@@ -12,7 +12,6 @@ repos:
     hooks:
       - id: jupyter-notebook-cleanup
         args:
-          # - --remove-kernel-metadata
           - --pin-patterns
           - "[pin];[donotremove]"
 
@@ -27,14 +26,6 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black"]
-
-  # There are some cases in which some imports not removed are
-  # not useful, so removed for now
-  # - repo: https://github.com/pycqa/flake8
-  #   rev: 4.0.1
-  #   hooks:
-  #     - id: flake8
-  #       additional_dependencies: ["flake8-eradicate==1.2.0"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.950
