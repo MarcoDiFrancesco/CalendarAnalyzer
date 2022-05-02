@@ -38,6 +38,6 @@ jobs:
           tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest
           platforms: |
             linux/arm64
-          cache-from: type=registry,ref=user/app:latest
-          cache-to: type=inline
-# linux/arm/v7 does not install matplotlib, just buffers until timeout
+          # linux/arm/v7 # does not install matplotlib, just buffers until timeout
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
