@@ -3,6 +3,7 @@ from urllib import parse
 
 import pandas as pd
 import streamlit as st
+from .data_checks.daily_checks import daily_checks
 
 
 def fix_activities(df: pd.DataFrame):
@@ -10,11 +11,13 @@ def fix_activities(df: pd.DataFrame):
     These activities may be broken due to:
     - A day does not have both
     https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/46
+
+    TODO: Rename and move to daily checks
     """
     df = df.copy()
     df = _cal_link(df)
     _check_minute(df)
-    _check_meal(df)
+    daily_checks(df)
     df = df[~df.Error.isnull()]
     with st.expander("Errors list", expanded=True):
         st.write(f"Total errors: {len(df)}")
@@ -32,25 +35,6 @@ def _check_minute(df: pd.DataFrame):
     df.loc[df["DTENDMIN"] == 15, "Error"] = "Ends at 15"
     df.loc[df["DTENDMIN"] == 45, "Error"] = "Ends at 45"
     df.drop(["DTSTARTMIN", "DTENDMIN"], axis=1, inplace=True)
-
-
-def _check_meal(df: pd.DataFrame):
-    df = df.head(50)
-    # TODO: impelement other daily checks using this function
-    # df.groupby("DAY").apply(_check_meal_day)
-
-
-def _check_meal_day(df: pd.DataFrame):
-    """Check for meal in this order
-    - Breakfast
-    - Lunch
-    - Dinner
-
-    Args:
-        df (pd.DataFrame): Datafram with all the activities in a day
-    """
-    df = df[df["SUMMARY"].isin(["Breakfast", "Lunch", "Dinner"])]
-    raise NotImplementedError
 
 
 def _cal_link(df: pd.DataFrame):
