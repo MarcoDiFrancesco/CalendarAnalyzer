@@ -2,8 +2,6 @@
 
 My life, visualized.
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/63b96f6110f044d9a41062b2508dbb87)](https://www.codacy.com/gh/MarcoDiFrancesco/CalendarAnalyzer/dashboard)
-
 ## Data collection
 
 Done using Google Calendar
