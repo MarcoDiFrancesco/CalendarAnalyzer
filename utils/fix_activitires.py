@@ -3,6 +3,7 @@ from urllib import parse
 
 import pandas as pd
 import streamlit as st
+
 from .data_checks.daily_checks import daily_checks
 
 
