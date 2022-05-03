@@ -2,10 +2,13 @@ import datetime
 import warnings
 
 import pandas as pd
+import pytz
+from dateutil.tz import tzlocal
 
 
 def clean_df(df: pd.DataFrame) -> pd.DataFrame:
     df = _to_datetime(df)
+    df = _set_timezone(df)
     df = _remove_first_month(df)
     df = _remove_future(df)
     df = _compute_duration(df)
@@ -18,6 +21,17 @@ def _to_datetime(df: pd.DataFrame) -> pd.DataFrame:
     # Transforms dates in date format
     df["DTSTART"] = pd.to_datetime(df["DTSTART"])
     df["DTEND"] = pd.to_datetime(df["DTEND"])
+    return df
+
+
+def _set_timezone(df: pd.DataFrame) -> pd.DataFrame:
+    """Issue about the wrong timezone unsolvable
+    https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/84
+    """
+    # tz = tzlocal()
+    tz = pytz.timezone("Europe/Rome")
+    df["DTSTART"] = df["DTSTART"].dt.tz_convert(tz)
+    df["DTEND"] = df["DTEND"].dt.tz_convert(tz)
     return df
 
 

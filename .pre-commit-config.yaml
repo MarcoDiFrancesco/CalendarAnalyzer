@@ -31,4 +31,5 @@ repos:
     rev: v0.950
     hooks:
       - id: mypy
-        additional_dependencies: ["types-requests"]
+        additional_dependencies:
+          ["types-requests", "types-pytz", "types-python-dateutil"]
