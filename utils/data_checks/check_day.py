@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def daily_checks(df: pd.DataFrame):
+def check_day(df: pd.DataFrame):
     """Check activity sequence in a day"""
     # Split day at 5am
     df_serie = df.resample(on="DTSTART", rule="24h", offset="5h")

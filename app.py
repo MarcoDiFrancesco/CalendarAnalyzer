@@ -4,9 +4,9 @@ from streamlit.commands.page_config import set_page_config
 from utils import admin, clean_df
 from utils.all_activities import chart_calendars, chart_calendars_longest
 from utils.compute_day import compute_day
+from utils.data_checks import data_checks
 from utils.download_cals import download_cals
 from utils.entertainment import entertainment
-from utils.fix_activitires import fix_activities
 from utils.personal_development import personal_development
 from utils.single_activity import (
     chart_calendar_vert,
@@ -31,7 +31,7 @@ def main():
     df = admin.get_password(df)
     df = df.sort_values("DTSTART")
     compute_day(df)
-    fix_activities(df)
+    data_checks(df)
 
     # All activities
     st.markdown("---")
