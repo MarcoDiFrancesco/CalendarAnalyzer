@@ -1,57 +1,52 @@
 import pandas as pd
 
 
-def check_day(df: pd.DataFrame):
+def check_day(df: pd.DataFrame) -> None:
     """Check activity sequence in a day"""
-    # Split day at 5am
-    df_serie = df.resample(on="DTSTART", rule="24h", offset="5h")
+    df = df.head(210)
+    # Split day at 4:30am (+1 Summer) or 5:30am (+2 Summer)
+    df_serie = df.resample(on="DTSTART", rule="24h", offset="3h 30m")
     for df_day in df_serie:
-        # daily_activities is a tuple of 2 items, first the serie beginning date second the df
+        # df_day is a
         _daily_checks(df, df_day[1])
 
 
-def _daily_checks(df: pd.DataFrame, df_day: pd.DataFrame):
+def _daily_checks(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
+    """
+    Args:
+        df (pd.DataFrame):
+        df_day (pd.DataFrame): tuple of 2 items, first the serie beginning date second the df
+    """
     if len(df_day) >= 2:
-        _check_gaps(df, df_day)
-        # _check_serie(df, df_day)
-        # _check_meal_day(df)
+        _check_consequent(df, df_day)
 
 
-def _check_gaps(df: pd.DataFrame, df_day: pd.DataFrame):
-    """Check if 2 consequent activities have a gap time in the middle.
-    Like Lunch ends at 13:00 and following Phone starts at 13:30.
+def _check_consequent(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
+    """
+    - Gaps: check if 2 consequent activities have a gap time in the middle
+            Like Lunch ends at 13:00 and following Phone starts at 13:30
+    - Serie: check if 2 consequent activities are the same.
+             Like Phone at 10:00 and Phone at 10:30.
     """
     for i in range(len(df_day) - 1):
-        if df_day.iloc[i]["DTEND"] != df_day.iloc[i + 1]["DTSTART"]:
-            # Activity before the gap
-            act1 = df_day.iloc[i]
-            # Activity after the gap
-            act2 = df_day.iloc[i + 1]
+        # Activity before the gap
+        act1 = df_day.iloc[i]
+        # Activity after the gap
+        act2 = df_day.iloc[i + 1]
+
+        # Gaps
+        if act1["DTEND"] != act2["DTSTART"]:
             gap_start = f"{act1['DTEND'].hour}:{act1['DTEND'].minute:02d}"
             gap_end = f"{act2['DTSTART'].hour}:{act2['DTSTART'].minute:02d}"
             df.loc[
                 df["DTSTART"] == act2["DTSTART"], "Error"
             ] = f"Gap {gap_start} to {gap_end}"
-            # print(gap_start, gap_end)
-            # print(df_day)
 
-
-def _check_serie(df: pd.DataFrame):
-    """Check if 2 consequent activities are the same.
-    Like Phone at 10:00 and Phone at 10:30.
-    """
-    # print("_check_gaps", df)
-    raise NotImplementedError
-
-
-def _check_meal_day(df: pd.DataFrame):
-    """Check for meal in this order
-    - Breakfast
-    - Lunch
-    - Dinner
-
-    Args:
-        df (pd.DataFrame): Datafram with all the activities in a day
-    """
-    df = df[df["SUMMARY"].isin(["Breakfast", "Lunch", "Dinner"])]
-    raise NotImplementedError
+        # Consequent
+        # If Calendar is different than do mark as error
+        # e.g. Walk (Commute) != Walk (Spare time)
+        if act1["SUMMARY"] == act2["SUMMARY"] and act1["Calendar"] == act2["Calendar"]:
+            act_start = f"{act2['DTSTART'].hour}:{act2['DTSTART'].minute:02d}"
+            df.loc[
+                df["DTSTART"] == act2["DTSTART"], "Error"
+            ] = f"Same act ({act_start})"

@@ -28,7 +28,6 @@ def _set_timezone(df: pd.DataFrame) -> pd.DataFrame:
     """Issue about the wrong timezone unsolvable
     https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/84
     """
-    # tz = tzlocal()
     tz = pytz.timezone("Europe/Rome")
     df["DTSTART"] = df["DTSTART"].dt.tz_convert(tz)
     df["DTEND"] = df["DTEND"].dt.tz_convert(tz)

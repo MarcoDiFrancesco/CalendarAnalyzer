@@ -1,3 +1,5 @@
+import datetime
+
 import pandas as pd
 import streamlit as st
 from streamlit.elements.arrow import Data
@@ -12,6 +14,8 @@ def data_checks(df: pd.DataFrame):
     https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/46
     """
     df = df.copy()
+    # Remove today's activities
+    df = df[df["DTSTART"] < datetime.date.today().strftime("%Y-%m-%d")]
     df = _compute_errors(df)
     show_error_table(df)
 
