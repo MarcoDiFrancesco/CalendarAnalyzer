@@ -29,7 +29,7 @@ def main():
     df = clean_df.clean_df(df)
 
     df = admin.get_password(df)
-    df = df.sort_values("DTSTART")
+
     compute_day(df)
     data_checks(df)
 

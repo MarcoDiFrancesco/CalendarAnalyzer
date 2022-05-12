@@ -14,6 +14,7 @@ def clean_df(df: pd.DataFrame) -> pd.DataFrame:
     df = _compute_duration(df)
     df = _remove_daily(df)
     df.loc[:, "SUMMARY"] = df.SUMMARY.apply(lambda x: x.strip())
+    df = df.sort_values("DTSTART")
     return df
 
 
@@ -25,12 +26,16 @@ def _to_datetime(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _set_timezone(df: pd.DataFrame) -> pd.DataFrame:
-    """Issue about the wrong timezone unsolvable
-    https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/84
+    """ICS saves timezone in 2 variables for each calendar, not for each event.
+    Each event is already shifted depending on the daylight saving, this means
+    only 2 hours are added.
     """
-    tz = pytz.timezone("Europe/Rome")
-    df["DTSTART"] = df["DTSTART"].dt.tz_convert(tz)
-    df["DTEND"] = df["DTEND"].dt.tz_convert(tz)
+    # Shift n hours ahead, e.g. 17:30:00 -> 19:30:00
+    df["DTSTART"] = df["DTSTART"] + pd.DateOffset(hours=2)
+    df["DTEND"] = df["DTEND"] + pd.DateOffset(hours=2)
+    # Remove timezone, e.g. 19:30:00+02:00 -> 19:30:00
+    df["DTSTART"] = df["DTSTART"].dt.tz_localize(None)
+    df["DTEND"] = df["DTEND"].dt.tz_localize(None)
     return df
 
 
