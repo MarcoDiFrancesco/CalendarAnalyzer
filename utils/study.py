@@ -108,7 +108,7 @@ def rige_plot(df: pd.DataFrame):
 
     df = filter_df_chart(df, "Study")
     df = normalized_duration(df)
-    # df = remove_last_month(df, "Period")
+    df = remove_last_month(df, "Period")
     df = _add_zeros(df)
     subjects_order = _order_subjects(df)
     # Replace this color color by subject
@@ -129,6 +129,11 @@ def rige_plot(df: pd.DataFrame):
                     "Duration",
                     title="Studied hours (month)",
                     format=".2",
+                ),
+                alt.Tooltip(
+                    "SUMMARY",
+                    title="Subject",
+                    # format=".2",
                 ),
             ]
             # TODO: add color palette like here https://stackoverflow.com/a/65861410/7924557
@@ -155,40 +160,3 @@ def rige_plot(df: pd.DataFrame):
         .configure_title(anchor="middle")
     )
     st.altair_chart(chart)
-
-    # chart = (
-    #     alt.Chart(source, height=step)
-    #     .transform_timeunit(Month="month(date)")
-    #     .transform_joinaggregate(mean_temp="mean(temp_max)", groupby=["Month"])
-    #     .transform_bin(["bin_max", "bin_min"], "temp_max")
-    #     .transform_aggregate(
-    #         value="count()", groupby=["Month", "mean_temp", "bin_min", "bin_max"]
-    #     )
-    #     .transform_impute(
-    #         impute="value", groupby=["Month", "mean_temp"], key="bin_min", value=0
-    #     )
-    #     .mark_area(
-    #         interpolate="monotone", fillOpacity=0.8, stroke="lightgray", strokeWidth=0.5
-    #     )
-    #     .encode(
-    #         alt.X("bin_min:Q", bin="binned", title="Maximum Daily Temperature (C)"),
-    #         alt.Y("value:Q", scale=alt.Scale(range=[step, -step * overlap]), axis=None),
-    #         # alt.Fill(  # Color for area
-    #         #     "mean_temp:Q",
-    #         #     legend=None,
-    #         #     scale=alt.Scale(domain=[30, 5], scheme="redyellowblue"),
-    #         # ),
-    #     )
-    #     .facet(
-    #         row=alt.Row(
-    #             "Month:T",
-    #             title=None,
-    #             header=alt.Header(labelAngle=0, labelAlign="left"),
-    #         )
-    #     )
-    #     .properties(title="Seattle Weather", bounds="flush")
-    #     .configure_facet(spacing=0)
-    #     .configure_view(stroke=None)
-    #     .configure_title(anchor="middle")
-    # )
-    # st.write(chart)
