@@ -20,7 +20,7 @@ def study(df: pd.DataFrame):
 def chart_vert(df: pd.DataFrame):
     st.markdown(
         """
-        ### Trend of study during time
+        ### Study trend
         - Normalized to average duration
         - Last month's data is removed
         """
@@ -35,7 +35,7 @@ def chart_vert(df: pd.DataFrame):
         .properties(width=700, height=350)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("sum(Duration)", title="Ratio"),
+            y=alt.Y("sum(Duration)", title="Study"),
             tooltip=[
                 alt.Tooltip("sum(Duration)", title="Ratio", format=".0%"),
             ],

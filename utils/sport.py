@@ -24,17 +24,19 @@ def chart_sport(df: pd.DataFrame):
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
         title = f"Sport map {year}"
-        heat_map(df_year, title, color_scheme="goldgreen")
+        _heat_map(df_year, title, color_scheme="goldgreen")
 
 
-def heat_map(df: pd.DataFrame, title: str, color_scheme):
+def _heat_map(df: pd.DataFrame, title: str, color_scheme):
     st.write(
         alt.Chart(df, title=title)
         .mark_rect()
         .encode(
             x=alt.X("date(DTSTART):O", title="Day"),
             y=alt.Y("month(DTSTART):O", title="Month"),
-            color=alt.Color("sum(Duration):Q", scale=alt.Scale(scheme=color_scheme)),
+            color=alt.Color(
+                "sum(Duration):Q", title="Hours", scale=alt.Scale(scheme=color_scheme)
+            ),
         )
         .properties(width=700)
     )

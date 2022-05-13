@@ -3,9 +3,6 @@ import pandas as pd
 import streamlit as st
 
 from utils.legend import legend
-from utils.normalize import normalize_to_average, normalized_duration
-from utils.remove_last_month import remove_last_month
-from utils.single_activity import filter_df_chart
 
 
 def personal_development(df: pd.DataFrame):
@@ -26,10 +23,13 @@ def layered_bar_chart(df: pd.DataFrame):
     chart = (
         alt.Chart(df)
         .mark_bar(opacity=0.5)
-        .properties(width=700, height=300)
+        .properties(width=60, height=300)
         .encode(
-            x=alt.X(
+            x=alt.X("Calendar", title="", axis=alt.Axis(labels=False)),
+            y=alt.Y("Duration:Q", title="Ratio"),
+            column=alt.Column(
                 "Period:O",
+                title="Day of the week",
                 sort=[
                     "Monday",
                     "Tuesday",
@@ -40,12 +40,7 @@ def layered_bar_chart(df: pd.DataFrame):
                     "Sunday",
                 ],
             ),
-            y=alt.Y("Duration:Q", title="Ratio", stack=None),
-            color=alt.Color(
-                "Calendar",
-                scale=legend(df),
-                legend=alt.Legend(title="Calendar"),
-            ),
+            color=alt.Color("Calendar", scale=legend(df)),
         )
     )
     st.altair_chart(chart)
