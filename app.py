@@ -28,10 +28,10 @@ def main() -> None:
     df = download_cals().copy()
     df = clean_df.clean_df(df)
 
-    df = admin.get_password(df)
-
     compute_day(df)
     data_checks(df)
+
+    df = admin.get_password(df)
 
     # All activities
     st.markdown("---")

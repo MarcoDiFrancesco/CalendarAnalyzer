@@ -3,9 +3,8 @@ import pandas as pd
 
 def check_day(df: pd.DataFrame) -> None:
     """Check activity sequence in a day."""
-    df = df.head(210)
-    # Split day at 4:30am (+1 Summer) or 5:30am (+2 Summer)
-    df_serie = df.resample(on="DTSTART", rule="24h", offset="3h 30m")
+    # Split day at 4:00am
+    df_serie = df.resample(on="DTSTART", rule="24h", offset="4h 30m")
     for df_day in df_serie:
         # df_day is a
         _daily_checks(df, df_day[1])

@@ -9,14 +9,12 @@ from .error_table import show_error_table
 
 
 def data_checks(df: pd.DataFrame):
-    """Show list of all the activities that are broken.
-
-    https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/46
-    """
+    """Show list of all the activities that are broken."""
     df = df.copy()
     # Remove today's activities
     df = df[df["DTSTART"] < datetime.date.today().strftime("%Y-%m-%d")]
     df = _compute_errors(df)
+    # print("ERRORS", df[df["DTSTART"] == "2020-02-15"])
     show_error_table(df)
 
 
