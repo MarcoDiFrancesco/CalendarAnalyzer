@@ -19,7 +19,6 @@ def layered_bar_chart(df: pd.DataFrame):
     ]
     df = df.groupby(["Period", "Calendar"]).sum().reset_index()
     df["Duration"] /= df["Duration"].max()
-    df["Duration"] *= 100
     chart = (
         alt.Chart(df)
         .mark_bar(opacity=0.5)
@@ -40,6 +39,17 @@ def layered_bar_chart(df: pd.DataFrame):
                     "Sunday",
                 ],
             ),
+            tooltip=[
+                alt.Tooltip(
+                    "Period",
+                    title="Day",
+                ),
+                alt.Tooltip(
+                    "Duration",
+                    title="Ratio",
+                    format=".0%",
+                ),
+            ],
             color=alt.Color("Calendar", scale=legend(df)),
         )
     )
