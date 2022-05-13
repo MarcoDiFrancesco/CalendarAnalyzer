@@ -19,8 +19,7 @@ calendars = {
 def legend(
     df: pd.DataFrame, color_map: dict = calendars, column="Calendar"
 ) -> alt.Scale:
-    """Return legend with only the calendar that appear on
-    the dataframe in specified column
+    """Return legend with only the calendar that appear on the dataframe in specified column.
 
     Args:
         df (pd.DataFrame): Input df

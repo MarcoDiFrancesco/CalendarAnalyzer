@@ -81,7 +81,7 @@ def chart_horiz(df: pd.DataFrame):
 
 
 def _add_zeros(df):
-    """Add zeros if not studied a subject month"""
+    """Add zeros if not studied a subject month."""
     df = df.groupby(["Period", "SUMMARY"]).sum()
     df = pd.pivot_table(
         df, index="Period", columns="SUMMARY", values="Duration", fill_value=0
@@ -92,7 +92,8 @@ def _add_zeros(df):
 
 
 def _order_subjects(df: pd.DataFrame) -> list:
-    """Order subjects by peak date
+    """Order subjects by peak date.
+
     Return list ordered list of subjects
     """
     # Get rows with max value of Duration

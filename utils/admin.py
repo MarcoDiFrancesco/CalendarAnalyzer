@@ -6,7 +6,7 @@ from streamlit.legacy_caching import clear_cache
 
 
 def get_password(df: pd.DataFrame) -> pd.DataFrame:
-    """Return true if password is correct"""
+    """Return true if password is correct."""
     with st.expander("Admin"):
         password = st.text_input("Enter a password", type="password")
         if os.environ.get("DEBUG"):

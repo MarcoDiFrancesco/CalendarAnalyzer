@@ -7,7 +7,7 @@ def check_minute(df: pd.DataFrame):
 
 
 def _check_quarter(df: pd.DataFrame) -> None:
-    """Get errors from dataframe"""
+    """Get errors from dataframe."""
     df["DTSTARTMIN"] = df["DTSTART"].dt.minute
     df["DTENDMIN"] = df["DTEND"].dt.minute
     df.loc[
@@ -20,7 +20,7 @@ def _check_quarter(df: pd.DataFrame) -> None:
 
 
 def _check_meal_day(df: pd.DataFrame) -> None:
-    """Check for meals time start, snacks are included in one of those meals
+    """Check for meals time start, snacks are included in one of those meals.
 
     TODO: replace with meal order, there are cases in which I want to have a breakfast
     at 12:30 and other days with lunch at 12:00

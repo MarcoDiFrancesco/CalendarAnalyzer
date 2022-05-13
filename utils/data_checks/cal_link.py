@@ -5,7 +5,9 @@ import pandas as pd
 
 
 def get_cal_link(df: pd.DataFrame):
-    """Compute calendar link described in:
+    """Generate Google calendar event link.
+
+    Detailed description in:
     https://github.com/MarcoDiFrancesco/CalendarAnalyzer/issues/58
 
     Columns taken into consideration:

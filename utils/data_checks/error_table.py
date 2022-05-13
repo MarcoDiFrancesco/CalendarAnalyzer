@@ -13,7 +13,9 @@ def show_error_table(df: pd.DataFrame):
 
 
 def _table_errors(df: pd.DataFrame):
-    """Make table containing
+    """Generate error table.
+
+    Make table containing
     - Error type
     - Calendar: Personal care
     - Summary: e.g. Show

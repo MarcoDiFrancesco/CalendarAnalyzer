@@ -2,7 +2,8 @@ import pandas as pd
 
 
 def normalize_to_average(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalize with aveage being to 1
+    """Normalize with aveage being to 1.
+
     Calculated as: sum_of_hours / months_number
     """
     df["Duration"] /= df["Duration"].sum() / len(df["Period"].unique())
@@ -10,7 +11,7 @@ def normalize_to_average(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def normalize_all_to_one(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalize all columns to 1"""
+    """Normalize all columns to 1."""
     df_sum = df.groupby(["Period"]).sum().reset_index()
     df_sum = df_sum.rename(columns={"Duration": "Duration_Month"})
     df_new = pd.merge(df, df_sum, on="Period")
@@ -20,8 +21,8 @@ def normalize_all_to_one(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def normalized_duration(df):
-    """
-    Normalize activity duration by number of days in the month
+    """Normalize activity duration by number of days in the month.
+
     e.g. 10h activity in February -> 10h * 30 / 28 = 10.71h
     """
     df_date = pd.DataFrame(df["Period"])

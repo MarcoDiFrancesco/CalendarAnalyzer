@@ -15,7 +15,7 @@ import streamlit as st
 # Cache for 1 week
 @st.cache(ttl=7 * 24 * 60 * 60)
 def download_cals() -> pd.DataFrame:
-    """Download calendars"""
+    """Download calendars."""
     cals = []
     links = os.getenv("CALENDAR_LINKS")
     assert (
@@ -38,7 +38,7 @@ def download_cals() -> pd.DataFrame:
 
 
 def _download_cal(link: str):
-    """Download ics from Google Calendar, return json"""
+    """Download ics from Google Calendar, return json."""
     ics = requests.get(link).text
     with tempfile.NamedTemporaryFile(mode="w") as f:
         f.write(str(ics))

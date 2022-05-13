@@ -18,7 +18,7 @@ from utils.study import study
 from utils.table_sum import table_sum
 
 
-def main():
+def main() -> None:
     set_page_config(page_title="Calendar Analyzer", page_icon="⌛")
     st.title("Calendar Analyzer")
     st.caption(

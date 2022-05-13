@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def check_day(df: pd.DataFrame) -> None:
-    """Check activity sequence in a day"""
+    """Check activity sequence in a day."""
     df = df.head(210)
     # Split day at 4:30am (+1 Summer) or 5:30am (+2 Summer)
     df_serie = df.resample(on="DTSTART", rule="24h", offset="3h 30m")
@@ -12,9 +12,10 @@ def check_day(df: pd.DataFrame) -> None:
 
 
 def _daily_checks(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
-    """
+    """TODO: add docstring.
+
     Args:
-        df (pd.DataFrame):
+        df (pd.DataFrame): input dataframe
         df_day (pd.DataFrame): tuple of 2 items, first the serie beginning date second the df
     """
     if len(df_day) >= 2:
@@ -22,7 +23,8 @@ def _daily_checks(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
 
 
 def _check_consequent(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
-    """
+    """Make gaps and serie checks.
+
     - Gaps: check if 2 consequent activities have a gap time in the middle
             Like Lunch ends at 13:00 and following Phone starts at 13:30
     - Serie: check if 2 consequent activities are the same.
