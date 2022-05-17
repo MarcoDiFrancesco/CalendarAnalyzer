@@ -7,6 +7,18 @@ from utils.normalize import normalized_duration
 from utils.remove_last_month import remove_last_month
 
 
+def print_text(df: pd.DataFrame):
+    act_tot = len(df.index)
+    st.markdown(
+        f"""
+    ---
+    # Single activity
+
+    - {act_tot} activities in total over 2 and a half years
+    """
+    )
+
+
 def filter_df_chart(df: pd.DataFrame, calendar: str):
     df = df.copy()
     df = group_by_period(df, "M")

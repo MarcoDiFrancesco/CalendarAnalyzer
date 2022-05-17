@@ -11,6 +11,7 @@ from utils.personal_development import personal_development
 from utils.single_activity import (
     chart_calendar_vert,
     chart_decreasing_activity,
+    print_text,
     select_activity,
 )
 from utils.sport import chart_sport
@@ -41,9 +42,7 @@ def main() -> None:
     table_sum(df)
 
     # Single activity
-    st.markdown("---")
-    st.header("Single activity")
-    st.text("Unique activities divided by calendar")
+    print_text(df)
     calendar = select_activity(df)
     chart_calendar_vert(df, calendar)
     chart_decreasing_activity(df, calendar)

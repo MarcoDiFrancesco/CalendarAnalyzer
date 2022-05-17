@@ -58,7 +58,7 @@ def _bar_chart(df: pd.DataFrame):
     st.write(
         alt.Chart(df, title="YouTube usage")
         .mark_bar()
-        .properties(width=700, height=400)
+        .properties(width=700, height=450)
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),

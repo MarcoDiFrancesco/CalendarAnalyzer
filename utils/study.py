@@ -1,5 +1,3 @@
-from os import name
-
 import altair as alt
 import pandas as pd
 import streamlit as st
@@ -17,7 +15,7 @@ def study(df: pd.DataFrame):
     rige_plot(df)
 
 
-def chart_vert(df: pd.DataFrame):
+def chart_vert(df: pd.DataFrame) -> None:
     st.markdown(
         """
         ### Study trend
@@ -29,15 +27,24 @@ def chart_vert(df: pd.DataFrame):
     df = normalized_duration(df)
     df = remove_last_month(df, "Period")
     df = normalize_to_average(df)
+    df = df.groupby(["Period"]).sum()
+    df = df.reset_index()
+    # Relative duration from 100%
+    # e.g. 67% -> -34%, 111% -> 11%
+    df["RelativeDuration"] = df["Duration"] - 1
     bars = (
         alt.Chart(df)
         .mark_bar()
         .properties(width=700, height=350)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("sum(Duration)", title="Study"),
+            y=alt.Y("Duration", title="Study"),
             tooltip=[
-                alt.Tooltip("sum(Duration)", title="Ratio", format=".0%"),
+                alt.Tooltip(
+                    "RelativeDuration",
+                    title="Deviation from the average",
+                    format="+.0%",
+                ),
             ],
         )
     )
@@ -47,6 +54,7 @@ def chart_vert(df: pd.DataFrame):
         .encode(y="y", size=alt.SizeValue(2))
     )
     st.write(alt.layer(bars, line))
+    # st.write(bars)
 
 
 def chart_horiz(df: pd.DataFrame):
