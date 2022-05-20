@@ -14,7 +14,6 @@ def check_name(df: pd.DataFrame) -> None:
         "Chores": [
             "Clean",
             "Organization",
-            "Preparation",
             "Shop",
             "Tidy up",
         ],
@@ -34,6 +33,9 @@ def check_name(df: pd.DataFrame) -> None:
         ],
         "Personal care": [
             "Hair cut",
+            # TODO: move 180 instances of Preparation to:
+            # - “Preparation” close to breakfast → “Breakfast”
+            # - “Preparation” far from breakfast → “Tidy up”
             "Preparation",
             "Shower",
         ],
@@ -112,43 +114,14 @@ def check_name(df: pd.DataFrame) -> None:
             "Workshop",
         ],
         "Spare time": [
-            "Account management",
-            "Apply film wrap",
-            "Bike",
             "Call Susanna",
-            "Car",
-            "Chat",
-            "Computer",
-            "Donate blood",
-            "Email",
-            "Form graduation Luca",
-            "Hacktoberfest",
-            "Kidney",
-            "Linux",
-            "Listen Pietro laurea",
-            "Manage pictures",
             "Memories",
-            "Memories management",
-            "Memory management",
-            "Mouse",
-            "Mouse warranty",
-            "Organization",
             "Phone",
-            "Play",
-            "Podcast",
-            "Read for Alessandro",
-            "Really",
             "Relax",
-            "Shop",
-            "Shower",
             "Sleep",
             "Talk",
-            "TeamViewer",
-            "Think",
-            "Trip organization",
-            "Wait",
-            "Walk",
-            "Windows",
+            # TODO: remove them
+            "Walk",  # TO: relax. About 360, I'm going to die.
         ],
         "Sport": [
             "Beach volleyball",
@@ -191,4 +164,4 @@ def check_name(df: pd.DataFrame) -> None:
     for cal, acts in act_names.items():
         df.loc[
             (df["Calendar"] == cal) & (~df["SUMMARY"].isin(acts)), "Error"
-        ] = "Act not categorized"
+        ] = "Not categorized"

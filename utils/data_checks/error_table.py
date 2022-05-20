@@ -8,7 +8,7 @@ def show_error_table(df: pd.DataFrame):
     with st.expander("Errors list", expanded=True):
         st.write(f"Total errors: {len(df)}")
         # Take at most n elements
-        df = df[: min(len(df), 10)]
+        df = df[: min(len(df), 50)]  # TODO: set to max 10
         _table_errors(df)
 
 
