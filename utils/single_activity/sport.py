@@ -7,7 +7,9 @@ from utils.remove_last_month import remove_last_month
 from utils.single_activity import chart_calendar_vert
 
 
-def chart_sport(df: pd.DataFrame):
+def sport(df: pd.DataFrame):
+    st.markdown("---")
+    st.header("Sport")
     df = df.copy()
     # TODO: fix normalized_duration and uncomment
     # df = normalized_duration(df)

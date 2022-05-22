@@ -2,8 +2,6 @@ import datetime
 import warnings
 
 import pandas as pd
-import pytz
-from dateutil.tz import tzlocal
 
 
 def clean_df(df: pd.DataFrame) -> pd.DataFrame:

@@ -3,19 +3,18 @@ import pandas as pd
 import streamlit as st
 
 from utils.group_by_period import group_by_period
-from utils.normalize import normalized_duration
 from utils.remove_last_month import remove_last_month
 
 
-def print_text(df: pd.DataFrame):
+def single_activity_text(df: pd.DataFrame):
     act_tot = len(df.index)
     st.markdown(
         f"""
-    ---
-    # Single activity
+        ---
+        # Single activity
 
-    - {act_tot} activities in total over 2 and a half years
-    """
+        - {act_tot} activities in total over 2 and a half years
+        """
     )
 
 
@@ -71,11 +70,12 @@ def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
     )
 
 
-def select_activity(df: pd.DataFrame) -> str:
-    cal_list = df.Calendar.unique()
-    cal_list = sorted(cal_list, reverse=True)
-    # Added a separate section for it
-    cal_list.remove("Entertainment")
-    cal_list.remove("Sport")
-    cal_list.remove("Study")
-    return st.radio("List of all calendars", cal_list)
+# def select_activity(df: pd.DataFrame) -> str:
+#     cal_list = df.Calendar.unique()
+#     cal_list = sorted(cal_list, reverse=True)
+#     # Added a separate section for it
+#     cal_list.remove("Entertainment")
+#     cal_list.remove("Sport")
+#     cal_list.remove("Work")
+#     cal_list.remove("Study")
+#     return st.radio("List of all calendars", cal_list)

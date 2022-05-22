@@ -1,9 +1,8 @@
-import numpy as np
 import pandas as pd
 import streamlit as st
 
 
-def table_sum(df: pd.DataFrame, calendar: str = None):
+def table_sum(df: pd.DataFrame, calendar: str | None = None):
     """Table with sum and standar deviation for each activity.
 
     Args:

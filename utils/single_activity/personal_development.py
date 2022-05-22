@@ -3,16 +3,21 @@ import pandas as pd
 import streamlit as st
 
 from utils.legend import legend
+from utils.remove_last_month import remove_last_month
+from utils.single_activity import chart_calendar_vert, chart_decreasing_activity
 
 
 def personal_development(df: pd.DataFrame):
     df = df.copy()
     st.markdown("---")
     st.header("Personal Development")
-    layered_bar_chart(df)
+    _layered_bar_chart(df)
+    df = remove_last_month(df, "DTSTART")
+    chart_calendar_vert(df, "Personal development")
+    chart_decreasing_activity(df, "Personal development")
 
 
-def layered_bar_chart(df: pd.DataFrame):
+def _layered_bar_chart(df: pd.DataFrame):
     df["Period"] = df["DTSTART"].dt.day_name()
     df = df.loc[
         (df["Calendar"] == "Personal development") | (df["Calendar"] == "Study")

@@ -25,7 +25,6 @@ def check_name(df: pd.DataFrame) -> None:
         "Entertainment": [
             "Cinema",
             "Game",
-            "Gaming",
             "Movie",
             "TV",
             "Twitch",
@@ -33,10 +32,6 @@ def check_name(df: pd.DataFrame) -> None:
         ],
         "Personal care": [
             "Hair cut",
-            # TODO: move 180 instances of Preparation to:
-            # - “Preparation” close to breakfast → “Breakfast”
-            # - “Preparation” far from breakfast → “Tidy up”
-            # "Preparation",
             "Shower",
         ],
         "Personal development": [
@@ -78,25 +73,16 @@ def check_name(df: pd.DataFrame) -> None:
             "WebValley",
         ],
         "Study": [
-            # TODO: put the ones I didn't do an exam into personal development
-            # Undestand if it's better to put everything to learn, or separate them.
-            # Note: German shoud be anyway separated, but merge English into Learn
             "AI for innovation",
             "Algorithms",
-            "Autonomous software agents",
-            "Computer vision",
             "Data mining",
             "Database",
-            "English",
-            "Finance",
             "Formal languages and compilers",
-            "German",
             "Human computer interaction",
             "Java",
             "Kuper",
             "Logic",
             "Machine learning",
-            "Natural language understanding",
             "Networks",
             "Operative systems",
             "Physics",
@@ -105,12 +91,19 @@ def check_name(df: pd.DataFrame) -> None:
             "Software engineering 2",
             "Thesis",
             "Web",
+            # TODO: undestand if it's better to put only courses without exams
+            # to learn, or separate them.
+            # Note: German shoud be anyway separated, but merge English into Learn.
+            "Autonomous software agents",
+            "Computer vision",
+            "English",
+            "Finance",
+            "German",
+            "Natural language understanding",
         ],
     }
 
     for cal, acts in act_names.items():
-        # TODO: check if an empty activity is given as error
         df.loc[
             (df["Calendar"] == cal) & (~df["SUMMARY"].isin(acts)), "Error"
         ] = "Not categorized"
-        # print(set(df.loc[df["Calendar"] == "Work"]["SUMMARY"].tolist()))
