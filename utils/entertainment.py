@@ -28,28 +28,8 @@ def entertainment(df: pd.DataFrame):
         - YouTube activities are becoming shorter. This may be due to YouTube Shorts.
         """
     )
-    _average_usage(df, 2020)
-    _average_usage(df, 2021)
+    _usage_table(df)
     _bar_chart(df)
-
-
-def _average_usage(df: pd.DataFrame, year: int):
-    df = df.copy()
-    df = df[df["DTSTART"].dt.year == year]
-    st.subheader(f"Year {year}")
-    # Days per year
-    tot_days = len(df["DAY"].unique())
-    st.text(f"📅 Days of usage: {tot_days}/{365}")
-    # Entertainment time per month
-    avg_ent = df["Duration"].sum() / 12
-    st.text(f"⏱ Average entertainment time per month: {avg_ent:.1f} hours")
-    # YouTube time per month
-    df_yt = df[df["SUMMARY"] == "YouTube"]
-    avg_yt_month = df_yt["Duration"].sum() / 12
-    st.text(f"🟥 Average YouTube time per month: {avg_yt_month:.1f} hours")
-    # Average session lenght
-    avg_yt_session = df_yt["Duration"].mean()
-    st.text(f"⏳ Average YouTube session lenght: {avg_yt_session:.2f} hours")
 
 
 def _bar_chart(df: pd.DataFrame):
@@ -62,10 +42,71 @@ def _bar_chart(df: pd.DataFrame):
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),
-            color=alt.Color(
-                "SUMMARY",
-                # scale=legend(df, color_map, "SUMMARY"),
-                legend=alt.Legend(title="Activity"),
-            ),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("sum(Duration)", title="Total duration (hours)"),
+            ],
+            color=alt.Color("SUMMARY", legend=alt.Legend(title="Activity")),
         )
     )
+
+
+def _usage_table(df: pd.DataFrame) -> None:
+    days_20, ent_20, yt_m_20 = _average_usage(df, 2020)
+    days_21, ent_21, yt_m_21 = _average_usage(df, 2021)
+    days_22, ent_22, yt_m_22 = _average_usage(df, 2022)
+
+    table = f"""
+    <table>
+      <thead>
+        <tr>
+            <th ></th>
+            <th >2020</th>
+            <th >2021</th>
+            <th >2022</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td >📅 Entertainment per year (over 365 days)</td>
+            <td >{days_20} days</td>
+            <td >{days_21} days</td>
+            <td >-</td>
+        </tr>
+        <tr>
+            <td >⏱ Entertainment per month (hours)</td>
+            <td >{ent_20:.0f}</td>
+            <td >{ent_21:.0f}</td>
+            <td >{ent_22:.0f}</td>
+        </tr>
+        <tr>
+            <td >🟥 YouTube per month (hours)</td>
+            <td >{yt_m_20:.0f}</td>
+            <td >{yt_m_21:.0f}</td>
+            <td >{yt_m_22:.0f}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br />
+    """
+    st.markdown(table, unsafe_allow_html=True)
+
+
+def _average_usage(df: pd.DataFrame, year: int):
+    df = df.copy()
+    df = df[df["DTSTART"].dt.year == year]
+
+    # Days per year
+    tot_days = len(df["DAY"].unique())
+
+    # Count number of months
+    months_num = len(df.groupby(by=[df.DTSTART.dt.month]).sum().index)
+
+    # Entertainment time per month
+    avg_ent = df["Duration"].sum() / months_num
+
+    # YouTube time per month
+    df_yt = df[df["SUMMARY"] == "YouTube"]
+    avg_yt_month = df_yt["Duration"].sum() / months_num
+
+    return tot_days, avg_ent, avg_yt_month

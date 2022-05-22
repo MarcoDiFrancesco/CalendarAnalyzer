@@ -21,7 +21,7 @@ def data_checks(df: pd.DataFrame):
 def _compute_errors(df: pd.DataFrame):
     """Compute errors and cache them."""
     cal_link.get_cal_link(df)
-    check_minute.check_minute(df)
+    # check_minute.check_minute(df)
     # check_day.check_day(df)
     check_name.check_name(df)
     # Cache must return an object

@@ -18,9 +18,7 @@ def study(df: pd.DataFrame):
 def chart_vert(df: pd.DataFrame) -> None:
     st.markdown(
         """
-        ### Study trend
-        - Normalized to average duration
-        - Last month's data is removed
+        ### Trend
         """
     )
     df = filter_df_chart(df, "Study")
@@ -58,6 +56,11 @@ def chart_vert(df: pd.DataFrame) -> None:
 
 
 def chart_horiz(df: pd.DataFrame):
+    st.markdown(
+        """
+        ### Time per exam
+        """
+    )
     df = filter_df_chart(df, "Study")
     df = df.groupby(["SUMMARY"]).sum().reset_index()
     # Round to closes integer
@@ -73,6 +76,10 @@ def chart_horiz(df: pd.DataFrame):
                 sort="-x",
                 # axis=alt.Axis(domain=False, tickSize=0, labelPadding=10),
             ),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("Duration", title="Total duration (hours)"),
+            ],
             color=alt.Color("SUMMARY", legend=None),
         )
     )

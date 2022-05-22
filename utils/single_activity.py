@@ -30,7 +30,6 @@ def filter_df_chart(df: pd.DataFrame, calendar: str):
 def chart_calendar_vert(df: pd.DataFrame, calendar: str):
     # TODO: remove this function once all categories are splitted
     df = filter_df_chart(df, calendar)
-    df = normalized_duration(df)
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
@@ -41,13 +40,13 @@ def chart_calendar_vert(df: pd.DataFrame, calendar: str):
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),
-            color=alt.Color(
-                "SUMMARY",
-                legend=alt.Legend(title="Activity"),
-            ),
+            color=alt.Color("SUMMARY", legend=alt.Legend(title="Activity")),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("sum(Duration)", title="Total duration (hours)"),
+            ],
         )
         .configure_legend(labelLimit=120),
-        # use_container_width=True,
     )
 
 
@@ -63,6 +62,10 @@ def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
+            ],
             color=alt.Color("SUMMARY", legend=None),
         )
     )

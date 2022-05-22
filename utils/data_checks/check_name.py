@@ -36,50 +36,22 @@ def check_name(df: pd.DataFrame) -> None:
             # TODO: move 180 instances of Preparation to:
             # - “Preparation” close to breakfast → “Breakfast”
             # - “Preparation” far from breakfast → “Tidy up”
-            "Preparation",
+            # "Preparation",
             "Shower",
         ],
         "Personal development": [
+            "Activity Watch",
             "AI challenge",
-            "Article Calendar analyzer",
-            "CV",
             "Calendar analyzer",
+            "CV",
+            "Internet Archive Updater",
             "Learn",
             "Linux",
             "MPM bot",
-            # TODO: about 167, split in:
-            # - Learn: if non-typing leraning
-            # - Linux: if typing, and no projects
-            "Activity Watch",
-            "Android",
-            "Biblioteca bot",
-            "Bitwarden",
-            "Cyber challenge",
-            "Data visualization",
-            "Heroku",
-            "Internet Archive Updater",
-            "Leetcode",
-            "Machine learning",
-            "Markdown",
-            "Organization",
-            "Podcast",
-            "Project UnitnCal",
-            "Project docker tools",
-            "Python",
-            "Pytorch lightning",
-            "Raspberry",
-            "SOI",
-            "Samsung innovation",
-            "Security keys",
-            "Seminar machine learning",
             "Simple Wikipedia",
-            "Speck and tech",
-            "Twilio",
-            "Ublock",
+            "SOI",
             "Unitn autologin",
-            "Wathsapp analyzer",
             "Website",
-            "Workshop",
         ],
         "Spare time": [
             "Call Susanna",
@@ -96,6 +68,14 @@ def check_name(df: pd.DataFrame) -> None:
             "Run",
             "Ski",
             "Workout",
+        ],
+        "Work": [
+            "DSH Website",
+            "FBK",
+            "Internship",
+            "Kidney",
+            "Meteo TN",
+            "WebValley",
         ],
         "Study": [
             # TODO: put the ones I didn't do an exam into personal development
@@ -133,3 +113,4 @@ def check_name(df: pd.DataFrame) -> None:
         df.loc[
             (df["Calendar"] == cal) & (~df["SUMMARY"].isin(acts)), "Error"
         ] = "Not categorized"
+        # print(set(df.loc[df["Calendar"] == "Work"]["SUMMARY"].tolist()))

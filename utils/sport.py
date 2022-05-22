@@ -37,6 +37,9 @@ def _heat_map(df: pd.DataFrame, title: str, color_scheme):
             color=alt.Color(
                 "sum(Duration):Q", title="Hours", scale=alt.Scale(scheme=color_scheme)
             ),
+            tooltip=[
+                alt.Tooltip("sum(Duration):Q", title="Hours"),
+            ],
         )
         .properties(width=700)
     )
