@@ -2,7 +2,11 @@ import streamlit as st
 from streamlit.commands.page_config import set_page_config
 
 from utils import admin, clean_df
-from utils.all_activities import chart_calendars, chart_calendars_longest
+from utils.all_activities import (
+    chart_calendars,
+    chart_calendars_longest,
+    should_increase,
+)
 from utils.compute_day import compute_day
 from utils.data_checks import data_checks
 from utils.download_cals import download_cals
@@ -41,6 +45,7 @@ def main() -> None:
     chart_calendars(df)
     chart_calendars_longest(df)
     table_sum(df)
+    should_increase(df)
 
     # Single activity
     single_activity_text(df)
