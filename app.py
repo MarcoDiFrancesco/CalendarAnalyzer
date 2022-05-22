@@ -13,6 +13,7 @@ from utils.single_activity.eat import eat
 from utils.single_activity.entertainment import entertainment
 from utils.single_activity.personal_care import personal_care
 from utils.single_activity.personal_development import personal_development
+from utils.single_activity.spare_time import spare_time
 from utils.single_activity.sport import sport
 from utils.single_activity.study import study
 from utils.single_activity.work import work
@@ -49,6 +50,7 @@ def main() -> None:
     entertainment(df)
     personal_care(df)
     personal_development(df)
+    spare_time(df)
     sport(df)
     study(df)
     work(df)
