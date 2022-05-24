@@ -19,7 +19,6 @@ def single_activity_text(df: pd.DataFrame):
 
 
 def filter_df_chart(df: pd.DataFrame, calendar: str):
-    df = df.copy()
     df = group_by_period(df, "M")
     df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
     df = df.loc[df["Calendar"] == calendar]
@@ -68,14 +67,3 @@ def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
             color=alt.Color("SUMMARY", legend=None),
         )
     )
-
-
-# def select_activity(df: pd.DataFrame) -> str:
-#     cal_list = df.Calendar.unique()
-#     cal_list = sorted(cal_list, reverse=True)
-#     # Added a separate section for it
-#     cal_list.remove("Entertainment")
-#     cal_list.remove("Sport")
-#     cal_list.remove("Work")
-#     cal_list.remove("Study")
-#     return st.radio("List of all calendars", cal_list)

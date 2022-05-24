@@ -30,7 +30,7 @@ def _layered_bar_chart(df: pd.DataFrame):
         .properties(width=60, height=300)
         .encode(
             x=alt.X("Calendar", title="", axis=alt.Axis(labels=False)),
-            y=alt.Y("Duration:Q", title="Ratio"),
+            y=alt.Y("Duration:Q", title="Ratio", axis=alt.Axis(format="%")),
             column=alt.Column(
                 "Period:O",
                 title="Day of the week",
