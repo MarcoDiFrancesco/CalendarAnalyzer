@@ -1,11 +1,14 @@
+import os
+
 import streamlit as st
 from streamlit.commands.page_config import set_page_config
 
 from utils import admin, clean_df
 from utils.all_activities import (
+    beginning_of_day,
     chart_calendars,
     chart_calendars_longest,
-    should_increase,
+    time_quality,
 )
 from utils.compute_day import compute_day
 from utils.data_checks import data_checks
@@ -35,7 +38,8 @@ def main() -> None:
     df = clean_df.clean_df(df)
 
     compute_day(df)
-    data_checks(df)
+    if not os.environ.get("DEBUG"):
+        data_checks(df)
 
     df = admin.get_password(df)
 
@@ -45,7 +49,8 @@ def main() -> None:
     chart_calendars(df)
     chart_calendars_longest(df)
     table_sum(df)
-    should_increase(df)
+    time_quality(df)
+    beginning_of_day(df)
 
     # Single activity
     single_activity_text(df)
