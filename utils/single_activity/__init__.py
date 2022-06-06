@@ -26,7 +26,7 @@ def filter_df_chart(df: pd.DataFrame, calendar: str):
 
 
 def chart_calendar_vert(df: pd.DataFrame, calendar: str):
-    # TODO: remove this function once all categories are splitted
+    # TODO: remove this function (above) once all categories are splitted
     df = filter_df_chart(df, calendar)
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
@@ -49,7 +49,7 @@ def chart_calendar_vert(df: pd.DataFrame, calendar: str):
 
 
 def chart_decreasing_activity(df: pd.DataFrame, calendar: str):
-    # TODO: remove this function once all categories are splitted
+    # TODO: remove this function (above) once all categories are splitted
     df = df.copy()
     df = df.loc[df["Calendar"] == calendar]
     df = df.groupby(["SUMMARY"]).sum().reset_index()

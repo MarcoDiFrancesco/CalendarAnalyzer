@@ -2,9 +2,9 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+from utils.group_by_period import group_by_period
 from utils.legend import legend
 from utils.remove_last_month import remove_last_month
-from utils.single_activity import chart_calendar_vert, chart_decreasing_activity
 
 
 def personal_development(df: pd.DataFrame):
@@ -12,12 +12,64 @@ def personal_development(df: pd.DataFrame):
     st.markdown("---")
     st.header("Personal Development")
     _layered_bar_chart(df)
+    st.subheader("Fiddling vs Working on projects")
+    _fiddle_plot(df)
+    st.subheader("Personal projects")
+    _projects_plot(df)
+
+
+def _fiddle_plot(df: pd.DataFrame):
+    df = df.copy()
+    df = group_by_period(df, "M")
+    df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
+    df = df.loc[df["Calendar"] == "Personal development"]
+    df.loc[df["SUMMARY"] == "Linux", "Category"] = "Fiddle (Linux)"
+    df.loc[df["SUMMARY"] != "Linux", "Category"] = "Non-Fiddle"
+    # Show in front Non-Fiddle (the most important)
+    df = df.sort_values(["Period", "Category"])
+    # Horizotal chart does not require last month to be removed
+    df = remove_last_month(df, "Period")
+    st.altair_chart(
+        alt.Chart(df)
+        .mark_bar(opacity=0.75)
+        .properties(width=700, height=500)
+        .encode(
+            x=alt.X("Period"),
+            y=alt.Y("sum(Duration)", title="Hours", stack=None),
+            color=alt.Color("Category", legend=alt.Legend(title="Activity")),
+            tooltip=[
+                alt.Tooltip("Category", title="Activity"),
+                alt.Tooltip("sum(Duration)", title="Total duration (hours)"),
+            ],
+        )
+        .configure_legend(labelLimit=120),
+    )
+
+
+def _projects_plot(df: pd.DataFrame):
+    df = df.copy()
     df = remove_last_month(df, "DTSTART")
-    chart_calendar_vert(df, "Personal development")
-    chart_decreasing_activity(df, "Personal development")
+    df = df.loc[df["Calendar"] == "Personal development"]
+    df = df.loc[df["SUMMARY"] != "Linux"]
+    df = df.groupby(["SUMMARY"]).sum().reset_index()
+    st.write(
+        alt.Chart(df)
+        .mark_bar(point=True)
+        .properties(width=550, height=500)
+        .encode(
+            alt.X("Duration", title="Hours"),
+            alt.Y("SUMMARY", title="Activity", sort="-x"),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
+            ],
+            color=alt.Color("SUMMARY", legend=None),
+        )
+    )
 
 
 def _layered_bar_chart(df: pd.DataFrame):
+    df = df.copy()
     df["Period"] = df["DTSTART"].dt.day_name()
     df = df.loc[
         (df["Calendar"] == "Personal development") | (df["Calendar"] == "Study")

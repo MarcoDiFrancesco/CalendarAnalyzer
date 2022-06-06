@@ -146,8 +146,7 @@ def beginning_of_day(df: pd.DataFrame) -> None:
     # df = df.loc[df["Calendar"].isin(["Eat"])]
 
     # TODO: undestand why half hours are not shown
-
-    print(df)
+    # print(df)
     st.altair_chart(
         alt.Chart(df)
         .mark_circle(size=14)
