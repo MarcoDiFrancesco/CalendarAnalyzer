@@ -18,7 +18,7 @@ def data_checks(df: pd.DataFrame):
     show_error_table(df)
 
 
-@st.cache
+@st.cache(ttl=7 * 24 * 60 * 60)
 def _compute_errors(df: pd.DataFrame):
     """Compute errors and cache them."""
     cal_link.get_cal_link(df)
