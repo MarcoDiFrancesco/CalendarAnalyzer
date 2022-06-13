@@ -13,7 +13,8 @@ import streamlit as st
 # from utils.sort_df import sort_by_name
 
 # Cache for 1 week
-@st.cache(ttl=7 * 24 * 60 * 60)
+# @st.cache(ttl=7 * 24 * 60 * 60)
+@st.experimental_memo
 def download_cals() -> pd.DataFrame:
     """Download calendars."""
     cals = []
