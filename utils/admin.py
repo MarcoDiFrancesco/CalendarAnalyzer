@@ -23,4 +23,5 @@ def get_password(df: pd.DataFrame) -> pd.DataFrame:
 def caching_button():
     btn = st.button("Clear cache")
     if btn:
-        clear_cache()
+        # clear_cache()
+        st.experimental_memo.clear()
