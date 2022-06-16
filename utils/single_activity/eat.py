@@ -36,6 +36,7 @@ def _beginning_of_day(df: pd.DataFrame) -> None:
     df = df.loc[df["Calendar"].isin(["Eat"])]
 
     group_by = "SUMMARY"
+    # TODO: write that I've done it
     df = _filter_first_daily_activity(df, group_by)
 
     # Add randomly + or - 15 minutes to distribute activities during the half hour

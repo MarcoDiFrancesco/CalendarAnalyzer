@@ -58,7 +58,7 @@ def chart_vert(df: pd.DataFrame) -> None:
 def chart_horiz(df: pd.DataFrame):
     st.markdown(
         """
-        ### Time per exam
+        ### Time cost per exam
         """
     )
     df = filter_df_chart(df, "Study")

@@ -7,6 +7,7 @@ from utils.group_by_period import group_by_period
 from utils.legend import legend
 from utils.normalize import normalize_all_to_one
 from utils.remove_last_month import remove_last_month
+from utils.single_activity.eat import _filter_first_daily_activity
 
 
 def chart_calendars(df: pd.DataFrame):
@@ -118,3 +119,51 @@ def time_quality(df: pd.DataFrame) -> None:
         .properties(title="Good", width=250)
     )
     st.altair_chart(alt.concat(left, middle, right, spacing=5))
+
+
+def average_activity_time(df: pd.DataFrame) -> None:
+    st.subheader("Average activity time")
+    df = df.copy()
+    # Filter for debugging readibility
+    df = df[["Calendar", "SUMMARY", "DTSTART"]]
+
+    # Consider only first activity of the day
+    df = _filter_first_daily_activity(df, "SUMMARY")
+
+    # Group by month and remvoe the last one
+    df = group_by_period(df, "M")
+    df = remove_last_month(df, "Period")
+
+    # Take time from DTSTART
+    df["Time"] = df["DTSTART"].dt.time
+    df["Time"] = pd.to_timedelta(df["Time"].astype(str))
+
+    # Not selecting raises warning
+    df = df[["Time", "Period", "SUMMARY"]].groupby(["Period", "SUMMARY"]).mean()
+    df = df.reset_index()
+
+    # TimeDelta to TimeDate
+    df = df.assign(TimeDate=0)
+    df["TimeDate"] = pd.to_datetime(df["TimeDate"])
+    df["TimeDate"] += df["Time"]
+    # Drop for readibility
+    df = df.drop("Time", axis=1)
+
+    # Select few activities
+    df = df[df["SUMMARY"].isin(["Breakfast", "Lunch", "Dinner"])]
+
+    st.altair_chart(
+        alt.Chart(df)
+        .mark_line()
+        .properties(width=700, height=400)
+        .encode(
+            alt.X("Period"),
+            alt.Y("hoursminutes(TimeDate):T", title="Time"),
+            color=alt.Color("SUMMARY"),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("hoursminutes(TimeDate):T", title="Average time"),
+                alt.Tooltip("Period"),
+            ],
+        )
+    )
