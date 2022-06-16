@@ -12,8 +12,6 @@ def single_activity_text(df: pd.DataFrame):
         f"""
         ---
         # Single activity
-
-        - {act_tot} activities in total over 2 and a half years
         """
     )
 

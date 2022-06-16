@@ -8,6 +8,7 @@ from utils.all_activities import chart_calendars, chart_calendars_longest, time_
 from utils.compute_day import compute_day
 from utils.data_checks import data_checks
 from utils.download_cals import download_cals
+from utils.global_info import global_info
 from utils.single_activity import single_activity_text
 from utils.single_activity.chores import chores
 from utils.single_activity.commute import commute
@@ -41,6 +42,7 @@ def main() -> None:
     # All activities
     st.markdown("---")
     st.header("All activities")
+    global_info(df)
     chart_calendars(df)
     chart_calendars_longest(df)
     table_sum(df)
