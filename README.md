@@ -16,8 +16,6 @@ Preview: [http://raspberry.gleeze.com:8501](http://raspberry.gleeze.com:8501)
 
 (hosted in a 1GB Raspberry Pi, be kind with it ❤️)
 
-<a href="http://raspberry.gleeze.com:8501" class="button home">Go to Dashboard</a>
-
 [
 ![All activities](https://i.imgur.com/KNwPSST.png)
 ![Single activity](https://i.imgur.com/uX8VCSD.png)
