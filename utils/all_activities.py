@@ -76,6 +76,7 @@ def time_quality(df: pd.DataFrame) -> None:
         .encode(
             y=alt.Y("Period:O", axis=None),
             x=alt.X("Duration", title="hourss", sort=alt.SortOrder("descending")),
+            color=alt.value("#eb4034"),  # Red
             # color=alt.Color(
             #     "Calendar",
             #     scale=legend(df),
@@ -105,6 +106,7 @@ def time_quality(df: pd.DataFrame) -> None:
         .encode(
             y=alt.Y("Period:O", axis=None),
             x=alt.X("Duration", title="hourss"),
+            color=alt.value("#3dbf4a"),  # Green
             # color=alt.Color(
             #     "Calendar",
             #     scale=legend(df),

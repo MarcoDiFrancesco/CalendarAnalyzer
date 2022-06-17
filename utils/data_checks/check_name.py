@@ -12,7 +12,6 @@ def check_name(df: pd.DataFrame) -> None:
             "Walk",
         ],
         "Chores": [
-            "Clean",
             "Organization",
             "Shop",
             "Tidy up",
