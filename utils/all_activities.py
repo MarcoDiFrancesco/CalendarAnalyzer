@@ -149,6 +149,9 @@ def average_activity_time(df: pd.DataFrame) -> None:
     # Drop for readibility
     df = df.drop("Time", axis=1)
 
+    # To altair format, otherwise converts to UTC
+    df["TimeDate"] = df["TimeDate"].dt.strftime("%Y/%m/%d %H:%M")
+
     # Select few activities
     df = df[df["SUMMARY"].isin(["Breakfast", "Lunch", "Dinner"])]
 
@@ -162,7 +165,8 @@ def average_activity_time(df: pd.DataFrame) -> None:
             color=alt.Color("SUMMARY"),
             tooltip=[
                 alt.Tooltip("SUMMARY", title="Activity"),
-                alt.Tooltip("hoursminutes(TimeDate):T", title="Average time"),
+                alt.Tooltip("TimeDate:O", title="Average time (O)"),
+                alt.Tooltip("hoursminutes(TimeDate):T", title="Average time (T)"),
                 alt.Tooltip("Period"),
             ],
         )
