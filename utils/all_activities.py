@@ -76,11 +76,11 @@ def time_quality(df: pd.DataFrame) -> None:
         .encode(
             y=alt.Y("Period:O", axis=None),
             x=alt.X("Duration", title="hourss", sort=alt.SortOrder("descending")),
-            color=alt.Color(
-                "Calendar",
-                scale=legend(df),
-                legend=alt.Legend(title="Calendar"),
-            ),
+            # color=alt.Color(
+            #     "Calendar",
+            #     scale=legend(df),
+            #     legend=alt.Legend(title="Calendar"),
+            # ),
             tooltip=[
                 "Calendar",
                 alt.Tooltip("sum(Duration)", title="Monthly occupation", format=".1%"),
@@ -105,11 +105,11 @@ def time_quality(df: pd.DataFrame) -> None:
         .encode(
             y=alt.Y("Period:O", axis=None),
             x=alt.X("Duration", title="hourss"),
-            color=alt.Color(
-                "Calendar",
-                scale=legend(df),
-                legend=alt.Legend(title="Calendar"),
-            ),
+            # color=alt.Color(
+            #     "Calendar",
+            #     scale=legend(df),
+            #     legend=alt.Legend(title="Calendar"),
+            # ),
             tooltip=[
                 "Calendar",
                 alt.Tooltip("sum(Duration)", title="Monthly occupation", format=".1%"),
