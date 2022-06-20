@@ -59,7 +59,7 @@ nbclient==0.5.9
 nbconvert==6.5.0
 nbformat==5.4.0
 nest-asyncio==1.5.4
-notebook==6.4.6
+notebook==6.4.12
 notebook-shim==0.1.0
 numpy==1.22.0
 outcome==1.1.0
