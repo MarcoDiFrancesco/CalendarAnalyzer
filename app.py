@@ -60,7 +60,6 @@ def main() -> None:
     commute(df)
     eat(df)
     entertainment(df)
-    personal_care(df)
     personal_development(df)
     spare_time(df)
     sport(df)
