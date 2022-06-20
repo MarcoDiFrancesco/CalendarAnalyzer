@@ -1,0 +1,5 @@
+jicson
+matplotlib
+pandas
+requests
+streamlit
