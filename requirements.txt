@@ -84,7 +84,7 @@ Pygments==2.11.2
 Pympler==1.0.1
 pyOpenSSL==22.0.0
 pyparsing==3.0.6
-PyQt5==5.15.5
+PyQt5
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.10.1
 pyrsistent==0.18.0
