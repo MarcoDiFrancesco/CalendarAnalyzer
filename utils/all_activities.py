@@ -27,7 +27,7 @@ def chart_calendars(df: pd.DataFrame):
             ),
             color=alt.Color(
                 "Calendar",
-                scale=legend(df),
+                scale=legend(df, "Calendar"),
                 legend=alt.Legend(title="Calendar"),
             ),
             tooltip=[
@@ -51,7 +51,7 @@ def chart_calendars_longest(df: pd.DataFrame):
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
-            color=alt.Color("Calendar", scale=legend(df)),
+            color=alt.Color("Calendar", scale=legend(df, "Calendar")),
             tooltip=[
                 alt.Tooltip("Duration", title="Duration (hours)"),
                 alt.Tooltip("yearmonthdatehoursminutes(DTSTART)", title="Start date"),

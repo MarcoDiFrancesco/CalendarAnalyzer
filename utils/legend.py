@@ -2,15 +2,13 @@ import altair as alt
 import pandas as pd
 
 
-def legend(
-    df: pd.DataFrame, *, color_map: dict | None = None, column="Calendar"
-) -> alt.Scale:
+def legend(df: pd.DataFrame, column, /, *, color_map: dict | None = None) -> alt.Scale:
     """Return legend with only the calendar that appear on the dataframe in specified column.
 
     Args:
         df (pd.DataFrame): Input df
+        column (str): Calendar or SUMMARY
         color_map (dict, optional): {"Chores": "#7986CB", "Work": "#F09300"}
-        column (str, optional): Calendar or SUMMARY. TODO: remove default
 
     Returns:
         alt.Scale: altair legend

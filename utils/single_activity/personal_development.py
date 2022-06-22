@@ -29,7 +29,6 @@ def _fiddle_plot(df: pd.DataFrame):
     df = df.sort_values(["Period", "Category"], ascending=False)
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
-    print("FIDDLEEE", df)
     st.altair_chart(
         alt.Chart(df)
         .mark_bar(opacity=0.75)
@@ -42,8 +41,8 @@ def _fiddle_plot(df: pd.DataFrame):
                 legend=alt.Legend(title="Activity"),
                 scale=legend(
                     df,
+                    "Category",
                     color_map={"Linux": "#B39DDB", "Learn-Projects": "#fcc221"},
-                    column="Category",
                 ),
             ),
             tooltip=[
@@ -116,7 +115,7 @@ def _layered_bar_chart(df: pd.DataFrame):
                     format=".0%",
                 ),
             ],
-            color=alt.Color("Calendar", scale=legend(df)),
+            color=alt.Color("Calendar", scale=legend(df, "Calendar")),
         )
     )
     st.altair_chart(chart)
