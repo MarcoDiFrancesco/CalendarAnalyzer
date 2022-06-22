@@ -2,4 +2,4 @@ jicson
 matplotlib
 pandas
 requests
-streamlit
+streamlit<1.10.0
