@@ -32,7 +32,7 @@ def chart_vert(df: pd.DataFrame) -> None:
     df["RelativeDuration"] = df["Duration"] - 1
     bars = (
         alt.Chart(df)
-        .mark_bar()
+        .mark_bar(opacity=0.9)
         .properties(width=700, height=350)
         .encode(
             x=alt.X("Period"),
@@ -67,7 +67,7 @@ def chart_horiz(df: pd.DataFrame):
     df = df.round(0)
     bars = (
         alt.Chart(df)
-        .mark_bar(point=True)
+        .mark_bar(point=True, opacity=0.9)
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y(
@@ -151,16 +151,7 @@ def rige_plot(df: pd.DataFrame):
                     title="Subject",
                     # format=".2",
                 ),
-            ]
-            # TODO: add color palette like here https://stackoverflow.com/a/65861410/7924557
-            # TODO: find a color scheme that makes sense, maybe join study with personal dev
-            #       and color in yellow the projects? Then there is the problem of linux project
-            #       and anyway most projects are very little, so not noticible
-            # alt.Fill(
-            #     "color:O",
-            #     # legend=None,
-            #     scale=None,
-            # ),
+            ],
         )
         .facet(
             row=alt.Row(

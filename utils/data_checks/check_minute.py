@@ -22,8 +22,8 @@ def _check_quarter(df: pd.DataFrame) -> None:
 def _check_meal_day(df: pd.DataFrame) -> None:
     """Check for meals time start, snacks are included in one of those meals.
 
-    TODO: replace with meal order, there are cases in which I want to have a breakfast
-    at 12:30 and other days with lunch at 12:00
+    If will ever be implemented, replace with meal order, there are cases in
+    which I want to have a breakfast at 12:30 and other days with lunch at 12:00
 
     e.g. Breakfast can start at 11:30 but cannot start at 12:00
     """

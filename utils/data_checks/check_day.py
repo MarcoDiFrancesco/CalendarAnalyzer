@@ -11,7 +11,7 @@ def check_day(df: pd.DataFrame) -> None:
 
 
 def _daily_checks(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
-    """TODO: add docstring.
+    """Wrapper of _check_consequent.
 
     Args:
         df (pd.DataFrame): input dataframe

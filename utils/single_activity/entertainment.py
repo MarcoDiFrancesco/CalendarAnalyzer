@@ -37,7 +37,7 @@ def _bar_chart(df: pd.DataFrame):
     df = group_by_period(df, "M")
     st.write(
         alt.Chart(df, title="YouTube usage")
-        .mark_bar()
+        .mark_bar(opacity=0.9)
         .properties(width=700, height=450)
         .encode(
             x=alt.X("Period"),

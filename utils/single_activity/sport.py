@@ -68,7 +68,7 @@ def _vertical(df: pd.DataFrame):
 
     st.altair_chart(
         alt.Chart(df)
-        .mark_bar()
+        .mark_bar(opacity=0.9)
         .properties(width=700, height=500)
         .encode(
             x=alt.X("Period"),
@@ -86,7 +86,7 @@ def _vertical(df: pd.DataFrame):
 def _heat_map(df: pd.DataFrame, title: str, color_scheme):
     st.write(
         alt.Chart(df, title=title)
-        .mark_rect()
+        .mark_rect(opacity=0.9)
         .encode(
             x=alt.X("date(DTSTART):O", title="Day"),
             y=alt.Y("month(DTSTART):O", title="Month"),

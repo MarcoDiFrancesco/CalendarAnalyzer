@@ -86,7 +86,7 @@ def _layered_bar_chart(df: pd.DataFrame):
     df["Duration"] /= df["Duration"].max()
     chart = (
         alt.Chart(df)
-        .mark_bar(opacity=0.5)
+        .mark_bar(opacity=0.8)
         .properties(width=60, height=300)
         .encode(
             x=alt.X("Calendar", title="", axis=alt.Axis(labels=False)),

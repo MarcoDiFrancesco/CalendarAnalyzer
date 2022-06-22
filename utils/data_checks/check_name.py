@@ -39,7 +39,7 @@ def check_name(df: pd.DataFrame) -> None:
             "AI challenge",
             "Calendar analyzer",
             "CV",
-            "Expense tracking",  # TODO: maybe remove?
+            "Expense tracking",  # Maybe remove?
             "Internet Archive Updater",
             "Learn",
             "Linux",
@@ -91,15 +91,9 @@ def check_name(df: pd.DataFrame) -> None:
             "Software engineering 2",
             "Thesis",
             "Web",
-            # TODO: undestand if it's better to put only courses without exams
-            # to learn, or separate them.
-            # Note: German shoud be anyway separated, but merge English into Learn.
-            "Autonomous software agents",
-            "Computer vision",
+            # Non-University subjects
             "English",
-            "Finance",
             "German",
-            "Natural language understanding",
         ],
     }
 

@@ -4,17 +4,37 @@ import pandas as pd
 import streamlit as st
 
 from utils.remove_last_month import remove_last_month
-from utils.single_activity import chart_calendar_vert, chart_decreasing_activity
+from utils.single_activity import filter_df_chart
 
 
 def eat(df: pd.DataFrame) -> None:
     df = df.copy()
     st.header("Eat")
     df = remove_last_month(df, "DTSTART")
-    chart_calendar_vert(df, "Eat")
-    chart_decreasing_activity(df, "Eat")
+    # TODO: Remove argument Calendar
+    _chart_decreasing_activity(df, "Eat")
     st.subheader("Meals time distribution")
     _beginning_of_day(df)
+
+
+def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
+    df = df.copy()
+    df = df.loc[df["Calendar"] == calendar]
+    df = df.groupby(["SUMMARY"]).sum().reset_index()
+    st.write(
+        alt.Chart(df)
+        .mark_bar(point=True, opacity=0.9)
+        .properties(width=550, height=250)
+        .encode(
+            alt.X("Duration", title="Hours"),
+            alt.Y("SUMMARY", title="Activity", sort="-x"),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
+            ],
+            color=alt.Color("SUMMARY", legend=None),
+        )
+    )
 
 
 def _beginning_of_day(df: pd.DataFrame) -> None:
@@ -35,8 +55,8 @@ def _beginning_of_day(df: pd.DataFrame) -> None:
     # Filter specific calendars
     df = df.loc[df["Calendar"].isin(["Eat"])]
 
+    # Get only first activity of the day
     group_by = "SUMMARY"
-    # TODO: write that I've done it
     df = _filter_first_daily_activity(df, group_by)
 
     # Add randomly + or - 15 minutes to distribute activities during the half hour
