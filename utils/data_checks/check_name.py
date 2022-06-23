@@ -25,9 +25,7 @@ def check_name(df: pd.DataFrame) -> None:
             "Cinema",
             "Game",
             "Movie",
-            "Social media",
             "TV",
-            "Twitch",
             "YouTube",
         ],
         "Personal care": [

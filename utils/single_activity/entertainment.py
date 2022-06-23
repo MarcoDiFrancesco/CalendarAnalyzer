@@ -5,6 +5,7 @@ import streamlit as st
 from utils.group_by_period import group_by_period
 from utils.legend import legend
 from utils.remove_last_month import remove_last_month
+from utils.single_activity import fill_missing_months
 
 color_map = {
     "YouTube": "#F4511E",
@@ -29,11 +30,17 @@ def entertainment(df: pd.DataFrame):
         """
     )
     _usage_table(df)
-    _bar_chart(df)
+    st.subheader("YouTube usage")
+    _bar_chart_singlecat(df, "YouTube", "red")
+    st.subheader("Game usage")
+    _bar_chart_singlecat(df, "Game", "#ff8000")
+    st.subheader("Misc entertainment")
+    _bar_chart_multicat(df)
 
 
-def _bar_chart(df: pd.DataFrame):
+def _bar_chart_multicat(df: pd.DataFrame):
     df = df.copy()
+    df = df[~df["SUMMARY"].isin(["YouTube", "Game"])]
     df = group_by_period(df, "M")
     st.write(
         alt.Chart(df, title="YouTube usage")
@@ -46,7 +53,31 @@ def _bar_chart(df: pd.DataFrame):
                 alt.Tooltip("SUMMARY", title="Activity"),
                 alt.Tooltip("sum(Duration)", title="Total duration (hours)"),
             ],
-            color=alt.Color("SUMMARY", legend=alt.Legend(title="Activity")),
+            color=alt.Color("SUMMARY", scale=alt.Scale(scheme="paired")),
+        )
+    )
+
+
+def _bar_chart_singlecat(df: pd.DataFrame, category: str, color: str):
+    df = df.copy()
+    df = group_by_period(df, "M")
+    # Select for debuggability
+    df = df[["SUMMARY", "Period", "Duration"]]
+    # Fill missing months
+    df = fill_missing_months(df, "Period", "SUMMARY")
+    df = df[df["SUMMARY"] == category]
+    assert len(df) > 0, f"DataFrame does not contain {category} elements"
+    st.write(
+        alt.Chart(df)
+        .mark_bar(opacity=0.7, color=color)
+        .properties(width=700, height=400)
+        .encode(
+            x=alt.X("Period"),
+            y=alt.Y("sum(Duration)", title="Hours"),
+            tooltip=[
+                alt.Tooltip("SUMMARY", title="Activity"),
+                alt.Tooltip("sum(Duration)", title="Total duration (hours)"),
+            ],
         )
     )
 
@@ -56,6 +87,7 @@ def _usage_table(df: pd.DataFrame) -> None:
     days_21, ent_21, yt_m_21 = _average_usage(df, 2021)
     days_22, ent_22, yt_m_22 = _average_usage(df, 2022)
 
+    # TODO: compute percentage (over 365 days)
     table = f"""
     <table>
       <thead>
@@ -68,22 +100,22 @@ def _usage_table(df: pd.DataFrame) -> None:
         </thead>
         <tbody>
         <tr>
-            <td >📅 Entertainment per year (over 365 days)</td>
-            <td >{days_20} days</td>
-            <td >{days_21} days</td>
+            <td >📅 Entertainment days / year</td>
+            <td >{days_20/365:.0%} ({days_20} days)</td>
+            <td >{days_21/365:.0%} ({days_21} days)</td>
             <td >-</td>
         </tr>
         <tr>
-            <td >⏱ Entertainment per month (hours)</td>
-            <td >{ent_20:.0f}</td>
-            <td >{ent_21:.0f}</td>
-            <td >{ent_22:.0f}</td>
+            <td >⏱ Entertainment / month</td>
+            <td >{ent_20:.0f} h</td>
+            <td >{ent_21:.0f} h</td>
+            <td >{ent_22:.0f} h</td>
         </tr>
         <tr>
-            <td >🟥 YouTube per month (hours)</td>
-            <td >{yt_m_20:.0f}</td>
-            <td >{yt_m_21:.0f}</td>
-            <td >{yt_m_22:.0f}</td>
+            <td >🟥 YouTube / month</td>
+            <td >{yt_m_20:.0f} h</td>
+            <td >{yt_m_21:.0f} h</td>
+            <td >{yt_m_22:.0f} h</td>
         </tr>
         </tbody>
     </table>
