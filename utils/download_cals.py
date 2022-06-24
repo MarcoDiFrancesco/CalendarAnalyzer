@@ -11,11 +11,10 @@ import pandas as pd
 import requests
 import streamlit as st
 
-# from utils.sort_df import sort_by_name
+persist = True if not os.environ.get("DEBUG") else False
 
 # Cache for 1 week
-# @st.cache(ttl=7 * 24 * 60 * 60)
-@st.experimental_memo
+@st.cache(ttl=7 * 24 * 60 * 60, persist=persist)
 def download_cals() -> pd.DataFrame:
     """Download calendars."""
     cals = []

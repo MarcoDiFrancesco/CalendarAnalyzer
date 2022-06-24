@@ -23,7 +23,6 @@ def data_checks(df: pd.DataFrame):
             table_errors(df)
 
 
-# @st.cache(ttl=7 * 24 * 60 * 60)
 @st.experimental_memo
 def _compute_errors(df: pd.DataFrame):
     """Compute errors and cache them."""
