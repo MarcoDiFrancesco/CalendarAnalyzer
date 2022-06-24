@@ -1,18 +1,17 @@
 import pandas as pd
 import streamlit as st
 
+# def show_error_table(df: pd.DataFrame):
+#     # Remove non-error activities
+#     df = df[~df.Error.isnull()]
+#     with st.expander("Errors list", expanded=True):
+#         st.write(f"Total errors: {len(df)}")
+#         # Take at most n elements
+#         df = df[: min(len(df), 30)]
+#         table_errors(df)
 
-def show_error_table(df: pd.DataFrame):
-    # Remove non-error activities
-    df = df[~df.Error.isnull()]
-    with st.expander("Errors list", expanded=True):
-        st.write(f"Total errors: {len(df)}")
-        # Take at most n elements
-        df = df[: min(len(df), 30)]
-        _table_errors(df)
 
-
-def _table_errors(df: pd.DataFrame):
+def table_errors(df: pd.DataFrame):
     """Generate error table.
 
     Make table containing

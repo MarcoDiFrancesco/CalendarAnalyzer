@@ -39,14 +39,12 @@ def main() -> None:
     df = clean_df.clean_df(df)
 
     compute_day(df)
-    if not os.environ.get("DEBUG"):
-        data_checks(df)
+    data_checks(df)
 
     df = admin.get_password(df)
 
     # All activities
     st.markdown("---")
-    st.header("All activities")
     global_info(df)
     chart_calendars(df)
     chart_calendars_longest(df)
