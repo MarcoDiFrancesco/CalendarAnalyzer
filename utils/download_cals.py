@@ -1,3 +1,4 @@
+import concurrent.futures
 import copy
 import datetime
 import json
@@ -25,16 +26,20 @@ def download_cals() -> pd.DataFrame:
     links = json.loads(links)
     # Check added for linter
     assert links is not None
-    for link in links:
-        cal = _download_cal(link)
-        cal = cal["VCALENDAR"][0]
-        cal_name = cal["X-WR-CALNAME"]
-        cal_content = pd.DataFrame(
-            data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND", "UID"]
-        )
-        cal_content["Calendar"] = cal_name
-        cal_content["CAL_LINK"] = link
-        cals.append(cal_content)
+    # Parallelize calendars download
+    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        future_link_map = {executor.submit(_download_cal, link): link for link in links}
+        for future in concurrent.futures.as_completed(future_link_map):
+            link = future_link_map[future]
+            cal = future.result()
+            cal = cal["VCALENDAR"][0]
+            cal_name = cal["X-WR-CALNAME"]
+            cal_content = pd.DataFrame(
+                data=cal["VEVENT"], columns=["SUMMARY", "DTSTART", "DTEND", "UID"]
+            )
+            cal_content["Calendar"] = cal_name
+            cal_content["CAL_LINK"] = link
+            cals.append(cal_content)
     return pd.concat(cals)
 
 
