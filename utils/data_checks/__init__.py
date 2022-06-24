@@ -1,13 +1,9 @@
 import datetime
-import os
 
 import pandas as pd
 import streamlit as st
-from streamlit.elements.arrow import Data
 
 from . import cal_link, check_day, check_minute, check_name
-
-# from .error_table import show_error_table
 from .error_table import table_errors
 
 
@@ -25,8 +21,6 @@ def data_checks(df: pd.DataFrame):
             # Take at most n elements
             df = df[: min(len(df), 30)]
             table_errors(df)
-
-    # show_error_table(df)
 
 
 # @st.cache(ttl=7 * 24 * 60 * 60)

@@ -40,10 +40,14 @@ def entertainment(df: pd.DataFrame):
 
 def _bar_chart_multicat(df: pd.DataFrame):
     df = df.copy()
-    df = df[~df["SUMMARY"].isin(["YouTube", "Game"])]
     df = group_by_period(df, "M")
+    # Select for debuggability
+    df = df[["SUMMARY", "Period", "Duration"]]
+    # Fill missing months
+    df = fill_missing_months(df, "Period", "SUMMARY")
+    df = df[~df["SUMMARY"].isin(["YouTube", "Game"])]
     st.write(
-        alt.Chart(df, title="YouTube usage")
+        alt.Chart(df)
         .mark_bar(opacity=0.9)
         .properties(width=700, height=450)
         .encode(
