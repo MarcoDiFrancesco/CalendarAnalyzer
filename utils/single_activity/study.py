@@ -2,6 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+from utils.fill_month_values import fill_month_values
 from utils.normalize import normalize_to_average, normalized_duration
 from utils.remove_last_month import remove_last_month
 from utils.single_activity import filter_df_chart
@@ -23,10 +24,12 @@ def chart_vert(df: pd.DataFrame) -> None:
     )
     df = filter_df_chart(df, "Study")
     df = normalized_duration(df)
-    df = remove_last_month(df, "Period")
     df = normalize_to_average(df)
     df = df.groupby(["Period"]).sum()
     df = df.reset_index()
+    df = fill_month_values(df, "Period", "Duration")
+    df = remove_last_month(df, "Period")
+
     # Relative duration from 100%
     # e.g. 67% -> -34%, 111% -> 11%
     df["RelativeDuration"] = df["Duration"] - 1
@@ -36,7 +39,7 @@ def chart_vert(df: pd.DataFrame) -> None:
         .properties(width=700, height=350)
         .encode(
             x=alt.X("Period"),
-            y=alt.Y("Duration", title="Study"),
+            y=alt.Y("Duration", title="Study", axis=alt.Axis(format="%")),
             tooltip=[
                 alt.Tooltip(
                     "RelativeDuration",
