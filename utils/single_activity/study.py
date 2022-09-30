@@ -2,6 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+from utils.data_checks.check_name import study_subjects
 from utils.fill_month_values import fill_month_values
 from utils.normalize import normalize_to_average, normalized_duration
 from utils.remove_last_month import remove_last_month
@@ -66,6 +67,14 @@ def chart_horiz(df: pd.DataFrame):
     )
     df = filter_df_chart(df, "Study")
     df = df.groupby(["SUMMARY"]).sum().reset_index()
+    subjects = study_subjects()
+    chart_horiz_single(df, subjects["Bachelor"])
+    chart_horiz_single(df, subjects["Master"])
+    chart_horiz_single(df, subjects["Other"])
+
+
+def chart_horiz_single(df: pd.DataFrame, subjects: list):
+    df = df[df["SUMMARY"].isin(subjects)]
     # Round to closes integer
     df = df.round(0)
     bars = (
@@ -92,8 +101,12 @@ def chart_horiz(df: pd.DataFrame):
         dx=3,  # Nudges text to right so it doesn't appear on top of the bar
     ).encode(text="Duration:Q")
 
+    # Height depending on number of subjects
+    height = 100 + len(subjects) * 30
+    # height = len(subjects) * 40
+
     chart = alt.layer(bars, line).properties(
-        padding={"right": 10}, width=600, height=500
+        padding={"right": 10}, width=600, height=height
     )
     st.write(chart)
 
