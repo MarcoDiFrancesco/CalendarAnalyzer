@@ -62,7 +62,7 @@ def chart_calendars_longest(df: pd.DataFrame):
 
 
 def time_quality(df: pd.DataFrame) -> None:
-    st.subheader("Time quality")
+    st.subheader("Productivity index")
     df = df.copy()
     df = group_by_period(df, "M")
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
@@ -70,6 +70,14 @@ def time_quality(df: pd.DataFrame) -> None:
     df = remove_last_month(df, "Period")
 
     act_bad = ["Chores", "Commute", "Eat", "Entertainment", "Personal care"]
+    act_good = [e for e in df["Calendar"].unique() if e not in act_bad]
+    st.markdown(
+        f"""
+        Bad: {act_bad}
+        Good: {act_good}
+        """
+    )
+
     df_bad = df.loc[df["Calendar"].isin(act_bad)]
     left = (
         alt.Chart(df_bad)
