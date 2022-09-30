@@ -13,13 +13,11 @@ def work(df: pd.DataFrame) -> None:
         return
     st.header("Work")
     df = remove_last_month(df, "DTSTART")
-    # TODO: Remove argument Calendar
-    _chart_calendar_vert(df, "Work")
-    _chart_decreasing_activity(df, "Work")
+    _chart_calendar_vert(df)
 
 
-def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
-    df = filter_df_chart(df, calendar)
+def _chart_calendar_vert(df: pd.DataFrame):
+    df = filter_df_chart(df, "Work")
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
@@ -40,21 +38,21 @@ def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
     )
 
 
-def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
-    df = df.copy()
-    df = df.loc[df["Calendar"] == calendar]
-    df = df.groupby(["SUMMARY"]).sum().reset_index()
-    st.write(
-        alt.Chart(df)
-        .mark_bar(point=True, opacity=0.9)
-        .properties(width=550, height=350)
-        .encode(
-            alt.X("Duration", title="Hours"),
-            alt.Y("SUMMARY", title="Activity", sort="-x"),
-            tooltip=[
-                alt.Tooltip("SUMMARY", title="Activity"),
-                alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
-            ],
-            color=alt.Color("SUMMARY", legend=None),
-        )
-    )
+# def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
+#     df = df.copy()
+#     df = df.loc[df["Calendar"] == calendar]
+#     df = df.groupby(["SUMMARY"]).sum().reset_index()
+#     st.write(
+#         alt.Chart(df)
+#         .mark_bar(point=True, opacity=0.9)
+#         .properties(width=550, height=350)
+#         .encode(
+#             alt.X("Duration", title="Hours"),
+#             alt.Y("SUMMARY", title="Activity", sort="-x"),
+#             tooltip=[
+#                 alt.Tooltip("SUMMARY", title="Activity"),
+#                 alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
+#             ],
+#             color=alt.Color("SUMMARY", legend=None),
+#         )
+#     )
