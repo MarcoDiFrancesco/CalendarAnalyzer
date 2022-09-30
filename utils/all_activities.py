@@ -74,6 +74,7 @@ def time_quality(df: pd.DataFrame) -> None:
     st.markdown(
         f"""
         Bad: {act_bad}
+
         Good: {act_good}
         """
     )
