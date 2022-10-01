@@ -16,14 +16,17 @@ def chart_calendars(df: pd.DataFrame):
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
     df = normalize_all_to_one(df)
     df = remove_last_month(df, "Period")
-    st.write(
+    st.altair_chart(
         alt.Chart(df)
         .mark_bar()
         .properties(height=500)
         .encode(
             x=alt.X("Period", title="Month"),
             y=alt.Y(
-                "sum(Duration)", title="Normalized duration", axis=alt.Axis(format="%")
+                "sum(Duration)",
+                title="Normalized duration",
+                axis=alt.Axis(format="%"),
+                scale=alt.Scale(domain=[0, 1]),
             ),
             color=alt.Color(
                 "Calendar",
