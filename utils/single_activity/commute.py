@@ -18,12 +18,11 @@ def commute(df: pd.DataFrame) -> None:
 
 
 def chart_walk_bus(df: pd.DataFrame) -> None:
-
     df = remove_last_month(df, "DTSTART")
     df = df.loc[df["SUMMARY"].isin(["Walk", "Bus", "Car", "Train"])]
     # Remove activities longer than 1 hour
     df = df.loc[df["Duration"] <= 1]
-    df = group_by_period(df, "M")
+    df = group_by_period(df, "Q")
     # Normalize all to one
     df = normalize_all_to_one_count(df, ["SUMMARY"])
     st.altair_chart(
