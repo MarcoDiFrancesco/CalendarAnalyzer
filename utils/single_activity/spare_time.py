@@ -12,12 +12,13 @@ def spare_time(df: pd.DataFrame) -> None:
     st.header("Spare time")
     df = remove_last_month(df, "DTSTART")
     # TODO: Remove argument Calendar
-    _chart_calendar_vert(df, "Spare time")
-    _chart_decreasing_activity(df, "Spare time")
+    _chart_calendar_vert(df)
+    _chart_decreasing_activity(df)
+    _susanna_call(df)
 
 
-def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
-    df = filter_df_chart(df, calendar)
+def _chart_calendar_vert(df: pd.DataFrame):
+    df = filter_df_chart(df, "Spare time")
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
@@ -38,9 +39,9 @@ def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
     )
 
 
-def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
+def _chart_decreasing_activity(df: pd.DataFrame):
     df = df.copy()
-    df = df.loc[df["Calendar"] == calendar]
+    df = df.loc[df["Calendar"] == "Spare time"]
     df = df.groupby(["SUMMARY"]).sum().reset_index()
     st.write(
         alt.Chart(df)
@@ -56,3 +57,34 @@ def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
             color=alt.Color("SUMMARY", legend=None),
         )
     )
+
+
+def _susanna_call(df: pd.DataFrame):
+
+    st.markdown("### Call Susanna frequency in time")
+    df = df.copy()
+    df = df.loc[df["SUMMARY"] == "Call Susanna"]
+    df = df[["SUMMARY", "DTSTART"]]
+    df = df.set_index("SUMMARY")
+    df["TIMEDELTA"] = df.diff()["DTSTART"].dt.days
+    # Rolling mean
+    df["DAYSMEAN"] = df.rolling(6).mean()["TIMEDELTA"]
+    df = df.reset_index()
+    print("TDELTA", df)
+
+    dots = (
+        alt.Chart(df)
+        .mark_line()
+        .mark_circle(opacity=0.5)
+        .properties(width=700, height=300)
+        .encode(
+            alt.X("DTSTART", title="Date"),
+            alt.Y("DAYSMEAN", title="Days mean"),
+        )
+    )
+    full = dots + dots.transform_loess(
+        "DTSTART",
+        "DAYSMEAN",
+    ).mark_line(size=3)
+
+    st.altair_chart(full)
