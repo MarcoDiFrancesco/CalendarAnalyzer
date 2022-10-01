@@ -37,11 +37,13 @@ def check_name(df: pd.DataFrame) -> None:
             "AI challenge",
             "Calendar analyzer",
             "CV",
+            "EIT Kick-Off",
             "Expense tracking",  # Maybe remove?
             "Internet Archive Updater",
             "Learn",
             "Linux",
             "MPM bot",
+            "Kide bot",
             "Simple Wikipedia",
             "Unitn autologin",
             "Website",
@@ -94,6 +96,7 @@ def study_subjects():
         ],
         "Master": [
             "AI for innovation",
+            "Complex networks",
             "Reinforcement",
             "Supervised",
             "Business",

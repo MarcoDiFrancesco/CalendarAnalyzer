@@ -3,7 +3,7 @@ import pandas as pd
 
 def check_day(df: pd.DataFrame) -> None:
     """Check activity sequence in a day."""
-    # Split day at 4:00am
+    # Split day at 4:30am
     df_serie = df.resample(on="DTSTART", rule="24h", offset="4h 30m")
     for df_day in df_serie:
         # df_day is a
@@ -39,9 +39,11 @@ def _check_consequent(df: pd.DataFrame, df_day: pd.DataFrame) -> None:
         if act1["DTEND"] != act2["DTSTART"]:
             gap_start = f"{act1['DTEND'].hour}:{act1['DTEND'].minute:02d}"
             gap_end = f"{act2['DTSTART'].hour}:{act2['DTSTART'].minute:02d}"
-            df.loc[
-                df["DTSTART"] == act2["DTSTART"], "Error"
-            ] = f"Gap {gap_start} to {gap_end}"
+            # Fix problem: Gap 22:30 to 4:00
+            if act2["DTSTART"].hour > 5:
+                df.loc[
+                    df["DTSTART"] == act2["DTSTART"], "Error"
+                ] = f"Gap {gap_start} to {gap_end}"
 
         # Consequent
         # If Calendar is different than do mark as error
