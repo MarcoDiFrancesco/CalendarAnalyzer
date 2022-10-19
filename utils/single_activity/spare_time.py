@@ -1,3 +1,5 @@
+import warnings
+
 import altair as alt
 import pandas as pd
 import streamlit as st
@@ -67,10 +69,13 @@ def _susanna_call(df: pd.DataFrame):
     df = df[["SUMMARY", "DTSTART"]]
     df = df.set_index("SUMMARY")
     df["TIMEDELTA"] = df.diff()["DTSTART"].dt.days
-    # Rolling mean
-    df["DAYSMEAN"] = df.rolling(6).mean()["TIMEDELTA"]
+    # Ignoring FutureWarning: Dropping of nuisance columns in rolling operations is deprecated; in a future version this will raise TypeError.
+    # I'm too lazy to fix it
+    with warnings.catch_warnings():
+        warnings.simplefilter(action="ignore", category=FutureWarning)
+        # Rolling mean
+        df["DAYSMEAN"] = df.rolling(6).mean()["TIMEDELTA"]
     df = df.reset_index()
-    print("TDELTA", df)
 
     dots = (
         alt.Chart(df)

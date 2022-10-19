@@ -182,4 +182,13 @@ def rige_plot(df: pd.DataFrame):
         .configure_view(stroke=None)
         .configure_title(anchor="middle")
     )
+
+    # Chart.configure_axis()
+    # Chart.configure_axisBand()
+    # Chart.configure_axisBottom()
+    # Chart.configure_axisLeft()
+    # Chart.configure_axisRight()
+    # Chart.configure_axisTop()
+    # Chart.configure_axisX()
+    # Chart.configure_axisY()
     st.altair_chart(chart)

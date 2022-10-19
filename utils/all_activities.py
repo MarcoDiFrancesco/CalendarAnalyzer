@@ -126,7 +126,7 @@ def time_quality(df: pd.DataFrame) -> None:
 
 
 def average_activity_time(df: pd.DataFrame) -> None:
-    st.subheader("Average activity time")
+    st.subheader("Average eat time")
     df = df.copy()
     # Filter for debugging readibility
     df = df[["Calendar", "SUMMARY", "DTSTART"]]

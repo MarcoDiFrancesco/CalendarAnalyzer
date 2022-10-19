@@ -91,7 +91,7 @@ def _usage_table(df: pd.DataFrame) -> None:
     days_21, ent_21, yt_m_21 = _average_usage(df, 2021)
     days_22, ent_22, yt_m_22 = _average_usage(df, 2022)
 
-    # TODO: compute percentage (over 365 days)
+    # TODO: compute percentage over 365 days
     table = f"""
     <table>
       <thead>

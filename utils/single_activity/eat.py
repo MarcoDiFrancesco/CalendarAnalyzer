@@ -11,15 +11,14 @@ def eat(df: pd.DataFrame) -> None:
     df = df.copy()
     st.header("Eat")
     df = remove_last_month(df, "DTSTART")
-    # TODO: Remove argument Calendar
-    _chart_decreasing_activity(df, "Eat")
+    _chart_decreasing_activity(df)
     st.subheader("Meals time distribution")
     _beginning_of_day(df)
 
 
-def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
+def _chart_decreasing_activity(df: pd.DataFrame):
     df = df.copy()
-    df = df.loc[df["Calendar"] == calendar]
+    df = df.loc[df["Calendar"] == "Eat"]
     df = df.groupby(["SUMMARY"]).sum().reset_index()
     st.write(
         alt.Chart(df)
