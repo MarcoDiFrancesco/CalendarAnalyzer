@@ -9,6 +9,7 @@ def check_name(df: pd.DataFrame) -> None:
             "Bus",
             "Car",
             "Train",
+            "Scooter",
             "Walk",
         ],
         "Chores": [
@@ -40,10 +41,11 @@ def check_name(df: pd.DataFrame) -> None:
             "EIT Kick-Off",
             "Expense tracking",  # Maybe remove?
             "Internet Archive Updater",
+            "Junction",
+            "Kide bot",
             "Learn",
             "Linux",
             "MPM bot",
-            "Kide bot",
             "Simple Wikipedia",
             "Unitn autologin",
             "Website",
@@ -59,6 +61,8 @@ def check_name(df: pd.DataFrame) -> None:
         "Sport": [
             "Beach volleyball",
             "Bike",
+            "Dance",
+            "Gym",
             "Ping pong",
             "Run",
             "Ski",
@@ -97,10 +101,11 @@ def study_subjects():
         "Master": [
             "AI for innovation",
             "Complex networks",
+            "Data mining",
+            "Management",
             "Reinforcement",
             "Supervised",
-            "Business",
-            "Data mining",
+            "Venturing",
         ],
         "Other": [
             "English",
