@@ -16,8 +16,9 @@ def chart_calendars(df: pd.DataFrame):
     df = df = df.groupby(["Period", "Calendar"]).sum().reset_index()
     df = normalize_all_to_one(df)
     df = remove_last_month(df, "Period")
+    month_count = len(df.Period.unique())
     st.altair_chart(
-        alt.Chart(df)
+        alt.Chart(df, width={"step": 0.45 * month_count})
         .mark_bar()
         .properties(height=500)
         .encode(

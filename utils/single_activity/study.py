@@ -3,18 +3,19 @@ import pandas as pd
 import streamlit as st
 
 from utils.data_checks.check_name import study_subjects
+from utils.df_shorten_string import df_shorten_string
 from utils.fill_month_values import fill_month_values
 from utils.normalize import normalize_to_average, normalized_duration
 from utils.remove_last_month import remove_last_month
 from utils.single_activity import filter_df_chart
 
 
-def study(df: pd.DataFrame):
+def study(df: pd.DataFrame) -> None:
     st.markdown("---")
     st.header("Study")
     chart_vert(df)
     chart_horiz(df)
-    rige_plot(df)
+    ridge_plot(df)
 
 
 def chart_vert(df: pd.DataFrame) -> None:
@@ -134,22 +135,27 @@ def _order_subjects(df: pd.DataFrame) -> list:
     return list_peak
 
 
-def rige_plot(df: pd.DataFrame):
-    step = 20  # Height of the each area plot
+def ridge_plot(df: pd.DataFrame):
+    step = 20  # Height of each area plot
     overlap = 1  # Height of the area
 
     df = filter_df_chart(df, "Study")
+    df = df_shorten_string(df, "SUMMARY")
     df = normalized_duration(df)
     df = remove_last_month(df, "Period")
     df = _add_zeros(df)
     subjects_order = _order_subjects(df)
-    # Replace this color color by subject
+    month_count = len(df.Period.unique())
+    # Replace this color by subject
     df["color"] = df["Duration"].apply(lambda d: "blue" if d < 10 else "red")
     chart = (
-        alt.Chart(df, height=step)
+        alt.Chart(df, height=step, width={"step": 0.55 * month_count})
         .transform_joinaggregate(mean_temp="mean(Duration)", groupby=["SUMMARY"])
         .mark_area(
-            interpolate="monotone", fillOpacity=0.8, stroke="lightgray", strokeWidth=0.5
+            interpolate="monotone",
+            fillOpacity=0.8,
+            stroke="lightgray",
+            strokeWidth=0.5,
         )
         .encode(
             alt.X("Period:O", bin="binned", title=None),

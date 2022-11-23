@@ -34,7 +34,6 @@ def main() -> None:
     st.caption(
         "[https://github.com/MarcoDiFrancesco/CalendarAnalyzer](https://github.com/MarcoDiFrancesco/CalendarAnalyzer)"
     )
-
     df = download_cals().copy()
     df = clean_df.clean_df(df)
 

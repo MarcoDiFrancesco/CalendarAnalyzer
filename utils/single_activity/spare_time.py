@@ -21,7 +21,7 @@ def spare_time(df: pd.DataFrame) -> None:
 
 def _chart_calendar_vert(df: pd.DataFrame):
     df = filter_df_chart(df, "Spare time")
-    # Horizotal chart does not require last month to be removed
+    # Horizontal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
     st.altair_chart(
