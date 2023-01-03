@@ -90,7 +90,11 @@ def _heat_map(df: pd.DataFrame, title: str, color_scheme):
         alt.Chart(df, title=title)
         .mark_rect(opacity=0.9)
         .encode(
-            x=alt.X("date(DTSTART):O", title="Day"),
+            x=alt.X(
+                "date(DTSTART):O",
+                title="Day",
+                scale=alt.Scale(domain=list(range(1, 31))),
+            ),
             y=alt.Y("month(DTSTART):O", title="Month"),
             color=alt.Color(
                 "sum(Duration):Q", title="Hours", scale=alt.Scale(scheme=color_scheme)
