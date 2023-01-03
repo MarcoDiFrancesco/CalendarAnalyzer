@@ -13,16 +13,20 @@ def work(df: pd.DataFrame) -> None:
     if not len(df.index):
         return
     st.header("Work")
-    df = remove_last_month(df, "DTSTART")
+    # df = remove_last_month(df, "DTSTART")
     _chart_calendar_vert(df)
 
 
 def _chart_calendar_vert(df: pd.DataFrame):
     df = filter_df_chart(df, "Work")
+
     df = fill_month_values(df, "Period", "Duration")
+
+    # Fill month sets SUMMARY as nan, so replace this value (set as 0) with something
+    df.fillna("FBK", inplace=True)
+
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
-
     st.altair_chart(
         alt.Chart(df)
         .mark_bar(opacity=0.9)

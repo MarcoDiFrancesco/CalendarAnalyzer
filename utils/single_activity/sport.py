@@ -47,19 +47,19 @@ def sport(df: pd.DataFrame):
 
     _vertical(df)
 
-    # Observations
-    st.markdown(
-        """
-        Observations:
-        - During winter 2020, right before the lockdown I skied a lot, compared to winter 2021 in lockdown
-        - During the first summer session of 2021 I played for a while beach volley, in summer 2020 I did nothing in that period, but I passed a lot of exams
-        """
-    )
+    st.markdown("### Sport map")
+    with st.expander("Observations"):
+        st.write(
+            """
+            - During winter 2020, right before the lockdown I skied a lot, compared to winter 2021 in lockdown
+            - During the first summer session of 2021 I played for a while beach volley, in summer 2020 I did nothing in that period, but I passed a lot of exams
+            """
+        )
 
     # Heat maps
     for year in range(2020, 2023):
         df_year = df[df["DTSTART"].dt.year == year]
-        title = f"Sport map {year}"
+        title = f"Year {year}"
         _heat_map(df_year, title, color_scheme="goldgreen")
 
 

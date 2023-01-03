@@ -30,6 +30,7 @@ def chart_vert(df: pd.DataFrame) -> None:
     df = df.groupby(["Period"]).sum()
     df = df.reset_index()
     df = fill_month_values(df, "Period", "Duration")
+    df = df.drop_duplicates("Period")
     df = remove_last_month(df, "Period")
 
     # Relative duration from 100%

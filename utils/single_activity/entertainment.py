@@ -17,18 +17,18 @@ def entertainment(df: pd.DataFrame):
     st.header("Entertainment")
     df = remove_last_month(df, "DTSTART")
     df = df[df["Calendar"] == "Entertainment"]
-    st.markdown(
-        """
-        Observations:
-        - Days I used to entertain myself incresed
-        - I played Stardew Valley during winter session of 2021 replacing the time spent YouTube, it's a sign that one balanced the other
-        - I decreased my average entertainment and YouTube time gaming a little bit less
-        - Starting from December and through the whole winter session I entertain myself a lot,
-          maybe this is due to me going back to my parents' home where the organizational strees increases
-        - September to November is where I'm entertaining myself the least
-        - YouTube activities are becoming shorter. This may be due to YouTube Shorts.
-        """
-    )
+    with st.expander("Observations"):
+        st.write(
+            """
+            - Days I used to entertain myself incresed
+            - I played Stardew Valley during winter session of 2021 replacing the time spent YouTube, it's a sign that one balanced the other
+            - I decreased my average entertainment and YouTube time gaming a little bit less
+            - Starting from December and through the whole winter session I entertain myself a lot,
+            maybe this is due to me going back to my parents' home where the organizational strees increases
+            - September to November is where I'm entertaining myself the least
+            - YouTube activities are becoming shorter. This may be due to YouTube Shorts.
+            """
+        )
     _usage_table(df)
     st.subheader("YouTube usage")
     _bar_chart_singlecat(df, "YouTube", "red")

@@ -9,12 +9,13 @@ from utils.single_activity import filter_df_chart
 def chores(df: pd.DataFrame) -> None:
     df = df.copy()
     st.header("Chores")
-    st.markdown(
-        """
-        Observations:
-        - Spike beginning of 2022: I chose the university and organized courses
-        """
-    )
+    with st.expander("Observations"):
+        st.write(
+            """
+            - Spike beginning of 2022: I chose the university and organized courses
+            """
+        )
+
     df = remove_last_month(df, "DTSTART")
     df = df.loc[df["Calendar"] == "Chores"]
     _chart_calendar_vert(df)
