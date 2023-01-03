@@ -1,0 +1,35 @@
+#!/bin/bash
+export DEBUG="yes"
+export PSW="xxxxxxxxx"
+
+# When importing from Google Calendar they should have this format
+# export CALENDAR_LINKS='
+# [
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+#     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics"
+# ]
+# '
+
+# Sample files from GitHub
+export CALENDAR_LINKS='
+[
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
+    "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics"
+]
+'
