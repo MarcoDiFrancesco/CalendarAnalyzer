@@ -2,6 +2,22 @@
 export DEBUG="yes"
 export PSW="xxxxxxxxx"
 
+# Sample files from GitHub
+# These files have randomized labels, thus data looks messed up. Refer to the original dashboard in the repository.
+export CALENDAR_LINKS='
+[
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Chores.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Commute.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Eat.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Entertainment.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Personal%20care.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Personal%20development.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Spare%20time.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Sport.ics",
+    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Study.ics"
+]
+'
+
 # When importing from Google Calendar they should have this format
 # export CALENDAR_LINKS='
 # [
@@ -17,18 +33,3 @@ export PSW="xxxxxxxxx"
 #     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics"
 # ]
 # '
-
-# Sample files from GitHub
-export CALENDAR_LINKS='
-[
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Chores.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Commute.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Eat.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Entertainment.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Personal%20care.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Personal%20development.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Spare%20time.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Sport.ics",
-    "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Study.ics"
-]
-'
