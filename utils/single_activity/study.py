@@ -38,7 +38,7 @@ def chart_vert(df: pd.DataFrame) -> None:
     bars = (
         alt.Chart(df)
         .mark_bar(opacity=0.9)
-        .properties(width=700, height=350)
+        .properties(width=670, height=350)
         .encode(
             x=alt.X("Period"),
             y=alt.Y("Duration", title="Study", axis=alt.Axis(format="%")),
@@ -75,7 +75,14 @@ def chart_horiz(df: pd.DataFrame):
 
 
 def chart_horiz_single(df: pd.DataFrame, subjects: list):
+
+    print("SUBJECTSZ", subjects, len(subjects))
+    print("PRE", df)
     df = df[df["SUMMARY"].isin(subjects)]
+    print("POST", df)
+
+    df = df_shorten_string(df, "SUMMARY")
+
     # Round to closes integer
     df = df.round(0)
     bars = (
@@ -95,6 +102,7 @@ def chart_horiz_single(df: pd.DataFrame, subjects: list):
             ],
             color=alt.Color("SUMMARY", legend=None),
         )
+        .properties()
     )
     line = bars.mark_text(
         align="left",
@@ -103,11 +111,10 @@ def chart_horiz_single(df: pd.DataFrame, subjects: list):
     ).encode(text="Duration:Q")
 
     # Height depending on number of subjects
-    height = 100 + len(subjects) * 30
-    # height = len(subjects) * 40
+    height = 100 + len(subjects) * 25
 
     chart = alt.layer(bars, line).properties(
-        padding={"right": 10}, width=600, height=height
+        padding={"right": 10}, width=650, height=height
     )
     st.write(chart)
 
@@ -156,7 +163,7 @@ def ridge_plot(df: pd.DataFrame):
     # Replace this color by subject
     df["color"] = df["Duration"].apply(lambda d: "blue" if d < 10 else "red")
     chart = (
-        alt.Chart(df, height=step, width={"step": 0.50 * month_count})
+        alt.Chart(df, height=step, width={"step": 0.47 * month_count})
         .transform_joinaggregate(mean_temp="mean(Duration)", groupby=["SUMMARY"])
         .mark_area(
             interpolate="monotone",
@@ -196,12 +203,4 @@ def ridge_plot(df: pd.DataFrame):
         .configure_title(anchor="middle")
     )
 
-    # Chart.configure_axis()
-    # Chart.configure_axisBand()
-    # Chart.configure_axisBottom()
-    # Chart.configure_axisLeft()
-    # Chart.configure_axisRight()
-    # Chart.configure_axisTop()
-    # Chart.configure_axisX()
-    # Chart.configure_axisY()
     st.altair_chart(chart)

@@ -32,7 +32,7 @@ def _fiddle_plot(df: pd.DataFrame):
     st.altair_chart(
         alt.Chart(df)
         .mark_bar(opacity=0.75)
-        .properties(width=700, height=500)
+        .properties(width=700, height=400)
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours", stack=None),

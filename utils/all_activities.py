@@ -20,7 +20,7 @@ def chart_calendars(df: pd.DataFrame):
     st.altair_chart(
         alt.Chart(df, width={"step": 0.45 * month_count})
         .mark_bar()
-        .properties(height=500)
+        .properties(height=500, width=780)
         .encode(
             x=alt.X("Period", title="Month"),
             y=alt.Y(
@@ -96,7 +96,7 @@ def time_quality(df: pd.DataFrame) -> None:
             ],
         )
         .mark_bar()
-        .properties(title="Bad", width=250)
+        .properties(title="Bad", width=250, height=500)
     )
     middle = (
         alt.Chart(df)
@@ -105,7 +105,7 @@ def time_quality(df: pd.DataFrame) -> None:
             text=alt.Text("Period"),
         )
         .mark_text()
-        .properties(width=50)
+        .properties(width=50, height=500)
     )
     act_good = ["Personal development", "Spare time", "Sport", "Study", "Work"]
     df_good = df.loc[df["Calendar"].isin(act_good)]
@@ -121,6 +121,6 @@ def time_quality(df: pd.DataFrame) -> None:
             ],
         )
         .mark_bar()
-        .properties(title="Good", width=250)
+        .properties(title="Good", width=250, height=500)
     )
     st.altair_chart(alt.concat(left, middle, right, spacing=5))

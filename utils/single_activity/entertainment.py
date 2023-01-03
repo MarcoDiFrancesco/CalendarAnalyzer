@@ -74,7 +74,7 @@ def _bar_chart_singlecat(df: pd.DataFrame, category: str, color: str):
     st.write(
         alt.Chart(df)
         .mark_bar(opacity=0.7, color=color)
-        .properties(width=700, height=400)
+        .properties(width=650, height=400)
         .encode(
             x=alt.X("Period"),
             y=alt.Y("sum(Duration)", title="Hours"),

@@ -61,8 +61,7 @@ def _chart_decreasing_activity(df: pd.DataFrame):
 
 
 def _susanna_call(df: pd.DataFrame):
-
-    st.markdown("### Call Susanna frequency in time")
+    st.markdown("### Call Susanna Frequency")
     df = df.copy()
     df = df.loc[df["SUMMARY"] == "Call Susanna"]
     df = df[["SUMMARY", "DTSTART"]]
@@ -80,7 +79,7 @@ def _susanna_call(df: pd.DataFrame):
         alt.Chart(df)
         .mark_line()
         .mark_circle(opacity=0.5)
-        .properties(width=700, height=300)
+        .properties(width=650, height=300)
         .encode(
             alt.X("DTSTART", title="Date"),
             alt.Y("DAYSMEAN", title="Days mean"),

@@ -2,6 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+from utils.fill_month_values import fill_month_values
 from utils.remove_last_month import remove_last_month
 from utils.single_activity import filter_df_chart
 
@@ -18,6 +19,7 @@ def work(df: pd.DataFrame) -> None:
 
 def _chart_calendar_vert(df: pd.DataFrame):
     df = filter_df_chart(df, "Work")
+    df = fill_month_values(df, "Period", "Duration")
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
