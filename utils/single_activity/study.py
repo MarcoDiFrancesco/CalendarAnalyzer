@@ -136,6 +136,13 @@ def _order_subjects(df: pd.DataFrame) -> list:
 
 
 def ridge_plot(df: pd.DataFrame):
+
+    st.markdown(
+        """
+        ### Study distribution by subject
+        """
+    )
+
     step = 20  # Height of each area plot
     overlap = 1  # Height of the area
 
@@ -149,7 +156,7 @@ def ridge_plot(df: pd.DataFrame):
     # Replace this color by subject
     df["color"] = df["Duration"].apply(lambda d: "blue" if d < 10 else "red")
     chart = (
-        alt.Chart(df, height=step, width={"step": 0.55 * month_count})
+        alt.Chart(df, height=step, width={"step": 0.50 * month_count})
         .transform_joinaggregate(mean_temp="mean(Duration)", groupby=["SUMMARY"])
         .mark_area(
             interpolate="monotone",
@@ -183,7 +190,7 @@ def ridge_plot(df: pd.DataFrame):
                 sort=subjects_order,
             )
         )
-        .properties(title="Subject study distribution by month", bounds="flush")
+        .properties(title="", bounds="flush")
         .configure_facet(spacing=0)
         .configure_view(stroke=None)
         .configure_title(anchor="middle")
