@@ -22,17 +22,27 @@ def eat(df: pd.DataFrame) -> None:
 def _chart_decreasing_activity(df: pd.DataFrame):
     df = df.copy()
     df = df.loc[df["Calendar"] == "Eat"]
+    # Month count
+    months = len(df["DTSTART"].dt.strftime("%Y-%m").unique())
     df = df.groupby(["SUMMARY"]).sum().reset_index()
+    df["DurationYear"] = df["Duration"] / months * 12
     st.write(
         alt.Chart(df)
         .mark_bar(point=True, opacity=0.9)
         .properties(width=550, height=250)
         .encode(
-            alt.X("Duration", title="Hours"),
+            alt.X("DurationYear", title="Hours per year"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
             tooltip=[
                 alt.Tooltip("SUMMARY", title="Activity"),
-                alt.Tooltip("Duration", title="Total duration (hours)", format=".0f"),
+                alt.Tooltip(
+                    "DurationYear", title="Duration per year (hours)", format=".0f"
+                ),
+                alt.Tooltip(
+                    "Duration",
+                    title=f"Total duration over {months / 12:.2f} years (hours)",
+                    format=".0f",
+                ),
             ],
             color=alt.Color("SUMMARY", legend=None),
         )

@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 
 
@@ -12,5 +14,7 @@ def df_shorten_string(df: pd.DataFrame, col_name: str) -> pd.DataFrame:
     21    2019-12     Study                  Formal languages      23.0
 
     """
-    df[col_name] = df[col_name].str.split(" ").str[:2].str.join(" ")
+    with warnings.catch_warnings():
+        warnings.simplefilter(action="ignore", category=FutureWarning)
+        df[col_name] = df[col_name].str.split(" ").str[:2].str.join(" ")
     return df

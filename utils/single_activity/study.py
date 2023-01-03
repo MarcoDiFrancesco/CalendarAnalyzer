@@ -76,9 +76,8 @@ def chart_horiz(df: pd.DataFrame):
 
 
 def chart_horiz_single(df: pd.DataFrame, subjects: list):
-    df = df_shorten_string(df, "SUMMARY")
     df = df[df["SUMMARY"].isin(subjects)]
-
+    df = df_shorten_string(df, "SUMMARY")
     # Round to closes integer
     df = df.round(0)
     bars = (
@@ -98,7 +97,6 @@ def chart_horiz_single(df: pd.DataFrame, subjects: list):
             ],
             color=alt.Color("SUMMARY", legend=None),
         )
-        .properties()
     )
     line = bars.mark_text(
         align="left",
@@ -109,9 +107,7 @@ def chart_horiz_single(df: pd.DataFrame, subjects: list):
     # Height depending on number of subjects
     height = 100 + len(subjects) * 25
 
-    chart = alt.layer(bars, line).properties(
-        padding={"right": 10}, width=650, height=height
-    )
+    chart = alt.layer(bars, line).properties(width=650, height=height)
     st.write(chart)
 
 
