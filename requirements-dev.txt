@@ -3,3 +3,4 @@ matplotlib
 pandas
 requests
 streamlit<1.10.0
+vega_datasets

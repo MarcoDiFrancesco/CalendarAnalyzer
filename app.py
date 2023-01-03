@@ -4,7 +4,12 @@ import streamlit as st
 from streamlit.commands.page_config import set_page_config
 
 from utils import admin, clean_df
-from utils.all_activities import chart_calendars, chart_calendars_longest, time_quality
+from utils.all_activities import (
+    chart_calendars,
+    chart_calendars_longest,
+    night_sleep_distribution,
+    time_quality,
+)
 from utils.compute_day import compute_day
 from utils.data_checks import data_checks
 from utils.download_cals import download_cals
@@ -44,6 +49,7 @@ def main() -> None:
     chart_calendars_longest(df)
     table_sum(df)
     time_quality(df)
+    night_sleep_distribution(df)
 
     # Single activity
     single_activity_text(df)

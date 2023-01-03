@@ -1,3 +1,5 @@
+import time
+
 import altair as alt
 import numpy as np
 import pandas as pd
@@ -124,3 +126,61 @@ def time_quality(df: pd.DataFrame) -> None:
         .properties(title="Good", width=250, height=500)
     )
     st.altair_chart(alt.concat(left, middle, right, spacing=5))
+
+
+def night_sleep_distribution(df: pd.DataFrame) -> None:
+    st.markdown(
+        """
+        ### Night sleep length distribution
+        """
+    )
+    df = df.copy()
+    df = _compute_sleep(df)
+    chart = (
+        alt.Chart(df)
+        .mark_bar(opacity=0.7, size=30)
+        .properties(width=670, height=350)
+        .encode(
+            x=alt.X("diff", title="Number of hours slept"),
+            y=alt.Y("count", title="Day count"),
+            tooltip=[
+                alt.Tooltip("diff", title="Hours slept"),
+                alt.Tooltip("count", title="Number of days"),
+            ],
+        )
+        .configure_mark(color="#555657")
+    )
+    st.altair_chart(chart)
+
+
+def _compute_sleep(df: pd.DataFrame) -> pd.DataFrame:
+    """Computes gap between activities, equivalent to sleep during the night.
+
+    Sleep during the day is ignored for the scope of this plot.
+
+    Returns:
+                  diff  count  diff_hours
+    0  0 days 05:00:00      6         5.0
+    1  0 days 05:30:00      5         5.5
+    2  0 days 06:00:00     10         6.0
+    """
+    sleep_ls = []
+    arr = df.to_numpy()
+    # Performance of this for loop: for 15.000 rows, 3 years of data, takes 0.074 sec
+    for i in range(len(df) - 1):
+        # Activity before the gap
+        _, act1_start, act1_end, _, _, _, _, _ = arr[i]
+        # Activity after the gap
+        _, act2_start, act2_end, _, _, _, _, _ = arr[i + 1]
+        # Gaps
+        if act1_end != act2_start:
+            sleep_ls.append((act1_end, act2_start))
+
+    df_sleep = pd.DataFrame(sleep_ls, columns=["start", "end"])
+    df_sleep["diff"] = df_sleep["end"] - df_sleep["start"]
+    df_sleep = df_sleep.groupby("diff").count()
+    df_sleep = (
+        df_sleep.drop("end", axis=1).rename({"start": "count"}, axis=1).reset_index()
+    )
+    df_sleep["diff"] = df_sleep["diff"].dt.seconds / 3600
+    return df_sleep
