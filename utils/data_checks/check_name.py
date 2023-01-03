@@ -1,87 +1,6 @@
 import pandas as pd
 
 
-def check_name(df: pd.DataFrame) -> None:
-    """Check for each calendar if activity is one of the list."""
-    act_names = {
-        "Commute": [
-            "Bike",
-            "Bus",
-            "Car",
-            "Train",
-            "Scooter",
-            "Walk",
-        ],
-        "Chores": [
-            "Organization",
-            "Shop",
-            "Tidy up",
-        ],
-        "Eat": [
-            "Breakfast",
-            "Lunch",
-            "Dinner",
-        ],
-        "Entertainment": [
-            "Cinema",
-            "Game",
-            "Movie",
-            "TV",
-            "YouTube",
-        ],
-        "Personal care": [
-            "Shower",
-        ],
-        "Personal development": [
-            "Activity Watch",
-            "AI challenge",
-            "Calendar analyzer",
-            "CV",
-            "Internet Archive Updater",
-            "Kide bot",
-            "Learn",
-            "Linux",
-            "MPM bot",
-            "Simple Wikipedia",
-            "Unitn autologin",
-            "Website",
-        ],
-        "Spare time": [
-            "Call Susanna",
-            "Memories",
-            "Phone",
-            "Relax",
-            "Sleep",
-            "Talk",
-        ],
-        "Sport": [
-            "Beach volleyball",
-            "Bike",
-            "Bouldering",
-            "Dance",
-            "Gym",
-            "Ping pong",
-            "Run",
-            "Ski",
-            "Workout",
-        ],
-        "Work": [
-            "DSH Website",
-            "FBK",
-            "Internship",
-            "Kidney",
-            "Meteo TN",
-            "WebValley",
-        ],
-        "Study": unpack_dict(study_subjects()),
-    }
-
-    for cal, acts in act_names.items():
-        df.loc[
-            (df["Calendar"] == cal) & (~df["SUMMARY"].isin(acts)), "Error"
-        ] = "Not categorized"
-
-
 def study_subjects():
     return {
         "Bachelor": [
@@ -148,3 +67,86 @@ def unpack_dict(d: dict) -> list:
     # To   [1, 2, 3, 4]
     ls = [item for sublist in ls for item in sublist]
     return ls
+
+
+ACTIVITY_DICT = act_names = {
+    "Commute": [
+        "Bike",
+        "Bus",
+        "Car",
+        "Train",
+        "Scooter",
+        "Walk",
+    ],
+    "Chores": [
+        "Organization",
+        "Shop",
+        "Tidy up",
+    ],
+    "Eat": [
+        "Breakfast",
+        "Lunch",
+        "Dinner",
+    ],
+    "Entertainment": [
+        "Cinema",
+        "Game",
+        "Movie",
+        "TV",
+        "YouTube",
+    ],
+    "Personal care": [
+        "Shower",
+    ],
+    "Personal development": [
+        "Activity Watch",
+        "AI challenge",
+        "Calendar analyzer",
+        "CV",
+        "Internet Archive Updater",
+        "Kide bot",
+        "Learn",
+        "Linux",
+        "MPM bot",
+        "Simple Wikipedia",
+        "Unitn autologin",
+        "Website",
+    ],
+    "Spare time": [
+        "Call Susanna",
+        "Memories",
+        "Phone",
+        "Relax",
+        "Sleep",
+        "Talk",
+    ],
+    "Sport": [
+        "Beach volleyball",
+        "Bike",
+        "Bouldering",
+        "Dance",
+        "Gym",
+        "Ping pong",
+        "Run",
+        "Ski",
+        "Workout",
+    ],
+    "Work": [
+        "DSH Website",
+        "FBK",
+        "Internship",
+        "Kidney",
+        "Meteo TN",
+        "WebValley",
+    ],
+    "Study": unpack_dict(study_subjects()),
+}
+
+
+def check_name(df: pd.DataFrame) -> None:
+    """Check for each calendar if activity is one of the list."""
+
+    for cal, acts in act_names.items():
+        df.loc[
+            (df["Calendar"] == cal) & (~df["SUMMARY"].isin(acts)), "Error"
+        ] = "Not categorized"

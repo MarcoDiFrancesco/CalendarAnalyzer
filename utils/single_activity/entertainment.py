@@ -70,7 +70,6 @@ def _bar_chart_singlecat(df: pd.DataFrame, category: str, color: str):
     # Fill missing months
     df = fill_missing_months(df, "Period", "SUMMARY")
     df = df[df["SUMMARY"] == category]
-    assert len(df) > 0, f"DataFrame does not contain {category} elements"
     st.write(
         alt.Chart(df)
         .mark_bar(opacity=0.7, color=color)

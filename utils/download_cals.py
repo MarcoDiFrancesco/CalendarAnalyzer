@@ -22,6 +22,7 @@ def download_cals() -> pd.DataFrame:
     assert (
         links
     ), "Environment variable CALENDAR_LINKS not found, did you source .envvar?"
+
     links = json.loads(links)
     # Check added for linter
     assert links is not None
