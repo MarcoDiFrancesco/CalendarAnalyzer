@@ -8,10 +8,10 @@ def global_info(df: pd.DataFrame) -> None:
     st.markdown(
         # Trailing spaces removed by pre-commit
         f"""
-        🟢 Beginning date: Dec 2019
+        🟢 Beginning date: Jan 2020 - Dec 2022 (3 years)
 
         ⌛ Elapsed days: {days}
 
-        🧮 Total activities: {n_act}
+        🧮 Total activities: {n_act} (~{n_act/days:.0f} per day)
         """
     )

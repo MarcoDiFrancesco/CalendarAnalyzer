@@ -75,13 +75,8 @@ def chart_horiz(df: pd.DataFrame):
 
 
 def chart_horiz_single(df: pd.DataFrame, subjects: list):
-
-    print("SUBJECTSZ", subjects, len(subjects))
-    print("PRE", df)
-    df = df[df["SUMMARY"].isin(subjects)]
-    print("POST", df)
-
     df = df_shorten_string(df, "SUMMARY")
+    df = df[df["SUMMARY"].isin(subjects)]
 
     # Round to closes integer
     df = df.round(0)
