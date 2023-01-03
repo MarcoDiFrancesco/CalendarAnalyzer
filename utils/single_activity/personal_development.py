@@ -23,10 +23,10 @@ def _fiddle_plot(df: pd.DataFrame):
     df = group_by_period(df, "M")
     df = df.groupby(["Period", "Calendar", "SUMMARY"]).sum().reset_index()
     df = df.loc[df["Calendar"] == "Personal development"]
-    df.loc[df["SUMMARY"] == "Linux", "Category"] = "Linux"
+    df.loc[df["SUMMARY"] == "Linux", "Category"] = "Fiddle (Linux)"
     df.loc[df["SUMMARY"] != "Linux", "Category"] = "Learn-Projects"
     # Show in front Non-Fiddle (the most important)
-    df = df.sort_values(["Period", "Category"], ascending=False)
+    df = df.sort_values(["Period", "Category"], ascending=True)
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
     st.altair_chart(
@@ -42,7 +42,10 @@ def _fiddle_plot(df: pd.DataFrame):
                 scale=legend(
                     df,
                     "Category",
-                    color_map={"Linux": "#B39DDB", "Learn-Projects": "#fcc221"},
+                    color_map={
+                        "Fiddle (Linux)": "#B39DDB",
+                        "Learn-Projects": "#fcc221",
+                    },
                 ),
             ),
             tooltip=[
@@ -63,7 +66,7 @@ def _projects_plot(df: pd.DataFrame):
     st.write(
         alt.Chart(df)
         .mark_bar(point=True)
-        .properties(width=550, height=500)
+        .properties(width=600, height=400)
         .encode(
             alt.X("Duration", title="Hours"),
             alt.Y("SUMMARY", title="Activity", sort="-x"),
