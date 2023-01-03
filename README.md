@@ -7,14 +7,14 @@ My life, visualized.
 Done using Google Calendar
 
 <p align="center">
-    <img src="img/google-calendar-week-view.png" width="800">
+    <img src="img/google-calendar-week-view.png" width=800>
 </p>
 
 ## Dashboard
 
 Preview: [http://raspberry.gleeze.com:8501](http://raspberry.gleeze.com:8501)
 
-(hosted in a 1GB Raspberry Pi, be kind with it ❤️)
+(hosted in a 1GB Raspberry Pi, be kind to it ❤️)
 
 [
 ![All activities](https://i.imgur.com/KNwPSST.png)

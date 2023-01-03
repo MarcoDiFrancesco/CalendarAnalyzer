@@ -14,13 +14,12 @@ def personal_care(df: pd.DataFrame) -> None:
     df = df.copy()
     st.header("Personal care")
     df = remove_last_month(df, "DTSTART")
-    # TODO: Remove argument Calendar
-    _chart_calendar_vert(df, "Personal care")
-    _chart_decreasing_activity(df, "Personal care")
+    _chart_calendar_vert(df)
+    _chart_decreasing_activity(df)
 
 
-def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
-    df = filter_df_chart(df, calendar)
+def _chart_calendar_vert(df: pd.DataFrame):
+    df = filter_df_chart(df, "Personal care")
     # Horizotal chart does not require last month to be removed
     df = remove_last_month(df, "Period")
 
@@ -41,9 +40,9 @@ def _chart_calendar_vert(df: pd.DataFrame, calendar: str):
     )
 
 
-def _chart_decreasing_activity(df: pd.DataFrame, calendar: str):
+def _chart_decreasing_activity(df: pd.DataFrame):
     df = df.copy()
-    df = df.loc[df["Calendar"] == calendar]
+    df = df.loc[df["Calendar"] == "Personal care"]
     df = df.groupby(["SUMMARY"]).sum().reset_index()
     st.write(
         alt.Chart(df)

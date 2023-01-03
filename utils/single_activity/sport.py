@@ -18,6 +18,8 @@ def sport(df: pd.DataFrame):
     days_20 = len(df_year["DAY"].unique())
     df_year = df[df["DTSTART"].dt.year == 2021]
     days_21 = len(df_year["DAY"].unique())
+    df_year = df[df["DTSTART"].dt.year == 2022]
+    days_22 = len(df_year["DAY"].unique())
 
     # Show table
     table = f"""
@@ -35,7 +37,7 @@ def sport(df: pd.DataFrame):
             <td >📅 Sport days</td>
             <td >{days_20/365:.0%} ({days_20} days)</td>
             <td >{days_21/365:.0%} ({days_21} days)</td>
-            <td >-</td>
+            <td >{days_22/365:.0%} ({days_22} days)</td>
         </tr>
         </tbody>
     </table>

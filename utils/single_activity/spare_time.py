@@ -13,7 +13,6 @@ def spare_time(df: pd.DataFrame) -> None:
     df = df[df["Calendar"] == "Spare time"]
     st.header("Spare time")
     df = remove_last_month(df, "DTSTART")
-    # TODO: Remove argument Calendar
     _chart_calendar_vert(df)
     _chart_decreasing_activity(df)
     _susanna_call(df)

@@ -30,7 +30,6 @@ def check_name(df: pd.DataFrame) -> None:
             "YouTube",
         ],
         "Personal care": [
-            "Hair cut",
             "Shower",
         ],
         "Personal development": [
@@ -38,10 +37,7 @@ def check_name(df: pd.DataFrame) -> None:
             "AI challenge",
             "Calendar analyzer",
             "CV",
-            "EIT Kick-Off",
-            "Expense tracking",  # Maybe remove?
             "Internet Archive Updater",
-            "Junction",
             "Kide bot",
             "Learn",
             "Linux",
@@ -61,6 +57,7 @@ def check_name(df: pd.DataFrame) -> None:
         "Sport": [
             "Beach volleyball",
             "Bike",
+            "Bouldering",
             "Dance",
             "Gym",
             "Ping pong",
