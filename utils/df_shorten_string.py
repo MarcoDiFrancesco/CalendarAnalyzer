@@ -15,6 +15,6 @@ def df_shorten_string(df: pd.DataFrame, col_name: str) -> pd.DataFrame:
 
     """
     with warnings.catch_warnings():
-        warnings.simplefilter(action="ignore", category=FutureWarning)
+        warnings.simplefilter(action="ignore")
         df[col_name] = df[col_name].str.split(" ").str[:2].str.join(" ")
     return df

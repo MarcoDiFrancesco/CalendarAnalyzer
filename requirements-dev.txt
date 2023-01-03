@@ -1,6 +1,6 @@
 jicson
 matplotlib
-pandas
+pandas<1.5
 requests
 streamlit<1.10.0
 vega_datasets
