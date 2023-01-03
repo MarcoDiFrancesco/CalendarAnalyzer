@@ -14,6 +14,7 @@ def spare_time(df: pd.DataFrame) -> None:
     st.header("Spare time")
     df = remove_last_month(df, "DTSTART")
     _chart_calendar_vert(df)
+    st.markdown("### Spenditure per year")
     _chart_decreasing_activity(df)
     _susanna_call(df)
 
