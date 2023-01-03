@@ -2,8 +2,11 @@
 export DEBUG="yes"
 export PSW="xxxxxxxxx"
 
-# Sample files from GitHub
-# These files have randomized labels, thus data looks messed up. Refer to the original dashboard in the repository.
+# Sample files from
+# - Cloudflare (r2.dev)
+# - GitHub (githubusercontent.com)
+# These files have Randomized Labels, thus data looks messed up.
+# Link to dashboard with the original data in README.
 export CALENDAR_LINKS='
 [
     "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Chores.ics",
@@ -15,6 +18,20 @@ export CALENDAR_LINKS='
     "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Spare%20time.ics",
     "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Sport.ics",
     "https://raw.githubusercontent.com/MarcoDiFrancesco/CalendarAnalyzer/master/sample_ics/Study.ics"
+]
+'
+
+export CALENDAR_LINKS='
+[
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Chores.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Commute.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Eat.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Entertainment.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Personal%20care.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Personal%20development.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Spare%20time.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Sport.ics",
+    "https://pub-4aae30c7eea344fba305b7050d211166.r2.dev/Study.ics"
 ]
 '
 

@@ -13,10 +13,11 @@ source .venv/bin/activate
 pip install wheel
 # Install packages
 pip install -r requirements.txt
-# Source variable
+# Source environment variable
 source .envvars.sample
 # Run Dashboard
 streamlit run app.py
+# Now open: http://localhost:8501
 ```
 
 ## Data collection
