@@ -1,4 +1,9 @@
-"""Randomize labels in sample_ics files."""
+"""Randomize labels and time in sample_ics files.
+
+e.g.
+DTSTART:20220605T133000Z -> DTSTART:20220605T143000Z
+SUMMARY:Relax            -> SUMMARY:Talk
+"""
 
 import random
 from pathlib import Path
