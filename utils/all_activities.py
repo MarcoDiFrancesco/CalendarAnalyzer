@@ -138,14 +138,14 @@ def night_sleep_distribution(df: pd.DataFrame) -> None:
     df = _compute_sleep(df)
     chart = (
         alt.Chart(df)
-        .mark_bar(opacity=0.7, size=30)
+        .mark_bar(opacity=0.7, size=460 / len(df))
         .properties(width=670, height=350)
         .encode(
             x=alt.X("diff", title="Number of hours slept"),
             y=alt.Y("count", title="Day count"),
             tooltip=[
                 alt.Tooltip("diff", title="Hours slept"),
-                alt.Tooltip("count", title="Number of days"),
+                alt.Tooltip("count", title="Number of times"),
             ],
         )
         .configure_mark(color="#555657")

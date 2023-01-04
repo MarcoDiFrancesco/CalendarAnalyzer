@@ -2,7 +2,7 @@
 export DEBUG="yes"
 export PSW="xxxxxxxxx"
 
-# Sample files from
+# Sample files available in:
 # - Cloudflare (r2.dev)
 # - GitHub (githubusercontent.com)
 # These files have Randomized Labels, thus data looks messed up.
@@ -35,7 +35,7 @@ export CALENDAR_LINKS='
 ]
 '
 
-# When importing from Google Calendar they should have this format
+# When importing directly from Google Calendar they should have this format.
 # export CALENDAR_LINKS='
 # [
 #     "https://calendar.google.com/calendar/ical/xxxxxxxxxxxxxxxxxxxxxxxxxx%40group.calendar.google.com/private-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/basic.ics",
