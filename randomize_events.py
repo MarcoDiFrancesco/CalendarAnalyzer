@@ -41,24 +41,25 @@ def _replace_date(line: str, act_list: list) -> str:
 def _add_random_time(hourmin_str: str, label: str) -> str:
     """Add random time to hour-minute format.
 
-    e.g.
-    '0700' -> '0730'
-    '1700' -> '1790'
-    '2330' -> '2330'
+    e.g. '0700' -> '0800'
+    e.g. '1700' -> '1900'
+    Note: time >= 20:00 does not increase
+    e.g. '2200' -> '2200'
     """
     if label in ["DTSTART"]:
-        time_list = [0, 30]
+        time_list = [0, 1]
     elif label in ["DTEND", "DTSTAMP", "CREATED", "LAST-MODIFIED"]:
-        time_list = [60, 90]
+        time_list = [2, 3]
     else:
         raise KeyError()
     # '0806' -> 806
     hourmin = int(hourmin_str)
     # If would not exceed midnight
-    if hourmin <= 2200:
-        hourmin += random.choice(time_list)
+    if hourmin <= 2000:
+        # e.g. from 19:30 + 3h = 22:30 is '1930' -> '2230'
+        hourmin += random.choice(time_list) * 100
     assert hourmin <= 2359, f"Time should not exceed 23:59, got {hourmin}"
-    # 800 -> '0800'
+    # 830 -> '0890'
     hourmin_str = str(hourmin).zfill(4)
     return hourmin_str
 
@@ -85,10 +86,10 @@ assert sample_dir.exists(), "Run script from repository root"
 ics_list = list(sample_dir.rglob("*.ics"))
 assert ics_list, "No ICS found"
 
+# Test file
+randomize_file(Path("sample_ics/Commute.ics"))
+print("Replacing")
 
-# randomize_file(Path("sample_ics/Commute.ics"))
-# print("Replacing")
-
-for fname in ics_list:
-    print(f"Replacing values in {fname}")
-    randomize_file(fname)
+# for fname in ics_list:
+#     print(f"Replacing values in {fname}")
+#     randomize_file(fname)
