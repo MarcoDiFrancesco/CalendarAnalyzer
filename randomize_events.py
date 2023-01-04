@@ -75,7 +75,7 @@ def randomize_file(fname):
             lines.append(line)
 
     # Replace original file
-    with open(f"{fname}.sample", "w") as f:
+    with open(f"{fname}", "w") as f:
         for line in lines:
             f.write(f"{line}")
 
@@ -86,10 +86,10 @@ assert sample_dir.exists(), "Run script from repository root"
 ics_list = list(sample_dir.rglob("*.ics"))
 assert ics_list, "No ICS found"
 
-# Test file
-randomize_file(Path("sample_ics/Commute.ics"))
-print("Replacing")
+# # Test file
+# randomize_file(Path("sample_ics/Commute.ics"))
+# print("Replacing")
 
-# for fname in ics_list:
-#     print(f"Replacing values in {fname}")
-#     randomize_file(fname)
+for fname in ics_list:
+    print(f"Replacing values in {fname}")
+    randomize_file(fname)
