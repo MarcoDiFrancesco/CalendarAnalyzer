@@ -85,16 +85,16 @@ def randomize_file(fname):
             f.write(f"{line}")
 
 
-sample_dir = Path("sample_ics")
-assert sample_dir.exists(), "Run script from repository root"
-# e.g. [PosixPath('sample_ics/Commute.ics'), PosixPath('sample_ics/Chores.ics'), ...]
-ics_list = list(sample_dir.rglob("*.ics"))
-assert ics_list, "No ICS found"
+def main():
+    sample_dir = Path("sample_ics")
+    assert sample_dir.exists(), "Run script from repository root"
+    # e.g. [PosixPath('sample_ics/Commute.ics'), PosixPath('sample_ics/Chores.ics'), ...]
+    ics_list = list(sample_dir.rglob("*.ics"))
+    assert ics_list, "No ICS found"
 
-# # Test file
-# randomize_file(Path("sample_ics/Commute.ics"))
-# print("Replacing")
+    for fname in ics_list:
+        print(f"Replacing values in {fname}")
+        randomize_file(fname)
 
-for fname in ics_list:
-    print(f"Replacing values in {fname}")
-    randomize_file(fname)
+
+main()

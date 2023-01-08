@@ -1,24 +1,50 @@
-# Calendar Analyzer
+<h1 align="center">Welcome to Calendar Analyzer 👋</h1>
 
-My life, visualized.
+> My life, visualized.
 
-## How to run
+Visualize **Google Calendar** events in an **Interactive Dashboard**.
+
+<p align="center">
+<kbd>
+    <img src="img/calendar-to-streamlit.png" width=600>
+</kbd>
+</p>
+
+<!-- ![img/calendar-to-streamlit.png](img/calendar-to-streamlit.png) -->
+
+## [👁️ Preview](http://raspberry.gleeze.com:8501)
+
+Preview hosted in a 1GB Raspberry Pi, be kind to it ❤️
+
+## 🚀 Usage
+
+0. (Optional) Create Virtual Environment
 
 ```sh
-# (Optional) Create Virtual Environment
 python -m venv .venv
-# (Optional) Source Virtual Environment
 source .venv/bin/activate
-# Install wheels to speedup install
-pip install wheel
-# Install packages
-pip install -r requirements.txt
-# Source environment variable
-source .envvars.sample
-# Run Dashboard
-streamlit run app.py
-# Now open: http://localhost:8501
 ```
+
+1. Install Python packages
+
+```sh
+pip install wheel
+pip install -r requirements.txt
+```
+
+2. Source environment variable (e.g. Calendar links)
+
+```sh
+source .envvars.sample
+```
+
+3. Run Dashboard
+
+```sh
+streamlit run app.py
+```
+
+4. Now open the Dashboard → http://localhost:8501
 
 ## Data collection
 
@@ -32,15 +58,9 @@ Done using Google Calendar
 
 ## Dashboard
 
-Preview: [http://raspberry.gleeze.com:8501](http://raspberry.gleeze.com:8501)
-
-(hosted in a 1GB Raspberry Pi, be kind to it ❤️)
-
 <p align="center">
-<kbd>
-    <!-- All activities -->
-    <img src="https://i.imgur.com/KNwPSST.png" width=600 />
-</kbd>
+<!-- All activities -->
+<img src="img/all-activities.png" width=600 />
 
 <kbd align="center">
     <!-- Single activity -->
@@ -53,3 +73,4 @@ Preview: [http://raspberry.gleeze.com:8501](http://raspberry.gleeze.com:8501)
     <img src="https://i.imgur.com/YF3F5up.png" width=600 />
 </kbd>
 </p>
+````

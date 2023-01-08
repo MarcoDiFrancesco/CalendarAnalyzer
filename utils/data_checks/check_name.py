@@ -70,6 +70,11 @@ def unpack_dict(d: dict) -> list:
 
 
 ACTIVITY_DICT = act_names = {
+    "Chores": [
+        "Organization",
+        "Shop",
+        "Tidy up",
+    ],
     "Commute": [
         "Bike",
         "Bus",
@@ -77,11 +82,6 @@ ACTIVITY_DICT = act_names = {
         "Train",
         "Scooter",
         "Walk",
-    ],
-    "Chores": [
-        "Organization",
-        "Shop",
-        "Tidy up",
     ],
     "Eat": [
         "Breakfast",
@@ -99,14 +99,15 @@ ACTIVITY_DICT = act_names = {
         "Shower",
     ],
     "Personal development": [
+        "CV",
+        "Learn",
+        "Linux",
+        # Projects
         "Activity Watch",
         "AI challenge",
         "Calendar analyzer",
-        "CV",
         "Internet Archive Updater",
         "Kide bot",
-        "Learn",
-        "Linux",
         "MPM bot",
         "Simple Wikipedia",
         "Unitn autologin",
