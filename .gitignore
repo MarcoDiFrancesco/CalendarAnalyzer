@@ -4,3 +4,5 @@ calendars.json
 venv
 .venv*/
 .envvars
+
+sample_ics

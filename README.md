@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Calendar Analyzer 👋</h1>
 
-> My life, visualized.
+> 3 years of My Life, visualized.
 
 Visualize **Google Calendar** events in an **Interactive Dashboard**.
 
@@ -64,7 +64,7 @@ Data is collected by adding events to Google Calendar.
 
 **Structure** of these calendars (e.g. Study, Sport) can be found in [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories) wiki page.
 
-**Link** to download of the calendar instruction in [Get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link) wiki page.
+**Link** to download the calendar in ICS format in [get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link) wiki page.
 
 <p align="center">
 <kbd>

@@ -76,7 +76,7 @@ def randomize_file(fname):
         fstem = fname.stem
         for line in f:
             line = _replace_summary(line, ACTIVITY_DICT[fstem])
-            line = _replace_date(line, ACTIVITY_DICT[fstem])
+            # line = _replace_date(line, ACTIVITY_DICT[fstem])
             lines.append(line)
 
     # Replace original file
