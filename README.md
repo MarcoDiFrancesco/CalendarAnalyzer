@@ -16,6 +16,14 @@ Visualize **Google Calendar** events in an **Interactive Dashboard**.
 
 [Preview](http://raspberry.gleeze.com:8501) hosted in a 1GB Raspberry Pi, be kind to it ❤️
 
+_(alternative on streamlit cloud - [link](https://marcodifrancesco-calendaranalyzer-app-4f17ot.streamlit.app/))_
+
+FYI, Continuously Deployed in the Raspberry through:
+
+- Github Actions: Runs tests, builds Docker Image
+- Docker compose
+- Watchtower: pull continuously image
+
 <p align="center">
 <kbd><img src='img/preview1.png' width=250 /></kbd>
 <!-- <kbd><img src='img/preview2.png' width=250 /></kbd> -->
