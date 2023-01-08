@@ -5,9 +5,9 @@
 Visualize **Google Calendar** events in an **Interactive Dashboard**.
 
 <p align="center">
-<kbd>
-    <img src="img/calendar-to-streamlit.png" width=100%>
-</kbd>
+<!-- <kbd> -->
+<img src="img/calendar-to-streamlit.png" width=700>
+<!-- </kbd> -->
 </p>
 
 <!-- ![img/calendar-to-streamlit.png](img/calendar-to-streamlit.png) -->
@@ -58,31 +58,16 @@ streamlit run app.py
 
 4. Now open the Dashboard → localhost:8501
 
-## Data collection
+## Data collection strategy
 
-Done using Google Calendar
+Data is collected by adding events to Google Calendar.
+
+**Structure** of these calendars (e.g. Study, Sport) can be found in [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories) wiki page.
+
+**Link** to download of the calendar instruction in [Get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link) wiki page.
 
 <p align="center">
 <kbd>
     <img src="img/google-calendar-week-view.png" width=600>
 </kbd>
 </p>
-
-## Dashboard
-
-<p align="center">
-<!-- All activities -->
-<img src="img/all-activities.png" width=600 />
-
-<kbd align="center">
-    <!-- Single activity -->
-    <img src="https://i.imgur.com/uX8VCSD.png" width=600 />
-
-</kbd>
-
-<kbd align="center">
-    <!-- Workout -->
-    <img src="https://i.imgur.com/YF3F5up.png" width=600 />
-</kbd>
-</p>
-````
