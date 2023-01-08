@@ -6,7 +6,7 @@ Visualize **Google Calendar** events in an **Interactive Dashboard**.
 
 <p align="center">
 <kbd>
-    <img src="img/calendar-to-streamlit.png" width=600>
+    <img src="img/calendar-to-streamlit.png" width=100%>
 </kbd>
 </p>
 
@@ -14,7 +14,19 @@ Visualize **Google Calendar** events in an **Interactive Dashboard**.
 
 ## [👁️ Preview](http://raspberry.gleeze.com:8501)
 
-Preview hosted in a 1GB Raspberry Pi, be kind to it ❤️
+[Preview](http://raspberry.gleeze.com:8501) hosted in a 1GB Raspberry Pi, be kind to it ❤️
+
+<p align="center">
+<kbd><img src='img/preview1.png' width=250 /></kbd>
+<!-- <kbd><img src='img/preview2.png' width=250 /></kbd> -->
+<kbd><img src='img/preview3.png' width=250 /></kbd>
+<!-- <kbd><img src='img/preview4.png' width=250 /></kbd> -->
+<!-- <kbd><img src='img/preview5.png' width=250 /></kbd> -->
+<kbd><img src='img/preview6.png' width=250 /></kbd>
+</p>
+
+<p align="center">
+</p>
 
 ## 🚀 Usage
 
@@ -44,7 +56,7 @@ source .envvars.sample
 streamlit run app.py
 ```
 
-4. Now open the Dashboard → http://localhost:8501
+4. Now open the Dashboard → localhost:8501
 
 ## Data collection
 
