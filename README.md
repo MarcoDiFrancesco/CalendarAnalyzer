@@ -20,11 +20,6 @@ Includes **3 years** of data, collected every **30 minutes**.
 
 _(alternative on streamlit cloud - [link](https://marcodifrancesco-calendaranalyzer-app-4f17ot.streamlit.app/))_
 
-FYI, Continuous Deployment to the Raspberry through:
-
-- Github Actions: Runs tests, builds Docker Image
-- Docker compose: Watchtower to pull continuously image
-
 <p align="center">
 <kbd><img src='img/preview1.png' width=250 /></kbd>
 <!-- <kbd><img src='img/preview2.png' width=250 /></kbd> -->
@@ -47,6 +42,7 @@ Prerequisites: **Python 3.10**
 
 ```
 git clone https://github.com/MarcoDiFrancesco/CalendarAnalyzer.git
+cd CalendarAnalyzer
 ```
 
 2. (Optional) Create Virtual Environment
@@ -77,18 +73,12 @@ streamlit run app.py
 
 6. Now open the Dashboard → `http://localhost:8501`
 
-## Data collection strategy
+## FAQ
 
-Data is collected by adding events to Google Calendar.
+_Which platform you collect data with?_ Google Calendar.
 
-**Structure** of these calendars (e.g. Study, Sport) can be found in [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories) wiki page.
+_How do you download data from Google Calendar?_ Instructions in the Wiki page [Get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link).
 
-**Link** to download the calendar in ICS format in [get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link) wiki page.
+_Which categories do you use?_ Structure of these calendars (e.g. Study, Sport) can be found in the Wiki page [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories).
 
-How a week looks like:
-
-<p align="center">
-<kbd>
-    <img src="img/google-calendar-week-view.png" width=600>
-</kbd>
-</p>
+_Why these categories?_ Can be found in Wiki page [Categorization rules](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categorization-rules).
