@@ -1,8 +1,10 @@
 <h1 align="center">Welcome to Calendar Analyzer 👋</h1>
 
-> 3 years of My Life, visualized.
+> My Life, Visualized.
 
 Visualize **Google Calendar** events in an **Interactive Dashboard**.
+
+Includes **3 years** of data, collected every **30 minutes**.
 
 <p align="center">
 <!-- <kbd> -->
