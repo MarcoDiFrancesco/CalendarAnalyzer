@@ -40,6 +40,7 @@ def main() -> None:
     compute_day(df)
     data_checks(df)
 
+    df_full = df
     df = admin.get_password(df)
 
     # All activities
@@ -49,7 +50,7 @@ def main() -> None:
     chart_calendars_longest(df)
     table_sum(df)
     time_quality(df)
-    night_sleep_distribution(df)
+    night_sleep_distribution(df_full)
 
     # Single activity
     single_activity_text(df)

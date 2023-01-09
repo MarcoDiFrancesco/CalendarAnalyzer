@@ -23,7 +23,7 @@ def study_subjects():
             "Supervised",
             "Venturing",
         ],
-        "Other": [
+        "Extracurricular": [
             "English",
             "German",
             # Studied also before Dec 2019

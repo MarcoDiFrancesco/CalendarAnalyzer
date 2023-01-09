@@ -70,12 +70,16 @@ def chart_horiz(df: pd.DataFrame):
     df = filter_df_chart(df, "Study")
     df = df.groupby(["SUMMARY"]).sum().reset_index()
     subjects = study_subjects()
-    chart_horiz_single(df, subjects["Bachelor"])
-    chart_horiz_single(df, subjects["Master"])
-    chart_horiz_single(df, subjects["Other"])
+    chart_horiz_single(df, "Bachelor")
+    chart_horiz_single(df, "Master")
+    chart_horiz_single(df, "Extracurricular")
 
 
-def chart_horiz_single(df: pd.DataFrame, subjects: list):
+def chart_horiz_single(df: pd.DataFrame, subject_cat: str):
+    # e.g. Master
+    st.markdown(f"#### {subject_cat}")
+    subjects = study_subjects()
+    subjects = subjects[subject_cat]
     df = df[df["SUMMARY"].isin(subjects)]
     df = df_shorten_string(df, "SUMMARY")
     # Round to closes integer

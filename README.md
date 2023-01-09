@@ -79,7 +79,7 @@ streamlit run app.py
 
 ⬇️ _How do you download data from Google Calendar?_ Instructions in the Wiki page [Get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link).
 
-📜 _Which categories do you use?_ List of activities like Study, Sport etc., can be found in the Wiki page [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories).
+📜 _Which categories do you use?_ List of activities e.g. Study, Sport; can be found in the Wiki page [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories).
 
 ❓ _Why these categories?_ Can be found in Wiki page [Categorization rules](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categorization-rules).
 
