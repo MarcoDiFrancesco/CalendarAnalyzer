@@ -20,11 +20,10 @@ Includes **3 years** of data, collected every **30 minutes**.
 
 _(alternative on streamlit cloud - [link](https://marcodifrancesco-calendaranalyzer-app-4f17ot.streamlit.app/))_
 
-FYI, Continuously Deployed in the Raspberry through:
+FYI, Continuous Deployment to the Raspberry through:
 
 - Github Actions: Runs tests, builds Docker Image
-- Docker compose
-- Watchtower: pull continuously image
+- Docker compose: Watchtower to pull continuously image
 
 <p align="center">
 <kbd><img src='img/preview1.png' width=250 /></kbd>
@@ -40,33 +39,43 @@ FYI, Continuously Deployed in the Raspberry through:
 
 ## 🚀 Usage
 
-0. (Optional) Create Virtual Environment
+Run with 3 years of sample data provided.
+
+Prerequisites: **Python 3.10**
+
+1. Clone repository
+
+```
+git clone https://github.com/MarcoDiFrancesco/CalendarAnalyzer.git
+```
+
+2. (Optional) Create Virtual Environment
 
 ```sh
-python -m venv .venv
+python3.10 -m venv .venv
 source .venv/bin/activate
 ```
 
-1. Install Python packages
+3. Install Python packages
 
 ```sh
 pip install wheel
 pip install -r requirements.txt
 ```
 
-2. Source environment variable (e.g. Calendar links)
+4. Source environment variables (e.g. calendar links)
 
 ```sh
 source .envvars.sample
 ```
 
-3. Run Dashboard
+5. Run Dashboard
 
 ```sh
 streamlit run app.py
 ```
 
-4. Now open the Dashboard → localhost:8501
+6. Now open the Dashboard → `http://localhost:8501`
 
 ## Data collection strategy
 
@@ -75,6 +84,8 @@ Data is collected by adding events to Google Calendar.
 **Structure** of these calendars (e.g. Study, Sport) can be found in [Categorization](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Categories) wiki page.
 
 **Link** to download the calendar in ICS format in [get calendar link](https://github.com/MarcoDiFrancesco/CalendarAnalyzer/wiki/Get-calendar-link) wiki page.
+
+How a week looks like:
 
 <p align="center">
 <kbd>
