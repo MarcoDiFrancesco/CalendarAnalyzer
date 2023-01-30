@@ -45,8 +45,5 @@ def download_cals() -> pd.DataFrame:
 
 def _download_cal(link: str):
     """Download ics from Google Calendar, return json."""
-    ics = requests.get(link).text
-    with tempfile.NamedTemporaryFile(mode="w") as f:
-        f.write(str(ics))
-        json = jicson.fromFile(f.name)
-    return json
+    ics = requests.get(link, timeout=5).text
+    return jicson.fromText(ics)

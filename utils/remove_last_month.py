@@ -18,4 +18,4 @@ def remove_last_month(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     """
 
     month = datetime.datetime.today().strftime("%Y-%m")
-    return df[df[column_name] < month]
+    return df if df.empty else df[df[column_name] < month]
