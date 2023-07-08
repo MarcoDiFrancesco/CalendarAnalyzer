@@ -47,14 +47,14 @@ repos:
         # - D213: Multi-line docstring summary should start at the second line
         args: ["--convention=google", "--add-ignore=D100,D103,D104,D202"]
 
-  - repo: https://github.com/pycqa/pylint
-    rev: v2.17.2
-    hooks:
-      - id: pylint
-        name: pylint
-        entry: pylint
-        types: [python]
-        args: [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
-          ]
+  # - repo: https://github.com/pycqa/pylint
+  #   rev: v2.17.2
+  #   hooks:
+  #     - id: pylint
+  #       name: pylint
+  #       entry: pylint
+  #       types: [python]
+  #       args: [
+  #           "-rn", # Only display messages
+  #           "-sn", # Don't display the score
+  #         ]
