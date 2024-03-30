@@ -14,11 +14,11 @@ Includes **3 years** of data, collected every **30 minutes**.
 
 <!-- ![img/calendar-to-streamlit.png](img/calendar-to-streamlit.png) -->
 
-## [👁️ Preview](http://raspberry.gleeze.com:8501)
+## 👁️ Preview
 
-[Preview](http://raspberry.gleeze.com:8501) hosted in a 1GB Raspberry Pi, be kind to it ❤️
+[~~Preview~~](http://raspberry.gleeze.com:8501) hosted in a 1GB Raspberry Pi, be kind to it ❤️
 
-_(alternative on streamlit cloud - [link](https://marcodifrancesco-calendaranalyzer-app-4f17ot.streamlit.app/))_
+_Preview not available for now, but you can stil run it on your own. Check out the next section :)_
 
 <p align="center">
 <kbd><img src='img/preview1.png' width=250 /></kbd>
