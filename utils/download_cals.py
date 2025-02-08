@@ -13,6 +13,7 @@ import streamlit as st
 
 persist = True if not os.environ.get("DEBUG") else False
 
+
 # Cache for 1 week
 @st.cache(ttl=7 * 24 * 60 * 60, persist=persist)
 def download_cals() -> pd.DataFrame:
@@ -45,5 +46,11 @@ def download_cals() -> pd.DataFrame:
 
 def _download_cal(link: str):
     """Download ics from Google Calendar, return json."""
-    ics = requests.get(link, timeout=5).text
-    return jicson.fromText(ics)
+    if link.startswith("http"):
+        ics = requests.get(link, timeout=5).text
+    else:
+        with open(link, "r") as f:
+            ics = f.read()
+    # Convert ics to json
+    cal = jicson.fromText(ics)
+    return cal
